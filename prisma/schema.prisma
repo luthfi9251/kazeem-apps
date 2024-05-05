@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRE_DATABASE_URL")
+}
+
+model User {
+  id           String      @id @default(uuid())
+  username     String      @db.VarChar(100)
+  password     String      @db.VarChar(100)
+  email        String      @db.VarChar(100)
+  nama_lengkap String      @db.VarChar(100)
+  aktif        Boolean     @default(true)
+  UserGroup    UserGroup[]
+  wali         Wali[]
+}
+
+model Group {
+  id         Int         @id
+  nama_group String      @db.VarChar(100)
+  deskripsi  String
+  UserGroup  UserGroup[]
+}
+
+model UserGroup {
+  id       Int    @id @default(autoincrement())
+  user_id  String
+  group_id Int
+  group    Group  @relation(fields: [group_id], references: [id])
+  user     User   @relation(fields: [user_id], references: [id])
+}
+
+model Santri {
+  id           Int          @id @default(autoincrement())
+  nama_lengkap String       @db.VarChar(100)
+  alamat       String       @db.VarChar(255)
+  email        String       @db.VarChar(100)
+  hp           String?      @db.VarChar(25)
+  tempat_lahir String       @db.VarChar(100)
+  tgl_lhr      DateTime
+  foto         String       @db.VarChar(100)
+  WaliSantri   WaliSantri[]
+}
+
+model WaliSantri {
+  id        Int       @id @default(autoincrement())
+  santri_id Int
+  wali_id   Int
+  peran     PeranWali
+  santri    Santri    @relation(fields: [santri_id], references: [id])
+  wali      Wali      @relation(fields: [wali_id], references: [id])
+}
+
+model Wali {
+  id         Int          @id @default(autoincrement())
+  nama_wali  String
+  tgl_lhr    DateTime
+  email      String?
+  hp         String?
+  user_id    String
+  user       User         @relation(fields: [user_id], references: [id])
+  WaliSantri WaliSantri[]
+}
+
+enum PeranWali {
+  AYAH
+  IBU
+  WALI
+  lainnya
+}
