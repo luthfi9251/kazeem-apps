@@ -26,13 +26,16 @@ export default function ModalEditGroupContext({
 }) {
     let [dataGroup, setDataGroup] = useContext(GroupContext);
     let saveGroup = saveEditedGroup;
+    let escapeAndCapitalize = (string) => {
+        return string.split(" ").join("_").toUpperCase();
+    };
 
     let handleSubmitForm = (e) => {
         e.preventDefault();
 
         let formData = {
             id: group?.id,
-            nama_group: e.target[0].value,
+            nama_group: escapeAndCapitalize(e.target[0].value),
             deskripsi: e.target[1].value,
         };
 

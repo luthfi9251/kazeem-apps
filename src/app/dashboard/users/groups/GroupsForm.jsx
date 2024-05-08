@@ -28,9 +28,12 @@ export default function GroupsForm() {
             deskripsi: "",
         },
     });
+    let escapeAndCapitalize = (string) => {
+        return string.split(" ").join("_").toUpperCase();
+    };
 
     const onSubmit = (data) => {
-        console.log(data);
+        // console.log(data);
         toast
             .promise(
                 () => addGroup(data),
@@ -43,17 +46,15 @@ export default function GroupsForm() {
                     position: "bottom-right",
                 }
             )
-            .then(() => {
-                let findCurrentGroup = (elem) => {
-                    return elem.id === group?.id;
+            .then((res) => {
+                let formData = {
+                    id: res.id,
+                    nama_group: escapeAndCapitalize(data.nama_group),
+                    deskripsi: data.deskripsi,
                 };
-                let copyArr = [...dataGroup];
-                copyArr.splice(
-                    dataGroup.findIndex(findCurrentGroup),
-                    1,
-                    formData
-                );
+                let copyArr = [...dataGroup, formData];
                 setDataGroup([...copyArr]);
+                form.reset();
             });
     };
     const onError = (e) => console.log(e);

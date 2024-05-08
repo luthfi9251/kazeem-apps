@@ -30,6 +30,7 @@ import Link from "next/link";
 import { useEffect, useState, useContext, useCallback } from "react";
 import ModalEditGroupContext from "./ModalEditGroupContext";
 import { GroupContext } from "./GroupDataProvider";
+import AlertDeleteUserProvider from "./AlertDeleteUserProvider";
 
 export default function GroupsTable() {
     let [search, setSearch] = useState("");
@@ -37,6 +38,7 @@ export default function GroupsTable() {
     let [data, setData] = useState(dataGroup);
     let [activeGroup, setActiveGroup] = useState(null);
     let [isModalOpen, setModalOpen] = useState(false);
+    let [isAlertOpen, setAlertOpen] = useState(false);
 
     useEffect(() => {
         if (search === "") {
@@ -52,6 +54,8 @@ export default function GroupsTable() {
     useEffect(() => {
         setData([...dataGroup]);
     }, [dataGroup]);
+
+    let handleDeleteGroups = (id) => {};
 
     return (
         <div className="bg-blue-1010 py-2 px-2 flex items-start justify-start flex-col">
@@ -77,59 +81,70 @@ export default function GroupsTable() {
                     data={data}
                     setData={setData}
                 >
-                    <TableBody>
-                        {data.map((item, key) => {
-                            return (
-                                <TableRow key={key}>
-                                    <TableCell className="font-medium">
-                                        {item.id}
-                                    </TableCell>
-                                    <TableCell>{item.nama_group}</TableCell>
-                                    <TableCell>{item.deskripsi}</TableCell>
-                                    <TableCell className="text-center">
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <Button
-                                                    variant="ghost"
-                                                    className="h-8 w-8 p-0"
-                                                >
-                                                    <span className="sr-only">
-                                                        Open menu
-                                                    </span>
-                                                    <MoreHorizontal className="h-4 w-4" />
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent align="end">
-                                                <DropdownMenuLabel>
-                                                    Actions
-                                                </DropdownMenuLabel>
-                                                <DropdownMenuItem
-                                                    onClick={() => {
-                                                        setModalOpen(true);
-                                                        setActiveGroup(item);
-                                                    }}
-                                                    className="w-full flex justify-between"
-                                                >
-                                                    Edit Grup{" "}
-                                                    <SquareArrowDown className="md:hidden h-4 w-4" />{" "}
-                                                    <SquareArrowRight className="hidden md:inline-block h-4 w-4" />
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem>
-                                                    <Link
-                                                        href={`/dashboard/users/action/`}
-                                                        className="w-full flex justify-between"
+                    <AlertDeleteUserProvider
+                        isOpen={isAlertOpen}
+                        onOpenChange={setAlertOpen}
+                        group={activeGroup}
+                    >
+                        <TableBody>
+                            {data.map((item, key) => {
+                                return (
+                                    <TableRow key={key}>
+                                        <TableCell className="font-medium">
+                                            {item.id}
+                                        </TableCell>
+                                        <TableCell>{item.nama_group}</TableCell>
+                                        <TableCell>{item.deskripsi}</TableCell>
+                                        <TableCell className="text-center">
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button
+                                                        variant="ghost"
+                                                        className="h-8 w-8 p-0"
+                                                    >
+                                                        <span className="sr-only">
+                                                            Open menu
+                                                        </span>
+                                                        <MoreHorizontal className="h-4 w-4" />
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end">
+                                                    <DropdownMenuLabel>
+                                                        Actions
+                                                    </DropdownMenuLabel>
+                                                    <DropdownMenuItem
+                                                        onClick={() => {
+                                                            setModalOpen(true);
+                                                            setActiveGroup(
+                                                                item
+                                                            );
+                                                        }}
+                                                        className="cursor-pointer w-full flex justify-between"
+                                                    >
+                                                        Edit Grup{" "}
+                                                        <SquareArrowDown className="md:hidden h-4 w-4" />{" "}
+                                                        <SquareArrowRight className="hidden md:inline-block h-4 w-4" />
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem
+                                                        onClick={() => {
+                                                            setAlertOpen(true);
+                                                            setActiveGroup(
+                                                                item
+                                                            );
+                                                        }}
+                                                        className="cursor-pointer w-full flex justify-between"
                                                     >
                                                         Hapus Grup{" "}
                                                         <Trash2 className="h-4 w-4" />
-                                                    </Link>
-                                                </DropdownMenuItem>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                    </TableCell>
-                                </TableRow>
-                            );
-                        })}
-                    </TableBody>
+                                                    </DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })}
+                        </TableBody>
+                    </AlertDeleteUserProvider>
                 </ModalEditGroupContext>
             </Table>
         </div>

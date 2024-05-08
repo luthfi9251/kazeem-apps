@@ -23,9 +23,24 @@ export async function saveEditedGroup(id, data) {
 }
 
 export async function addGroup(data) {
+    let escapeAndCapitalize = (string) => {
+        return string.split(" ").join("_").toUpperCase();
+    };
+
     let prom = prisma.Group.create({
-        data: { nama_group: data.nama_group, deskripsi: data.deskripsi },
+        data: {
+            nama_group: escapeAndCapitalize(data.nama_group),
+            deskripsi: data.deskripsi,
+        },
     });
     revalidatePath("/dashboard/users/groups");
     return prom;
+}
+
+export async function deleteGroup(id) {
+    //delete groups otomatis delete userGroups
+    let delUserGroup = prisma.UserGroup.deleteMany({ where: { group_id: id } });
+    let delGroup = prisma.Group.delete({ where: { id: id } });
+    const transaction = await prisma.$transaction([delUserGroup, delGroup]);
+    return transaction;
 }

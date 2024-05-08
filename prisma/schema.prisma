@@ -9,9 +9,9 @@ datasource db {
 
 model User {
   id           String      @id @default(uuid())
-  username     String      @db.VarChar(100)
+  username     String      @db.VarChar(100) @unique
   password     String      @db.VarChar(100)
-  email        String      @db.VarChar(100)
+  email        String      @db.VarChar(100) @unique
   nama_lengkap String      @db.VarChar(100)
   aktif        Boolean     @default(true)
   UserGroup    UserGroup[]
