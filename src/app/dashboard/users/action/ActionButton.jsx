@@ -56,7 +56,7 @@ export default function ActionButton({ form }) {
                     </Button>
                 </Link>
                 <Button
-                    className="w-36 bg-kazeem-primary hover:bg-kazeem-darker"
+                    className="md:w-36 bg-kazeem-primary hover:bg-kazeem-darker"
                     onClick={handleSimpanForm}
                 >
                     Simpan
@@ -64,7 +64,7 @@ export default function ActionButton({ form }) {
                 <Link href="/dashboard/users/">
                     <Button
                         variant="outline"
-                        className="w-36 border-kazeem-primary"
+                        className="md:w-36 border-kazeem-primary"
                     >
                         Cancel
                     </Button>
@@ -75,7 +75,7 @@ export default function ActionButton({ form }) {
                     <Button
                         variant="outline"
                         disabled={userId ? false : true}
-                        className="w-36 bg-red-500 justify-items-end hover:bg-red-800"
+                        className="md:w-36 bg-red-500 justify-items-end hover:bg-red-800"
                     >
                         Hapus
                     </Button>

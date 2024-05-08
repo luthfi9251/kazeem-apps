@@ -20,6 +20,7 @@ module.exports = {
             colors: {
                 kazeem: {
                     primary: "#456083",
+                    middle: "#516c8f",
                     darker: "#3b516e",
                     secondary: "#feba35",
                 },

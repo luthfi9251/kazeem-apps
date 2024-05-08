@@ -3,6 +3,7 @@
 import prisma from "@/lib/prisma";
 import { hashPassword } from "@/lib/bcrypt";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 /*  
     algorithm
     1. Get userGroups dulu
@@ -59,6 +60,7 @@ export async function createUserData(data) {
         }),
     });
     revalidatePath("/dashboard/users");
+    redirect("/dashboard/users");
     return addGroupProm;
 }
 

@@ -47,7 +47,6 @@ export default function UserForm({ reference, user }) {
     }));
 
     const onSubmit = (data) => {
-        console.log(data);
         let requestData = {
             user: {
                 ...data,
