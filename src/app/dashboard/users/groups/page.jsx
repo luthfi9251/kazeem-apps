@@ -10,13 +10,15 @@ import { getAllGroups } from "./_actions/group";
 import GroupsForm from "./GroupsForm";
 import GroupsTable from "./GroupsTable";
 import GroupDataProvider from "./GroupDataProvider";
+import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
+import { PAGE_NAME } from "@/security-config";
 
 async function getData() {
     let data = await getAllGroups();
     return data;
 }
 
-export default async function PageGroups() {
+async function PageGroups() {
     let groupData = await getData();
 
     return (
@@ -36,3 +38,5 @@ export default async function PageGroups() {
         </div>
     );
 }
+
+export default withAuthAndGroupCheck(PageGroups, PAGE_NAME.MANAGE_ROLE_PAGE);

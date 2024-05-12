@@ -1,9 +1,12 @@
 import Sidebar from "./Sidebar";
+import { auth } from "@/auth";
 
-export default function DashboardLayout({ children }) {
+export default async function DashboardLayout(props) {
+    let session = await auth();
+    const { children } = props;
     return (
         <div>
-            <Sidebar>{children}</Sidebar>
+            <Sidebar session={session}>{children}</Sidebar>
         </div>
     );
 }

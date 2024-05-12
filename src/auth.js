@@ -55,7 +55,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 include: {
                     group: {
                         select: {
-                            id: true,
+                            nama_group: true,
                         },
                     },
                 },
@@ -65,7 +65,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             session.user.email = token.email;
             session.user.nama_lengkap = token.nama_lengkap;
             session.user.aktif = token.aktif;
-            session.user.groups_id = groups.map((item) => item.group.id);
+            session.user.groups = groups.map((item) => item.group.nama_group);
             return session;
         },
     },

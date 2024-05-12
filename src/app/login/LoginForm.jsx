@@ -25,10 +25,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import loginSchema from "./yup-login-schema";
 import { logIn } from "./_actions/login";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export function LoginForm() {
     let [isLoading, setIsLoading] = useState(false);
     let [errorMsg, setErrorMsg] = useState(null);
+    let router = useRouter();
     const form = useForm({
         resolver: yupResolver(loginSchema),
         defaultValues: {
@@ -43,8 +45,9 @@ export function LoginForm() {
         try {
             await logIn("credentials", data);
             setIsLoading(false);
+            router.push("/dashboard");
         } catch (err) {
-            setErrorMsg(err.message);
+            setErrorMsg("Email atau password salah!");
             setIsLoading(false);
         }
     };
@@ -92,7 +95,10 @@ export function LoginForm() {
                             )}
                         />
                         {errorMsg ? (
-                            <p className="text-xs bg-red-200 rounded-sm flex items-center gap-2 p-1 font-semibold">
+                            <p
+                                className="text-xs bg-red-200 rounded-sm flex items-center gap-2 p-1 font-semibold"
+                                id="error-msg"
+                            >
                                 <CircleAlert className="h-4 w-4 inline" />{" "}
                                 {errorMsg}
                             </p>

@@ -1,6 +1,8 @@
 import ActionPage from "./ActionPage";
 import getUserById from "../_actions/getUserById";
 import getAllAvailableGroups from "../_actions/getAllAvailableGroups";
+import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
+import { PAGE_NAME } from "@/security-config";
 
 async function getData(id) {
     let getUserData = getUserById(id);
@@ -9,7 +11,7 @@ async function getData(id) {
     return Promise.all([getUserData, getAllGroups]);
 }
 
-export default async function Page({ params }) {
+async function Page({ params }) {
     let data = await getData(params.slug ? params.slug[0] : false);
     return (
         <>
@@ -17,3 +19,5 @@ export default async function Page({ params }) {
         </>
     );
 }
+
+export default withAuthAndGroupCheck(Page, PAGE_NAME.MANAGE_USER_PAGE);

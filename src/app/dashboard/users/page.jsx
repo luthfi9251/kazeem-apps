@@ -9,6 +9,8 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import prisma from "@/lib/prisma";
+import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
+import { PAGE_NAME } from "@/security-config";
 
 async function getData() {
     let usersData = await prisma.user.findMany({
@@ -23,7 +25,7 @@ async function getData() {
     return usersData;
 }
 
-export default async function Users() {
+async function Users(props) {
     const user = await getData();
 
     return (
@@ -40,3 +42,5 @@ export default async function Users() {
         </div>
     );
 }
+
+export default withAuthAndGroupCheck(Users, PAGE_NAME.MANAGE_USER_PAGE);

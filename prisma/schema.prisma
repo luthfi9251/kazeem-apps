@@ -9,9 +9,9 @@ datasource db {
 
 model User {
   id           String      @id @default(uuid())
-  username     String      @db.VarChar(100) @unique
+  username     String      @unique @db.VarChar(100)
   password     String      @db.VarChar(100)
-  email        String      @db.VarChar(100) @unique
+  email        String      @unique @db.VarChar(100)
   nama_lengkap String      @db.VarChar(100)
   aktif        Boolean     @default(true)
   UserGroup    UserGroup[]
@@ -20,7 +20,7 @@ model User {
 
 model Group {
   id         Int         @id @default(autoincrement())
-  nama_group String      @db.VarChar(100)
+  nama_group String      @unique @db.VarChar(100)
   deskripsi  String
   UserGroup  UserGroup[]
 }
@@ -40,8 +40,8 @@ model Santri {
   email        String       @db.VarChar(100)
   hp           String?      @db.VarChar(25)
   tempat_lahir String       @db.VarChar(100)
-  tgl_lhr      DateTime
-  foto         String       @db.VarChar(100)
+  tgl_lhr      DateTime     @db.Date
+  foto         String?      @db.VarChar(100)
   WaliSantri   WaliSantri[]
 }
 
@@ -57,12 +57,14 @@ model WaliSantri {
 model Wali {
   id         Int          @id @default(autoincrement())
   nama_wali  String
-  tgl_lhr    DateTime
-  email      String?
+  tgl_lhr    DateTime     @db.Date
+  email      String?      @unique @db.VarChar(100)
   hp         String?
-  user_id    String
-  user       User         @relation(fields: [user_id], references: [id])
+  user_id    String?
+  user       User?        @relation(fields: [user_id], references: [id])
   WaliSantri WaliSantri[]
+
+  @@unique([nama_wali, tgl_lhr], name: "waliIdentifier")
 }
 
 enum PeranWali {

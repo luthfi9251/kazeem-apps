@@ -1,0 +1,105 @@
+"use client";
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
+import { MoreHorizontal, PenLine } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Trash2 } from "lucide-react";
+import { WaliContext } from "./WaliDataProvider";
+import { useContext } from "react";
+
+let staticData = [
+    { id: 1, nama_wali: "Rohmad Widodo", peran: "ayah" },
+    { id: 1, nama_wali: "Rohmad Widodo", peran: "ayah" },
+];
+
+export default function WaliSantriView(props) {
+    let waliSelected = staticData;
+    let { disabled } = props;
+    let [dataWali, setWaliGroup] = useContext(WaliContext);
+    let handleDelete = (data) => {
+        let filtered = dataWali.filter(
+            (item) => item.nama_wali !== data.nama_wali
+        );
+        setWaliGroup([...filtered]);
+    };
+
+    return (
+        <Table>
+            <TableCaption></TableCaption>
+            <TableHeader>
+                <TableRow>
+                    <TableHead>Nama Wali</TableHead>
+                    <TableHead>Peran</TableHead>
+                    <TableHead className="text-center">Action</TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                {dataWali.map((item, i) => {
+                    return (
+                        <TableRow key={i}>
+                            <TableCell className="font-medium">
+                                {item.nama_wali}
+                            </TableCell>
+                            <TableCell>{item.peran}</TableCell>
+                            <TableCell className="text-center">
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button
+                                            variant="ghost"
+                                            className="h-8 w-8 p-0"
+                                        >
+                                            <span className="sr-only">
+                                                Open menu
+                                            </span>
+                                            <MoreHorizontal className="h-4 w-4" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end">
+                                        <DropdownMenuLabel>
+                                            Actions
+                                        </DropdownMenuLabel>
+                                        <DropdownMenuItem disabled={disabled}>
+                                            <div
+                                                className="flex gap-3 cursor-pointer"
+                                                onClick={() => {
+                                                    handleDelete(item);
+                                                }}
+                                            >
+                                                <Trash2 className="h-5 w-5" />
+                                                Hapus
+                                            </div>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem>
+                                            <div
+                                                className="flex gap-3 cursor-pointer"
+                                                onClick={() => {}}
+                                            >
+                                                <PenLine className="h-5 w-5" />
+                                                Detail
+                                            </div>
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </TableCell>
+                        </TableRow>
+                    );
+                })}
+            </TableBody>
+        </Table>
+    );
+}

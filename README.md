@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Kazeem App
 
-## Getting Started
+Aplikasi Manajemen Pondok Pesantren
 
-First, run the development server:
+Fitur
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+-   [x] Autentikasi
+-   [x] Manajemen User
+-   [x] Manajemen Santri
+-   [ ] Manajemen Wali Santri
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Installation
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+> [!NOTE]
+> Insyaallah App ini akan di Dockerize ASAP.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+1. Pastikan node js sudah terinstall (development menggunakan node v18.17).
+    ```bash
+    node --version
+    ```
+2. Clone repository ini
+3. Jalankan npm install
+    ```bash
+    npm install
+    ```
+4. Jika terdapat opsi init `shadcn`, pilih `Y`
+5. Pastikan sudah terdapat database postgresql yang berjalan
+6. isi file `.env` sesuai dengan example
+7. Jalankan migrasi database
+    ```bash
+    npx prisma db push
+    ```
+8. Jalankan perintah `npm run build`
+9. Jalankan perintah `npm start` untuk menjalankan server
 
-## Learn More
+## Testing
 
-To learn more about Next.js, take a look at the following resources:
+### Inisialisasi
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+App ini menggunakan Cypress sebagai testing library E2E, untuk menjalankan testing berikut adalah hal yang perlu dilakukan:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+1. Menjalankan server web terlebih dahulu dengan command `npm start` atau `npm run dev`
+2. Menjalankan server Cypress dengan perintah `npm run cypress:open`
+3. Jendela baru akan terbuka
 
-## Deploy on Vercel
+### Run Unit Test
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Testing bersifat E2E atau End to End yang berarti hanya menguji tiap flow dari aplikasi Kazeem, untuk saat ini, unit testing sudah mencakup fitur:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+-   [x] Create, Read, Update, Delete Data Santri
+-   added soon
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first
+to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.

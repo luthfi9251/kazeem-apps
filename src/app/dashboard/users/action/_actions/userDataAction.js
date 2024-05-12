@@ -41,7 +41,6 @@ export async function deleteUser(id) {
 }
 
 export async function createUserData(data) {
-    console.log("User Baru");
     let password = hashPassword(data.user.password);
     const user = await prisma.user.create({
         data: {

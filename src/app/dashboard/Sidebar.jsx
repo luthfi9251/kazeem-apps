@@ -24,65 +24,16 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion";
-
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import "react-toastify/dist/ReactToastify.css";
+import { URL_PATH } from "@/navigation-data";
+import { PAGE_ACCESS_CONFIG } from "@/security-config";
 
-const linkData = [
-    {
-        name: "Dashboard",
-        href: "/dashboard",
-        icon: <Home className="h-5 w-5" />,
-        onlyAdmin: false,
-    },
-    {
-        name: "Absensi",
-        href: "/dashboard/absensi",
-        icon: <FileText className="h-5 w-5" />,
-        onlyAdmin: false,
-    },
-];
-
-const dataLink = [
-    {
-        name: "Users",
-        icon: <User className="h-5 w-5" />,
-        href: "",
-        hasChild: true,
-        children: [
-            {
-                name: "User",
-                href: "/dashboard/users",
-                icon: <UserRoundCog className="h-5 w-5" />,
-            },
-            {
-                name: "Group",
-                href: "/dashboard/users/groups",
-                icon: <Users className="h-5 w-5" />,
-            },
-        ],
-    },
-    {
-        name: "Santri",
-        icon: <Home className="h-5 w-5" />,
-        href: "",
-        hasChild: true,
-        children: [
-            {
-                name: "Santri",
-                href: "/dashboard",
-                icon: <Home className="h-5 w-5" />,
-            },
-            {
-                name: "Another Santri",
-                href: "/dashboard/groups",
-                icon: <Home className="h-5 w-5" />,
-            },
-        ],
-    },
-];
-
-export default function Sidebar({ children }) {
+export default function Sidebar(props) {
     let pathname = usePathname();
+    let router = useRouter();
+    let { children, session } = props;
 
     let getOpenedAcordion = () => {
         let index = -1;
@@ -102,6 +53,34 @@ export default function Sidebar({ children }) {
         });
         return index;
     };
+
+    let getAllowedNavLink = () => {
+        let nav = [];
+        URL_PATH.forEach((item) => {
+            let pageName = item.page_name;
+            let pageConfig = PAGE_ACCESS_CONFIG.find(
+                (item) => item.name === pageName
+            );
+
+            if (!pageConfig)
+                throw Error(
+                    "Kesalahan dalam konfigurasi navigation data dan security config!"
+                );
+            let allowed = false;
+            if (session) {
+                allowed = pageConfig.allowedGroup.every((role) =>
+                    session.user.groups.includes(role)
+                );
+            }
+
+            if (allowed) {
+                nav.push(item);
+            }
+        });
+        return nav;
+    };
+
+    let dataLink = getAllowedNavLink();
 
     return (
         <div className="flex flex-col md:grid h-screen overflow-hidden w-full md:w-auto md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
@@ -245,7 +224,7 @@ export default function Sidebar({ children }) {
                     </SheetContent>
                 </Sheet>
             </div>
-            <div className="self-start w-full max-w-screen overflow-x-hidden overflow-y-scroll max-h-screen md:pb-0 pb-16">
+            <div className="self-start w-full max-w-screen overflow-x-hidden overflow-y-auto max-h-screen md:pb-0 pb-16">
                 {children}
             </div>
             <ToastContainer />
