@@ -7,7 +7,7 @@ Fitur
 -   [x] Autentikasi
 -   [x] Manajemen User
 -   [x] Manajemen Santri
--   [ ] Manajemen Wali Santri
+-   [x] Manajemen Wali Santri
 
 ## Installation
 
@@ -45,10 +45,11 @@ App ini menggunakan Cypress sebagai testing library E2E, untuk menjalankan testi
 
 ### Run Unit Test
 
-Testing bersifat E2E 
+Testing bersifat E2E
 atau End to End yang berarti hanya menguji tiap flow dari aplikasi Kazeem, untuk saat ini, unit testing sudah mencakup fitur:
 
 -   [x] Create, Read, Update, Delete Data Santri
+-   [x] Create, Read, Update, Delete Data Wali Santri
 -   added soon
 
 ## Contributing
