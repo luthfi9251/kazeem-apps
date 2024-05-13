@@ -21,14 +21,9 @@ import {
 import { Trash2 } from "lucide-react";
 import { WaliContext } from "./WaliDataProvider";
 import { useContext } from "react";
-
-let staticData = [
-    { id: 1, nama_wali: "Rohmad Widodo", peran: "ayah" },
-    { id: 1, nama_wali: "Rohmad Widodo", peran: "ayah" },
-];
+import Link from "next/link";
 
 export default function WaliSantriView(props) {
-    let waliSelected = staticData;
     let { disabled } = props;
     let [dataWali, setWaliGroup] = useContext(WaliContext);
     let handleDelete = (data) => {
@@ -85,13 +80,13 @@ export default function WaliSantriView(props) {
                                             </div>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem>
-                                            <div
-                                                className="flex gap-3 cursor-pointer"
-                                                onClick={() => {}}
+                                            <Link
+                                                className="flex gap-3 cursor-pointer w-full"
+                                                href={`/dashboard/santri/wali/detail/${item.id}`}
                                             >
                                                 <PenLine className="h-5 w-5" />
                                                 Detail
-                                            </div>
+                                            </Link>
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>

@@ -1,6 +1,6 @@
-import EditPage from "../EditPage";
 import prisma from "@/lib/prisma";
 import PerwalianDataProvider from "../../PerwalianDataProvider";
+import DetailPage from "../DetailPage";
 
 async function getData(id) {
     let data = await prisma.Wali.findUnique({
@@ -32,11 +32,11 @@ async function getData(id) {
     return data;
 }
 
-export default async function PageEdit(props) {
+export default async function PageDetail(props) {
     let data = await getData(props.params.id[0]);
     return (
         <PerwalianDataProvider data={data.WaliSantri}>
-            <EditPage data={data} id={props.params.id[0]} />
+            <DetailPage data={data} id={props.params.id[0]} />
         </PerwalianDataProvider>
     );
 }

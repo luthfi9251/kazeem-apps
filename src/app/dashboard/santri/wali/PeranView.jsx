@@ -1,3 +1,6 @@
+"use client";
+import { useContext } from "react";
+import { PerwalianContext } from "./PerwalianDataProvider";
 import {
     Select,
     SelectContent,
@@ -16,11 +19,15 @@ import {
 } from "@/components/ui/card";
 
 function PeranItem(props) {
-    let { data, disabled } = props;
+    let { data, disabled, onChangeHandler } = props;
     return (
         <div className="grid grid-cols-1 space-y-2 items-center">
             <h3 className="text-base font-medium">{data.nama_lengkap}</h3>
-            <Select defaultValue={data.peran} disabled={disabled}>
+            <Select
+                defaultValue={data.peran}
+                disabled={disabled}
+                onValueChange={(val) => onChangeHandler(val, data.nama_lengkap)}
+            >
                 <SelectTrigger>
                     <SelectValue placeholder="Pilih peran wali" />
                 </SelectTrigger>
@@ -50,7 +57,24 @@ function PeranItem(props) {
 //     },
 // ];
 
-export default function PeranView({ data, disabled = false }) {
+export default function PeranView({ disabled = false }) {
+    let [dataPerwalian, setDataPerwalian] = useContext(PerwalianContext);
+
+    let handlerOnChange = (val, nama) => {
+        let updateData = dataPerwalian.map((item) => {
+            if (item.nama_lengkap === nama) {
+                return {
+                    id: item.id,
+                    peran: val,
+                    nama_lengkap: nama,
+                };
+            } else {
+                return item;
+            }
+        });
+        setDataPerwalian([...updateData]);
+    };
+
     return (
         <Card>
             <CardHeader>
@@ -58,9 +82,14 @@ export default function PeranView({ data, disabled = false }) {
                 <CardDescription>Card Description</CardDescription>
             </CardHeader>
             <CardContent className=" space-y-6">
-                {data.map((item, i) => {
+                {dataPerwalian.map((item, i) => {
                     return (
-                        <PeranItem key={i} disabled={disabled} data={item} />
+                        <PeranItem
+                            key={i}
+                            disabled={disabled}
+                            data={item}
+                            onChangeHandler={handlerOnChange}
+                        />
                     );
                 })}
             </CardContent>

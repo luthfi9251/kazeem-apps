@@ -45,7 +45,7 @@ export default function WaliSantriFormExpanded(props) {
                                 <FormItem>
                                     <FormLabel>Nama Wali</FormLabel>
                                     <FormControl>
-                                        <Input {...field} />
+                                        <Input {...field} disabled={disabled} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -58,7 +58,7 @@ export default function WaliSantriFormExpanded(props) {
                                 <FormItem>
                                     <FormLabel>Email Wali</FormLabel>
                                     <FormControl>
-                                        <Input {...field} />
+                                        <Input {...field} disabled={disabled} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -71,7 +71,11 @@ export default function WaliSantriFormExpanded(props) {
                                 <FormItem>
                                     <FormLabel>No. Hp Wali</FormLabel>
                                     <FormControl>
-                                        <Input {...field} />
+                                        <Input
+                                            {...field}
+                                            disabled={disabled}
+                                            data-e2e="hp"
+                                        />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -89,6 +93,7 @@ export default function WaliSantriFormExpanded(props) {
                                         name="tgl_lhr"
                                         id="tgl_lhr"
                                         {...field}
+                                        disabled={disabled}
                                     />
                                     <FormMessage />
                                 </FormItem>
