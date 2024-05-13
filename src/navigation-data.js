@@ -34,8 +34,8 @@ export const URL_PATH = [
                 icon: <Home className="h-5 w-5" />,
             },
             {
-                name: "Another Santri",
-                href: "/dashboard/groups",
+                name: "Wali Santri",
+                href: "/dashboard/santri/wali",
                 icon: <Home className="h-5 w-5" />,
             },
         ],

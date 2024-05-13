@@ -17,7 +17,7 @@ let waliSantriSchema = yup.object({
         .min(6, "Panjang minimal 6 karakter!")
         .max(25, "Panjang maksimal 25 Karakter")
         .nullable(),
-    peran: yup.string().required(),
+    peran: yup.string().optional(),
 });
 
 export default waliSantriSchema;

@@ -20,9 +20,14 @@ async function main() {
             UserGroup: {
                 create: {
                     group: {
-                        create: {
-                            nama_group: "ADMIN",
-                            deskripsi: "Grup Admin",
+                        connectOrCreate: {
+                            where: {
+                                nama_group: "ADMIN",
+                            },
+                            create: {
+                                nama_group: "ADMIN",
+                                deskripsi: "Grup Admin",
+                            },
                         },
                     },
                 },
