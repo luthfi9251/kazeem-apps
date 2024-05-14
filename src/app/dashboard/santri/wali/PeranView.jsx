@@ -76,7 +76,7 @@ export default function PeranView({ disabled = false }) {
     };
 
     return (
-        <Card>
+        <Card className="col-span-1">
             <CardHeader>
                 <CardTitle>Perwalian</CardTitle>
                 <CardDescription>Card Description</CardDescription>

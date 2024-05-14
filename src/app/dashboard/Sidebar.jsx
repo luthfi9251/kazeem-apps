@@ -43,10 +43,6 @@ export default function Sidebar(props) {
                 return true;
             } else {
                 item.children.findLast((item2) => {
-                    // if (item2.href === pathname) {
-                    //     index = i;
-                    //     return true;
-                    // }
                     if (pathname.includes(item2.href)) {
                         index = i;
                         return true;
@@ -227,8 +223,9 @@ export default function Sidebar(props) {
                                                                 key={key}
                                                                 href={item.href}
                                                                 className={
-                                                                    pathname ===
-                                                                    item.href
+                                                                    calculateActivePage(
+                                                                        item
+                                                                    )
                                                                         ? "mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-kazeem-primary hover:text-primary"
                                                                         : "mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-white transition-all hover:bg-kazeem-darker"
                                                                 }

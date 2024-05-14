@@ -56,7 +56,7 @@ export default function DetailPage(props) {
                 <Link href={`/dashboard/santri/wali/edit/${id}`}>
                     <Button
                         variant="outline"
-                        className="md:w-36 bg-kazeem-primary hover:bg-kazeem-darker"
+                        className="md:w-36 bg-kazeem-primary hover:bg-kazeem-darker text-white"
                     >
                         Edit
                     </Button>

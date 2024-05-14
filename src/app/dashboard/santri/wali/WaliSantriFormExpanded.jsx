@@ -26,7 +26,7 @@ export default function WaliSantriFormExpanded(props) {
     let { form, onSubmit, disabled = false } = props;
 
     return (
-        <Card className="max-h-min">
+        <Card className="max-h-min col-span-1 ">
             <CardHeader>
                 <CardTitle>Data Wali Santri</CardTitle>
                 <CardDescription> </CardDescription>

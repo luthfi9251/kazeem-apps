@@ -25,7 +25,7 @@ export default function DetailPage(props) {
     });
     return (
         <div className="md:p-5 p-2 grid md:grid-cols-2 grid-cols-1 gap-5">
-            <div className="flex gap-2 col-span-2">
+            <div className="flex gap-2 md:col-span-2 col-span-1">
                 <Link href="/dashboard/santri/">
                     <Button variant="outline" className="mr-3">
                         <ArrowLeft />
@@ -34,7 +34,7 @@ export default function DetailPage(props) {
                 <Link href={`/dashboard/santri/edit/${data.id}`}>
                     <Button
                         // onClick={onSubmitBothForms}
-                        className="md:w-36 bg-kazeem-primary hover:bg-kazeem-darker"
+                        className="md:w-36 bg-kazeem-primary hover:bg-kazeem-darker text-white"
                     >
                         Edit
                     </Button>
