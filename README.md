@@ -33,6 +33,9 @@ Fitur
 8. Jalankan perintah `npm run build`
 9. Jalankan perintah `npm start` untuk menjalankan server
 
+> [!NOTE]
+> Setelah dijalankan silahkan menuju halaman /login dan login dengan credential default admin sbb email : `admin@admin.com` password : `passwordadmin`
+
 ## Testing
 
 ### Inisialisasi
