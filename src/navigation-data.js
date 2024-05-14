@@ -12,11 +12,13 @@ export const URL_PATH = [
             {
                 name: "User",
                 href: "/dashboard/users",
+                suffix: ["/action", "/create", "/detail"],
                 icon: <UserRoundCog className="h-5 w-5" />,
             },
             {
                 name: "Group",
                 href: "/dashboard/users/groups",
+                suffix: ["/edit", "/create", "/detail"],
                 icon: <Users className="h-5 w-5" />,
             },
         ],
@@ -31,11 +33,13 @@ export const URL_PATH = [
             {
                 name: "Kelola Santri",
                 href: "/dashboard/santri",
+                suffix: ["/edit", "/create", "/detail"],
                 icon: <Home className="h-5 w-5" />,
             },
             {
                 name: "Wali Santri",
                 href: "/dashboard/santri/wali",
+                suffix: ["/edit", "/create", "/detail"],
                 icon: <Home className="h-5 w-5" />,
             },
         ],

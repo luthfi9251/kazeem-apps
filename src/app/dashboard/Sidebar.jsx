@@ -42,8 +42,12 @@ export default function Sidebar(props) {
                 index = i;
                 return true;
             } else {
-                item.children.find((item2) => {
-                    if (item2.href === pathname) {
+                item.children.findLast((item2) => {
+                    // if (item2.href === pathname) {
+                    //     index = i;
+                    //     return true;
+                    // }
+                    if (pathname.includes(item2.href)) {
                         index = i;
                         return true;
                     }
@@ -81,6 +85,25 @@ export default function Sidebar(props) {
     };
 
     let dataLink = getAllowedNavLink();
+
+    let calculateActivePage = (navItem) => {
+        if (pathname.includes(navItem.href)) {
+            let suffixPathname = pathname.split(navItem.href);
+            console.log(suffixPathname);
+            if (suffixPathname.length > 1) {
+                let part = suffixPathname[1].split("/");
+                let normalize = `/${part[1]}`;
+                console.log({ part });
+                if (navItem.suffix.includes(normalize)) {
+                    return true;
+                } else if (suffixPathname[0] === suffixPathname[1]) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return false;
+    };
 
     return (
         <div className="flex flex-col md:grid h-screen overflow-hidden w-full md:w-auto md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
@@ -126,8 +149,9 @@ export default function Sidebar(props) {
                                                                 key={key}
                                                                 href={item.href}
                                                                 className={
-                                                                    pathname ===
-                                                                    item.href
+                                                                    calculateActivePage(
+                                                                        item
+                                                                    )
                                                                         ? "flex items-center gap-3 rounded-lg bg-muted px-3 py-3 text-kazeem-primary transition-all hover:text-primary"
                                                                         : "flex items-center gap-3 rounded-lg bg-kazeem-middle px-3 py-3 text-white transition-all hover:bg-kazeem-darker"
                                                                 }
