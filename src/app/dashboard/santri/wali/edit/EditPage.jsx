@@ -114,7 +114,7 @@ export default function EditPage(props) {
                 >
                     Simpan
                 </Button>
-                <Link href={`/dashboard/santri/detail/`}>
+                <Link href={`/dashboard/santri/wali/detail/${id}`}>
                     <Button
                         variant="outline"
                         className="md:w-36 border-kazeem-primary"

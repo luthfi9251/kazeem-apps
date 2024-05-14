@@ -211,7 +211,10 @@ function DialogFormWali({ open, openChange, context }) {
     );
 }
 
-export default function WaliSantriForm({ disabled = false }) {
+export default function WaliSantriForm({
+    disabled = false,
+    allowDetail = true,
+}) {
     let [isOpen, setIsOpen] = useState(false);
     const waliContextVal = useContext(WaliContext);
 
@@ -223,7 +226,10 @@ export default function WaliSantriForm({ disabled = false }) {
                     <CardDescription> </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-5">
-                    <WaliSantriView disabled={disabled} />
+                    <WaliSantriView
+                        disabled={disabled}
+                        allowDetail={allowDetail}
+                    />
                     <Separator />
                     <Button
                         variant="outline"

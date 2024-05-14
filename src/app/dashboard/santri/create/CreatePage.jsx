@@ -103,7 +103,7 @@ function PageCreateSantri() {
                 </Button>
             </div>
             <SantriForm form={formSantri} />
-            <WaliSantriForm />
+            <WaliSantriForm allowDetail={false} />
         </div>
     );
 }

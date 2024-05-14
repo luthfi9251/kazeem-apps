@@ -24,7 +24,7 @@ import { useContext } from "react";
 import Link from "next/link";
 
 export default function WaliSantriView(props) {
-    let { disabled } = props;
+    let { disabled, allowDetail = true } = props;
     let [dataWali, setWaliGroup] = useContext(WaliContext);
     let handleDelete = (data) => {
         let filtered = dataWali.filter(
@@ -79,7 +79,9 @@ export default function WaliSantriView(props) {
                                                 Hapus
                                             </div>
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            disabled={!allowDetail}
+                                        >
                                             <Link
                                                 className="flex gap-3 cursor-pointer w-full"
                                                 href={`/dashboard/santri/wali/detail/${item.id}`}

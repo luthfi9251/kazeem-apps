@@ -68,6 +68,14 @@ export const columns = [
                                 Detail
                             </Link>
                         </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <Link
+                                href={`/dashboard/santri/edit/${user.id}`}
+                                className="w-full"
+                            >
+                                Edit
+                            </Link>
+                        </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             );

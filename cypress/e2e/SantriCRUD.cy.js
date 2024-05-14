@@ -112,7 +112,7 @@ describe("Santri Page CRUD", () => {
         cy.contains("tr", dataSantri.nama_lengkap).within(($row) => {
             cy.get("button").click();
         });
-        cy.get("a.w-full").click();
+        cy.contains("a.w-full", "Detail").click();
         cy.url().should("contain", "/dashboard/santri/detail");
         //check elemen sebelum diupdate
         cy.get('textarea[name="alamat"]').should(
@@ -176,7 +176,7 @@ describe("Santri Page CRUD", () => {
         cy.contains("tr", dataSantri.nama_lengkap).within(($row) => {
             cy.get("button").click();
         });
-        cy.get("a.w-full").click();
+        cy.contains("a.w-full", "Detail").click();
         cy.url().should("contain", "/dashboard/santri/detail");
         //check elemen sebelum diupdate
         cy.get('input[name="nama_lengkap"]').should(
