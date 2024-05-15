@@ -1,16 +1,7 @@
 "use client";
 import Link from "next/link";
-import {
-    Bell,
-    FileText,
-    Home,
-    Menu,
-    Package2,
-    University,
-    User,
-    UserRoundCog,
-    Users,
-} from "lucide-react";
+import { Settings, Menu } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -34,6 +25,19 @@ export default function Sidebar(props) {
     let pathname = usePathname();
     let router = useRouter();
     let { children, session } = props;
+    console.log(session);
+
+    let generateFallbackAvatar = () => {
+        if (session) {
+            let name = session.user.nama_lengkap;
+            let list = name.split(" ");
+            if (list.length > 1) {
+                return list[0].charAt(0) + list[list.length - 1].charAt(0);
+            } else {
+                return list[0].charAt(0);
+            }
+        }
+    };
 
     let getOpenedAcordion = () => {
         let index = -1;
@@ -85,11 +89,9 @@ export default function Sidebar(props) {
     let calculateActivePage = (navItem) => {
         if (pathname.includes(navItem.href)) {
             let suffixPathname = pathname.split(navItem.href);
-            console.log(suffixPathname);
             if (suffixPathname.length > 1) {
                 let part = suffixPathname[1].split("/");
                 let normalize = `/${part[1]}`;
-                console.log({ part });
                 if (navItem.suffix.includes(normalize)) {
                     return true;
                 } else if (suffixPathname[0] === suffixPathname[1]) {
@@ -119,8 +121,8 @@ export default function Sidebar(props) {
                             <span className="">Kazeem</span>
                         </Link>
                     </div>
-                    <div className="flex-1">
-                        <nav className="grid items-start px-2 text-md font-medium lg:px-4 gap-1 text-kazeem-primary">
+                    <div className="grow overflow-y-auto">
+                        <nav className="grid items-start px-1 text-md font-medium lg:px-2 gap-1 text-kazeem-primary max-h-full">
                             <Accordion
                                 type="single"
                                 collapsible
@@ -148,8 +150,8 @@ export default function Sidebar(props) {
                                                                     calculateActivePage(
                                                                         item
                                                                     )
-                                                                        ? "flex items-center gap-3 rounded-lg bg-muted px-3 py-3 text-kazeem-primary transition-all hover:text-primary"
-                                                                        : "flex items-center gap-3 rounded-lg bg-kazeem-middle px-3 py-3 text-white transition-all hover:bg-kazeem-darker"
+                                                                        ? "flex items-center gap-3 rounded-md bg-muted px-3 py-3 text-kazeem-primary transition-all hover:text-primary"
+                                                                        : "flex items-center gap-3 rounded-md bg-kazeem-middle px-3 py-3 text-white transition-all hover:bg-kazeem-darker"
                                                                 }
                                                             >
                                                                 {item.icon}
@@ -164,6 +166,28 @@ export default function Sidebar(props) {
                                 })}
                             </Accordion>
                         </nav>
+                    </div>
+                    <div className="h-14 w-full border-t p-1 flex items-center">
+                        <Avatar className="">
+                            {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
+                            <AvatarFallback className="text-black">
+                                {generateFallbackAvatar()}
+                            </AvatarFallback>
+                        </Avatar>
+                        <div className="grow px-3">
+                            <p className="cursor-default text-base font-semibold line-clamp-1">
+                                {session?.user.nama_lengkap}
+                            </p>
+                            <p className="cursor-default text-xs font-light">
+                                {session?.user.groups.length} Groups
+                            </p>
+                        </div>
+                        <Button
+                            variant="ghost"
+                            className="w-10 p-1 hover:bg-kazeem-darker hover:text-white"
+                        >
+                            <Settings className="w-6 h-6" />
+                        </Button>
                     </div>
                 </div>
             </div>
@@ -183,9 +207,9 @@ export default function Sidebar(props) {
                     </SheetTrigger>
                     <SheetContent
                         side="left"
-                        className="flex flex-col bg-kazeem-primary text-white"
+                        className="flex flex-col bg-kazeem-primary text-white px-3"
                     >
-                        <nav className="grid gap-2 text-lg font-medium">
+                        <nav className="flex flex-col gap-2 text-lg font-medium h-full">
                             <Link
                                 href="#"
                                 className="flex items-center gap-2 text-lg font-semibold"
@@ -202,6 +226,7 @@ export default function Sidebar(props) {
                             <Accordion
                                 type="single"
                                 collapsible
+                                className="grow overflow-y-auto"
                                 defaultValue={getOpenedAcordion() + 1}
                             >
                                 {dataLink.map((item, key) => {
@@ -226,8 +251,8 @@ export default function Sidebar(props) {
                                                                     calculateActivePage(
                                                                         item
                                                                     )
-                                                                        ? "mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-kazeem-primary hover:text-primary"
-                                                                        : "mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-white transition-all hover:bg-kazeem-darker"
+                                                                        ? "mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-5 py-2 text-kazeem-primary hover:text-primary h-14"
+                                                                        : "mx-[-0.65rem] flex items-center gap-4 rounded-xl px-5 py-2 text-white transition-all hover:bg-kazeem-darker h-14"
                                                                 }
                                                             >
                                                                 {item.icon}
@@ -241,6 +266,28 @@ export default function Sidebar(props) {
                                     );
                                 })}
                             </Accordion>
+                            <div className="h-14 w-full border-t p-1 flex items-center">
+                                <Avatar className="">
+                                    {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
+                                    <AvatarFallback className="text-black">
+                                        {generateFallbackAvatar()}
+                                    </AvatarFallback>
+                                </Avatar>
+                                <div className="grow px-3">
+                                    <p className="cursor-default text-base font-semibold line-clamp-1">
+                                        {session?.user.nama_lengkap}
+                                    </p>
+                                    <p className="cursor-default text-xs font-light">
+                                        {session?.user.groups.length} Groups
+                                    </p>
+                                </div>
+                                <Button
+                                    variant="ghost"
+                                    className="w-10 p-1 hover:bg-kazeem-darker hover:text-white"
+                                >
+                                    <Settings className="w-6 h-6" />
+                                </Button>
+                            </div>
                         </nav>
                     </SheetContent>
                 </Sheet>
