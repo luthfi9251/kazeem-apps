@@ -1,10 +1,19 @@
 "use server";
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { auth } from "@/auth";
 
 export async function saveEditWaliSantri(idWali, dataWali, dataWaliSantri) {
     return new Promise(async (resolve, reject) => {
         try {
+            let session = await auth();
+
+            let userActionId = {
+                connect: {
+                    id: session.user.id,
+                },
+            };
+
             let updateWali = await prisma.Wali.update({
                 where: {
                     id: parseInt(idWali),
@@ -14,6 +23,7 @@ export async function saveEditWaliSantri(idWali, dataWali, dataWaliSantri) {
                     tgl_lhr: new Date(dataWali.tgl_lhr).toISOString(),
                     email: dataWali.email === "" ? null : dataWali.email,
                     hp: dataWali.hp,
+                    last_update_by: userActionId,
                 },
             });
 
@@ -24,6 +34,7 @@ export async function saveEditWaliSantri(idWali, dataWali, dataWaliSantri) {
                     },
                     data: {
                         peran: item.peran,
+                        last_update_by: userActionId,
                     },
                 });
             });
@@ -44,7 +55,6 @@ export async function deleteWaliSantri(id) {
                     wali_id: id,
                 },
             });
-            console.log({ check: checkHasRelation });
             if (checkHasRelation.length > 0) {
                 throw new Error(
                     "Wali tidak dapat dihapus karena memiliki perwalian santri!"

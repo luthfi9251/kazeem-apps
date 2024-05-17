@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
+import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
 
 async function saveFotoToLocal(file) {
@@ -32,11 +33,18 @@ export async function editSantri(santriFormData, waliSantriFormData) {
             let waliSantri = waliSantriFormData;
             let file = santri.get("foto");
             let fotoPath = null;
+            let session = await auth();
 
             if (file !== "undefined") {
                 let path = await saveFotoToLocal(file);
                 fotoPath = path;
             }
+
+            let userActionId = {
+                connect: {
+                    id: session.user.id,
+                },
+            };
 
             let updateSantri = prisma.Santri.update({
                 where: {
@@ -50,6 +58,7 @@ export async function editSantri(santriFormData, waliSantriFormData) {
                     tempat_lahir: santri.get("tempat_lahir"),
                     tgl_lhr: new Date(santri.get("tgl_lhr")).toISOString(),
                     foto: fotoPath ? fotoPath : null,
+                    last_update_by: userActionId,
                     WaliSantri: {
                         deleteMany: {},
                     },
@@ -65,6 +74,7 @@ export async function editSantri(santriFormData, waliSantriFormData) {
                         create: waliSantri.map((item) => {
                             return {
                                 peran: item.peran,
+                                last_update_by: userActionId,
                                 wali: {
                                     connectOrCreate: {
                                         where: {
@@ -82,6 +92,8 @@ export async function editSantri(santriFormData, waliSantriFormData) {
                                             ).toISOString(),
                                             email: item.email || null,
                                             hp: item.hp || null,
+                                            last_update_by: userActionId,
+                                            created_by: userActionId,
                                         },
                                     },
                                 },

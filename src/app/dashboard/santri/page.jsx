@@ -47,7 +47,7 @@ async function getData() {
             nama_wali: item.WaliSantri[0].wali.nama_wali,
         };
     });
-    console.log(data);
+    // console.log(data);
     return data;
 }
 

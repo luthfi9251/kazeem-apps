@@ -16,6 +16,16 @@ model User {
   aktif        Boolean     @default(true)
   UserGroup    UserGroup[]
   wali         Wali[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  WaliCreated       Wali[]       @relation("wali_created_by")
+  WaliUpdated       Wali[]       @relation("wali_updated_by")
+  WaliSantriCreated WaliSantri[] @relation("walisantri_created_by")
+  WaliSantriUpdated WaliSantri[] @relation("walisantri_updated_by")
+  SantriCreated     Santri[]     @relation("santri_created_by")
+  SantriUpdated     Santri[]     @relation("santri_updated_by")
 }
 
 model Group {
@@ -23,6 +33,9 @@ model Group {
   nama_group String      @unique @db.VarChar(100)
   deskripsi  String
   UserGroup  UserGroup[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
 
 model UserGroup {
@@ -31,6 +44,9 @@ model UserGroup {
   group_id Int
   group    Group  @relation(fields: [group_id], references: [id])
   user     User   @relation(fields: [user_id], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
 
 model Santri {
@@ -43,6 +59,14 @@ model Santri {
   tgl_lhr      DateTime     @db.Date
   foto         String?      @db.VarChar(100)
   WaliSantri   WaliSantri[]
+
+  last_updat_by_id String?
+  last_update_by   User?   @relation("santri_updated_by", fields: [last_updat_by_id], references: [id])
+  created_by_id    String?
+  created_by       User?   @relation("santri_created_by", fields: [created_by_id], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
 
 model WaliSantri {
@@ -52,6 +76,14 @@ model WaliSantri {
   peran     PeranWali
   santri    Santri    @relation(fields: [santri_id], references: [id])
   wali      Wali      @relation(fields: [wali_id], references: [id])
+
+  last_update_by_id String?
+  last_update_by    User?   @relation("walisantri_updated_by", fields: [last_update_by_id], references: [id])
+  created_by_id     String?
+  created_by        User?   @relation("walisantri_created_by", fields: [created_by_id], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
 
 model Wali {
@@ -63,6 +95,14 @@ model Wali {
   user_id    String?
   user       User?        @relation(fields: [user_id], references: [id])
   WaliSantri WaliSantri[]
+
+  last_update_by_id String?
+  last_update_by    User?   @relation("wali_updated_by", fields: [last_update_by_id], references: [id])
+  created_by_id     String?
+  created_by        User?   @relation("wali_created_by", fields: [created_by_id], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   @@unique([nama_wali, tgl_lhr], name: "waliIdentifier")
 }

@@ -3,8 +3,7 @@ import prisma from "@/lib/prisma";
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
-import { redirect } from "next/navigation";
-import { hashPassword } from "@/lib/bcrypt";
+import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
 
 async function saveFotoToLocal(file) {
@@ -63,12 +62,19 @@ export async function addSantri(santriFormData, waliSantriFormData) {
     let santri = santriFormData;
     let waliSantri = waliSantriFormData;
     let file = santri.get("foto");
+    let session = await auth();
     let fotoPath = null;
 
     if (file !== "undefined") {
         let path = await saveFotoToLocal(file);
         fotoPath = path;
     }
+
+    let userActionId = {
+        connect: {
+            id: session.user.id,
+        },
+    };
 
     let query = {
         data: {
@@ -79,10 +85,14 @@ export async function addSantri(santriFormData, waliSantriFormData) {
             tempat_lahir: santri.get("tempat_lahir"),
             tgl_lhr: new Date(santri.get("tgl_lhr")).toISOString(),
             foto: fotoPath ? fotoPath : null,
+            created_by: userActionId,
+            last_update_by: userActionId,
             WaliSantri: {
                 create: waliSantri.map((item) => {
                     return {
                         peran: item.peran,
+                        created_by: userActionId,
+                        last_update_by: userActionId,
                         wali: {
                             connectOrCreate: {
                                 where: {
@@ -100,6 +110,8 @@ export async function addSantri(santriFormData, waliSantriFormData) {
                                     ).toISOString(),
                                     email: item.email || null,
                                     hp: item.hp || null,
+                                    created_by: userActionId,
+                                    last_update_by: userActionId,
                                 },
                             },
                         },

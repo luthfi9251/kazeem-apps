@@ -85,11 +85,9 @@ export default function Sidebar(props) {
     let calculateActivePage = (navItem) => {
         if (pathname.includes(navItem.href)) {
             let suffixPathname = pathname.split(navItem.href);
-            console.log(suffixPathname);
             if (suffixPathname.length > 1) {
                 let part = suffixPathname[1].split("/");
                 let normalize = `/${part[1]}`;
-                console.log({ part });
                 if (navItem.suffix.includes(normalize)) {
                     return true;
                 } else if (suffixPathname[0] === suffixPathname[1]) {

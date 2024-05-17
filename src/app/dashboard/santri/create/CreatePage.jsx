@@ -76,7 +76,7 @@ function PageCreateSantri() {
 
         if (formSantri.formState.isValid && dataWali.length != 0) {
             let dataSantri = formSantri.getValues();
-            console.log(dataSantri);
+            // console.log(dataSantri);
             let dataWaliSantri = [...dataWali];
             sendToServer(dataSantri, dataWaliSantri);
         } else {
