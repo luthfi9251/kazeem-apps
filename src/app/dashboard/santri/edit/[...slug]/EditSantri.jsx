@@ -55,7 +55,7 @@ export default function EditSantriPage(props) {
         santriFormData.append("id", data.id);
 
         toast.promise(
-            () => editSantri(santriFormData, dataWaliSantri),
+            () => editSantri(santriFormData, dataWaliSantri, data.foto),
             {
                 pending: "Menyimpan data",
                 success: {
@@ -97,7 +97,7 @@ export default function EditSantriPage(props) {
 
     let onDeletehandle = () => {
         toast.promise(
-            () => deleteSantri(data.id),
+            () => deleteSantri(data.id, data.foto),
             {
                 pending: "Menghapus data",
                 success: {

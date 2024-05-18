@@ -16,6 +16,9 @@ async function getData(id, mode) {
             },
         },
     });
+    if (data?.foto) {
+        data.foto = process.env.APP_URL + "/api" + data.foto;
+    }
     return data;
 }
 

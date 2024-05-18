@@ -170,6 +170,7 @@ export default function SantriForm({ form, disabled, foto = null }) {
                                                 <div className="grid w-full max-w-sm items-center gap-1.5">
                                                     <Input
                                                         type="file"
+                                                        accept="image/*"
                                                         disabled={
                                                             disabled
                                                                 ? true

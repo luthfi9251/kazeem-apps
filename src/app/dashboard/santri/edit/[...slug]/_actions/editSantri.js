@@ -26,7 +26,19 @@ async function saveFotoToLocal(file) {
     return `/foto/${fileName}.${fileExt}`;
 }
 
-export async function editSantri(santriFormData, waliSantriFormData) {
+async function deleteFoto(file) {
+    let pathList = file.split("/");
+    let fileName = pathList[pathList.length - 1];
+    let pathToSave = path.join(process.cwd(), "public", "foto", `${fileName}`);
+
+    fs.unlink(pathToSave, (err) => {
+        if (err) {
+            console.log(`Error delete foto : ${fileName} - ${err}`);
+        }
+    });
+}
+
+export async function editSantri(santriFormData, waliSantriFormData, prevFoto) {
     return new Promise(async (resolve, reject) => {
         try {
             let santri = santriFormData;
@@ -38,6 +50,9 @@ export async function editSantri(santriFormData, waliSantriFormData) {
             if (file !== "undefined") {
                 let path = await saveFotoToLocal(file);
                 fotoPath = path;
+                if (prevFoto) {
+                    await deleteFoto(prevFoto);
+                }
             }
 
             let userActionId = {
@@ -46,23 +61,28 @@ export async function editSantri(santriFormData, waliSantriFormData) {
                 },
             };
 
+            let updateQueryData = {
+                nama_lengkap: santri.get("nama_lengkap"),
+                alamat: santri.get("alamat"),
+                email: santri.get("email"),
+                hp: santri.get("hp") || null,
+                tempat_lahir: santri.get("tempat_lahir"),
+                tgl_lhr: new Date(santri.get("tgl_lhr")).toISOString(),
+                last_update_by: userActionId,
+                WaliSantri: {
+                    deleteMany: {},
+                },
+            };
+
+            if (fotoPath) {
+                updateQueryData.foto = fotoPath;
+            }
+
             let updateSantri = prisma.Santri.update({
                 where: {
                     id: parseInt(santri.get("id")),
                 },
-                data: {
-                    nama_lengkap: santri.get("nama_lengkap"),
-                    alamat: santri.get("alamat"),
-                    email: santri.get("email"),
-                    hp: santri.get("hp") || null,
-                    tempat_lahir: santri.get("tempat_lahir"),
-                    tgl_lhr: new Date(santri.get("tgl_lhr")).toISOString(),
-                    foto: fotoPath ? fotoPath : null,
-                    last_update_by: userActionId,
-                    WaliSantri: {
-                        deleteMany: {},
-                    },
-                },
+                data: updateQueryData,
             });
 
             let updateWaliSantri = prisma.Santri.update({
@@ -114,7 +134,7 @@ export async function editSantri(santriFormData, waliSantriFormData) {
     });
 }
 
-export async function deleteSantri(id) {
+export async function deleteSantri(id, foto) {
     return new Promise(async (resolve, reject) => {
         try {
             let deleteWaliSantri = prisma.WaliSantri.deleteMany({
@@ -138,6 +158,10 @@ export async function deleteSantri(id) {
                 deleteSantri,
                 deleteWali,
             ]);
+
+            if (foto) {
+                await deleteFoto(foto);
+            }
             revalidatePath("/dashboard/santri");
             resolve(deleteTransaction);
         } catch (err) {
