@@ -8,6 +8,7 @@ export const PAGE_NAME = {
     MANAGE_USER_PAGE: "MANAGE_USER_PAGE",
     MANAGE_ROLE_PAGE: "MANAGE_ROLE_PAGE",
     MANAGE_SANTRI_PAGE: "MANAGE_SANTRI_PAGE",
+    MANAGE_PELANGGARAN_PAGE: "MANAGE_PELANGGARAN_PAGE",
 };
 
 export const PAGE_ACCESS_CONFIG = [
@@ -21,6 +22,10 @@ export const PAGE_ACCESS_CONFIG = [
     },
     {
         name: PAGE_NAME.MANAGE_SANTRI_PAGE,
+        allowedGroup: [ROLE.ADMIN],
+    },
+    {
+        name: PAGE_NAME.MANAGE_PELANGGARAN_PAGE,
         allowedGroup: [ROLE.ADMIN],
     },
 ];

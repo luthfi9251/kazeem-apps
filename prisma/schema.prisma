@@ -60,10 +60,10 @@ model Santri {
   foto         String?      @db.VarChar(100)
   WaliSantri   WaliSantri[]
 
-  last_updat_by_id String?
-  last_update_by   User?   @relation("santri_updated_by", fields: [last_updat_by_id], references: [id])
-  created_by_id    String?
-  created_by       User?   @relation("santri_created_by", fields: [created_by_id], references: [id])
+  last_update_by_id String?
+  last_update_by    User?   @relation("santri_updated_by", fields: [last_update_by_id], references: [id])
+  created_by_id     String?
+  created_by        User?   @relation("santri_created_by", fields: [created_by_id], references: [id])
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt

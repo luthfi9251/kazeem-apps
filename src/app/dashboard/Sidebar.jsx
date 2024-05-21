@@ -146,8 +146,8 @@ export default function Sidebar(props) {
                                                                     calculateActivePage(
                                                                         item
                                                                     )
-                                                                        ? "flex items-center gap-3 rounded-lg bg-muted px-3 py-3 text-kazeem-primary transition-all hover:text-primary"
-                                                                        : "flex items-center gap-3 rounded-lg bg-kazeem-middle px-3 py-3 text-white transition-all hover:bg-kazeem-darker"
+                                                                        ? "flex items-center gap-3 rounded bg-muted px-3 py-3 text-kazeem-primary transition-all hover:text-primary"
+                                                                        : "flex items-center gap-3 rounded bg-kazeem-middle px-3 py-3 text-white transition-all hover:bg-kazeem-darker"
                                                                 }
                                                             >
                                                                 {item.icon}
