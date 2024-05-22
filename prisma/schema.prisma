@@ -20,12 +20,14 @@ model User {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  WaliCreated       Wali[]       @relation("wali_created_by")
-  WaliUpdated       Wali[]       @relation("wali_updated_by")
-  WaliSantriCreated WaliSantri[] @relation("walisantri_created_by")
-  WaliSantriUpdated WaliSantri[] @relation("walisantri_updated_by")
-  SantriCreated     Santri[]     @relation("santri_created_by")
-  SantriUpdated     Santri[]     @relation("santri_updated_by")
+  WaliCreated        Wali[]                @relation("wali_created_by")
+  WaliUpdated        Wali[]                @relation("wali_updated_by")
+  WaliSantriCreated  WaliSantri[]          @relation("walisantri_created_by")
+  WaliSantriUpdated  WaliSantri[]          @relation("walisantri_updated_by")
+  SantriCreated      Santri[]              @relation("santri_created_by")
+  SantriUpdated      Santri[]              @relation("santri_updated_by")
+  KategoriPelCreated KategoriPelanggaran[] @relation("kategoriPel_created_by")
+  KategoriPelUpdated KategoriPelanggaran[] @relation("kategoriPel_updated_by")
 }
 
 model Group {
@@ -112,4 +114,25 @@ enum PeranWali {
   IBU
   WALI
   lainnya
+}
+
+model KategoriPelanggaran {
+  id               Int      @id @default(autoincrement())
+  nama_pelanggaran String
+  kategori         Kategori
+  jenis            String
+  poin             Int
+
+  created_by        User?    @relation("kategoriPel_created_by", fields: [created_by_id], references: [id])
+  created_by_id     String?
+  last_update_by    User?    @relation("kategoriPel_updated_by", fields: [last_update_by_id], references: [id])
+  last_update_by_id String?
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+}
+
+enum Kategori {
+  BERAT
+  SEDANG
+  RINGAN
 }
