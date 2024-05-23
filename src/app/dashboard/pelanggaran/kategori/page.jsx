@@ -12,6 +12,11 @@ import {
 
 async function getData() {
     let data = await prisma.KategoriPelanggaran.findMany({
+        orderBy: [
+            {
+                nama_pelanggaran: "asc",
+            },
+        ],
         select: {
             id: true,
             nama_pelanggaran: true,

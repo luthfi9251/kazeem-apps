@@ -4,7 +4,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-    title: "Kazeem - web app",
+    title: "Kazeem - Web App",
     description: "Kazeem, aplikasi pondok pesantren online",
 };
 

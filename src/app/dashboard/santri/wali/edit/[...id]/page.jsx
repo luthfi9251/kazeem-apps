@@ -1,6 +1,8 @@
 import EditPage from "../EditPage";
 import prisma from "@/lib/prisma";
 import PerwalianDataProvider from "../../PerwalianDataProvider";
+import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
+import { PAGE_NAME } from "@/security-config";
 
 async function getData(id) {
     let data = await prisma.Wali.findUnique({
@@ -21,6 +23,7 @@ async function getData(id) {
             },
         },
     });
+    if (!data) return null;
     data.tgl_lhr = new Date(data.tgl_lhr).toISOString().split("T")[0];
     data.WaliSantri = data.WaliSantri.map((item) => {
         return {
@@ -32,11 +35,16 @@ async function getData(id) {
     return data;
 }
 
-export default async function PageEdit(props) {
+async function PageEdit(props) {
     let data = await getData(props.params.id[0]);
+    if (!data) {
+        throw new Error("Data tidak ditemukan!");
+    }
     return (
         <PerwalianDataProvider data={data.WaliSantri}>
             <EditPage data={data} id={props.params.id[0]} />
         </PerwalianDataProvider>
     );
 }
+
+export default withAuthAndGroupCheck(PageEdit, PAGE_NAME.MANAGE_SANTRI_PAGE);

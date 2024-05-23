@@ -7,7 +7,7 @@ import {
     flexRender,
     getCoreRowModel,
     getPaginationRowModel,
-    ColumnFiltersState,
+    getSortedRowModel,
     getFilteredRowModel,
     useReactTable,
 } from "@tanstack/react-table";
@@ -38,8 +38,17 @@ export function DataTable({ columns, data }) {
         getPaginationRowModel: getPaginationRowModel(),
         onColumnFiltersChange: setColumnFilters,
         getFilteredRowModel: getFilteredRowModel(),
+        getSortedRowModel: getSortedRowModel(),
         state: {
             columnFilters,
+        },
+        initialState: {
+            sorting: [
+                {
+                    id: "no",
+                    asc: true,
+                },
+            ],
         },
     });
 

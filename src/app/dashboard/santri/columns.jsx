@@ -30,6 +30,12 @@ model Santri {
 
 export const columns = [
     {
+        header: "No.",
+        cell: ({ row }) => {
+            return <span className="capitalize ">{row.index + 1}</span>;
+        },
+    },
+    {
         accessorKey: "nama_lengkap",
         header: "Nama Lengkap",
     },

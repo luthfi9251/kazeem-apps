@@ -66,3 +66,24 @@ export async function editKategoriPelanggaran(id, data) {
         }
     });
 }
+
+export async function deleteKategoriPelanggaran(id) {
+    return new Promise(async (resolve, reject) => {
+        //TODO
+        // Ketika sudah ada tabel relasi, cek terlebih dahulu apakah ada relasi baru dihapus!
+        try {
+            let deleteKategori = await prisma.KategoriPelanggaran.delete({
+                where: {
+                    id,
+                },
+            });
+            revalidatePath("/dashboard/pelanggaran/kategori");
+            resolve("success delete");
+        } catch (err) {
+            reject({
+                msg: "error delete",
+                err: err,
+            });
+        }
+    });
+}

@@ -8,8 +8,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { ArrowLeft } from "lucide-react";
 import { addKategoriPelanggaran } from "../../_actions/kategori";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 export default function CreatePage() {
+    let router = useRouter();
     const formKategori = useForm({
         resolver: yupResolver(kategoriPelanggaranSchema),
         defaultValues: {
@@ -31,7 +33,7 @@ export default function CreatePage() {
                 pending: "Menyimpan data",
                 success: {
                     render({ data }) {
-                        // router.push("/dashboard/santri");
+                        router.push("/dashboard/pelanggaran/kategori");
                         return "Data berhasil disimpan";
                     },
                 },
@@ -59,12 +61,18 @@ export default function CreatePage() {
                 <Button
                     onClick={onSimpanClick}
                     className="md:w-36 bg-kazeem-primary hover:bg-kazeem-darker"
+                    data-e2e="btn-simpan"
                 >
                     Simpan
                 </Button>
-                <Button className="md:w-36 bg-red-500  hover:bg-red-800">
-                    Cancel
-                </Button>
+                <Link href={`/dashboard/pelanggaran/kategori`}>
+                    <Button
+                        className="md:w-36 border-kazeem-primary hover:bg-slate-200"
+                        variant="outline"
+                    >
+                        Cancel
+                    </Button>
+                </Link>
             </div>
             <KategoriForm form={formKategori} />
         </div>

@@ -9,9 +9,16 @@ import {
 import prisma from "@/lib/prisma";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
+import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
+import { PAGE_NAME } from "@/security-config";
 
 async function getData() {
     let data = await prisma.Wali.findMany({
+        orderBy: [
+            {
+                nama_wali: "asc",
+            },
+        ],
         select: {
             id: true,
             nama_wali: true,
@@ -38,7 +45,7 @@ async function getData() {
     return data;
 }
 
-export default async function Page() {
+async function Page() {
     let data = await getData();
     return (
         <div className="md:p-5 p-2">
@@ -54,3 +61,5 @@ export default async function Page() {
         </div>
     );
 }
+
+export default withAuthAndGroupCheck(Page, PAGE_NAME.MANAGE_SANTRI_PAGE);

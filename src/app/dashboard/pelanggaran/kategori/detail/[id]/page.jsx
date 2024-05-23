@@ -13,7 +13,9 @@ async function getData(id) {
 export default async function Page(props) {
     let id = parseInt(props.params.id);
     let data = await getData(id);
-
+    if (!data) {
+        throw new Error("Data tidak ditemukan!");
+    }
     return (
         <>
             <DetailPage data={data} />

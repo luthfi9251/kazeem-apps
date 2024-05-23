@@ -75,6 +75,7 @@ export function DataTable({ columns, data }) {
                     <Button
                         className="self-end bg-kazeem-secondary "
                         id="tambah-santri"
+                        data-e2e="btn-tambah"
                     >
                         Tambah Kategori
                     </Button>

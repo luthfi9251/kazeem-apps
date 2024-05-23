@@ -30,6 +30,7 @@ export default function DetailPage({ data }) {
                     <Button
                         // onClick={onSimpanClick}
                         className="md:w-36 bg-kazeem-primary hover:bg-kazeem-darker"
+                        data-e2e="btn-edit"
                     >
                         Edit
                     </Button>

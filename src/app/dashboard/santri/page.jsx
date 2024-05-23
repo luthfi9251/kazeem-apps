@@ -14,6 +14,11 @@ import { PAGE_NAME } from "@/security-config";
 
 async function getData() {
     let santriData = await prisma.Santri.findMany({
+        orderBy: [
+            {
+                nama_lengkap: "asc",
+            },
+        ],
         select: {
             id: true,
             nama_lengkap: true,

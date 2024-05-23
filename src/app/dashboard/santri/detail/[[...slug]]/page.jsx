@@ -26,6 +26,9 @@ async function PageDetailSantri(props) {
     let santriId = props.params.slug[0];
     let mode = props.params.slug[1] || false;
     let data = await getData(santriId, mode);
+    if (!data) {
+        throw new Error("Data tidak ditemukan!");
+    }
     let waliSantri = data.WaliSantri.map((item) => {
         return {
             id: item.wali.id,

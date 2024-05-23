@@ -25,6 +25,9 @@ async function getData(id) {
 async function PageEdit(props) {
     let { params } = props;
     let data = await getData(params.slug[0]);
+    if (!data) {
+        throw new Error("Data tidak ditemukan!");
+    }
     let waliSantri = data.WaliSantri.map((item) => {
         return {
             id: item.wali.id,
