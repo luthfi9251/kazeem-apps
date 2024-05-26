@@ -1,6 +1,6 @@
 import { PAGE_NAME } from "./security-config";
 import {
-    Home,
+    School,
     User,
     UserRoundCog,
     Users,
@@ -46,6 +46,21 @@ export const URL_PATH = [
             {
                 name: "Wali Santri",
                 href: "/dashboard/santri/wali",
+                suffix: ["/edit", "/create", "/detail"],
+                icon: "",
+            },
+        ],
+    },
+    {
+        name: "Kemadrasahan",
+        icon: <School className="h-5 w-5" />,
+        page_name: PAGE_NAME.MANAGE_MADRASAH_PAGE,
+        href: "",
+        hasChild: true,
+        children: [
+            {
+                name: "Kelola Kelas",
+                href: "/dashboard/kemadrasahan/kelas",
                 suffix: ["/edit", "/create", "/detail"],
                 icon: "",
             },
