@@ -17,7 +17,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { getTahunAjarSummaryByKelas } from "../_actions/kelas";
+import { getTahunAjarSummaryByKelas } from "../../_actions/kelas";
 
 export default function CardTahunAjar({ dataKelas }) {
     let { data, isLoading, isError } = useQuery({

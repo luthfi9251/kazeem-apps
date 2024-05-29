@@ -48,7 +48,7 @@ import { useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import kelasSantriSchema from "./yup-kelasSantri-schema";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getAllSiswaNotJoinKelas, addSiswaToKelas } from "../_actions/kelas";
+import { getAllSiswaNotJoinKelas, addSiswaToKelas } from "../../_actions/kelas";
 
 export default function SiswaDialogForm({
     open,

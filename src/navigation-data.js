@@ -8,6 +8,15 @@ import {
     CircleAlert,
 } from "lucide-react";
 
+export const HREF_URL = {
+    KEMADRASAHAN_KELAS_DETAIL: (id) =>
+        `/dashboard/kemadrasahan/kelas/detail/${id}`,
+    KEMADRASAHAN_KELAS_EDIT: (id) => `/dashboard/kemadrasahan/kelas/edit/${id}`,
+    KEMADRASAHAN_KELAS_HOME: `/dashboard/kemadrasahan/kelas`,
+    KEMADRASAHAN_TA_HOME: "/dashboard/kemadrasahan/tahunajar",
+    KEMADRASAHAN_TA_CREATE: "/dashboard/kemadrasahan/tahunajar/create",
+};
+
 export const URL_PATH = [
     {
         name: "Users",
@@ -64,6 +73,12 @@ export const URL_PATH = [
                 suffix: ["/edit", "/create", "/detail"],
                 icon: "",
             },
+            {
+                name: "Tahun Ajar",
+                href: HREF_URL.KEMADRASAHAN_TA_HOME,
+                suffix: ["/edit", "/create"],
+                icon: "",
+            },
         ],
     },
     {
@@ -88,10 +103,3 @@ export const URL_PATH = [
         ],
     },
 ];
-
-export const HREF_URL = {
-    KEMADRASAHAN_KELAS_DETAIL: (id) =>
-        `/dashboard/kemadrasahan/kelas/detail/${id}`,
-    KEMADRASAHAN_KELAS_EDIT: (id) => `/dashboard/kemadrasahan/kelas/edit/${id}`,
-    KEMADRASAHAN_KELAS_HOME: `/dashboard/kemadrasahan/kelas`,
-};

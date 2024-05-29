@@ -2,16 +2,60 @@
 import prisma from "@/lib/prisma";
 import { auth } from "@/auth";
 
+export async function addTahunAjaran(tglMulai, tglSelesai, session = null) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!session) {
+                session = await auth();
+            }
+            let tgl = {
+                tgl_mulai: new Date(tglMulai),
+                tgl_selesai: new Date(tglSelesai),
+            };
+            let ta = await prisma.TahunAjar.create({
+                data: {
+                    tgl_mulai: tgl.tgl_mulai.toISOString(),
+                    tgl_selesai: tgl.tgl_selesai.toISOString(),
+                    kode_ta:
+                        tgl.tgl_mulai.getFullYear() +
+                        "/" +
+                        tgl.tgl_selesai.getFullYear(),
+                    aktif: true,
+                    created_by_id: session.user.id,
+                    last_update_by_id: session.user.id,
+                },
+            });
+            resolve(ta);
+        } catch (err) {
+            reject(err);
+        }
+    });
+}
+
 export async function addKelas(data) {
     return new Promise(async (resolve, reject) => {
         /**
          1. Menambahkan Tingkatan Kelas
          2. Menambahkan Kelas
-
+            *Ketika membuat kelas dan belum ada Tahun Ajaran yang dibuat, maka akan otomatis terbuat*
          PARALEL = NAMA_KELAS
          */
         try {
             let session = await auth();
+
+            let checkTA = await prisma.TahunAjar.findMany({
+                select: {
+                    id: true,
+                },
+            });
+
+            if (checkTA.length < 1) {
+                let start = new Date();
+                let end = new Date(start);
+                end.setFullYear(start.getFullYear() + 1);
+                await addTahunAjaran(start, end, session);
+            }
+
             let uniqueTingkatan = [
                 ...new Set(data.map((item) => item.tingkatan)),
             ];
@@ -52,7 +96,7 @@ export async function addKelas(data) {
                 data: queryKelas,
                 skipDuplicates: true,
             });
-            console.log("Berhasil membuat kelas");
+
             resolve(createKelas);
         } catch (err) {
             console.log(err);

@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { LoaderCircle } from "lucide-react";
+
 import {
     ColumnDef,
     flexRender,
@@ -25,48 +24,14 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
-import {
-    getSiswaByKelasAndTA,
-    deleteSiswaFromKelas,
-} from "../../_actions/kelas";
-import SiswaDialogForm from "./SiswaDialogForm";
+import { HREF_URL } from "@/navigation-data";
 
-export function DataTable({ columns, dataTA, idKelas }) {
-    const [taSelected, setTASelected] = useState(
-        dataTA.find((item) => item.aktif).kode_ta
-    );
-    const queryClient = useQueryClient();
-
-    const [dialogOpen, setDialogOpen] = useState(false);
-
-    let { data, isFetching, isError } = useQuery({
-        queryKey: ["siswa", idKelas, taSelected],
-        queryFn: () => getSiswaByKelasAndTA(idKelas, taSelected),
-        initialData: [],
-    });
-
-    const deleteMutation = useMutation({
-        mutationFn: (idKelasSantri) => {
-            return deleteSiswaFromKelas(idKelasSantri);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["siswa", idKelas, taSelected],
-            });
-            queryClient.invalidateQueries({
-                queryKey: ["santri", "notin", idKelas],
-            });
-        },
-    });
-
-    if (isError) throw new Error();
-
+export function DataTable({ columns, data }) {
     const [columnFilters, setColumnFilters] = useState();
     const [pagination, setPagination] = useState({
         pageIndex: 0, //initial page index
         pageSize: 10, //default page size
     });
-    // console.log(dataSiswa);
     const table = useReactTable({
         data,
         columns,
@@ -86,32 +51,33 @@ export function DataTable({ columns, dataTA, idKelas }) {
                 },
             ],
         },
-        meta: {
-            deleteHandler: (id) => deleteMutation.mutate(id),
-        },
     });
 
     return (
         <div>
-            <div className="flex justify-between items-end pb-4 flex-wrap">
+            <div className="grid grid-cols-2 py-4">
                 <Input
-                    placeholder="Cari Siswa"
-                    value={
-                        table.getColumn("nama_lengkap")?.getFilterValue() ?? ""
-                    }
+                    placeholder="Cari Kode TA"
+                    value={table.getColumn("kode_ta")?.getFilterValue() ?? ""}
                     onChange={(event) =>
                         table
-                            .getColumn("nama_lengkap")
+                            .getColumn("kode_ta")
                             ?.setFilterValue(event.target.value)
                     }
                     className="max-w-sm"
                 />
-                <Button
-                    className="bg-kazeem-secondary"
-                    onClick={() => setDialogOpen(true)}
+                <Link
+                    href={HREF_URL.KEMADRASAHAN_TA_CREATE}
+                    className="w-1/4 justify-self-end flex justify-end"
                 >
-                    Tambah Siswa
-                </Button>
+                    <Button
+                        className="self-end bg-kazeem-secondary "
+                        id="tambah-kelas"
+                        data-e2e="btn-tambah"
+                    >
+                        Tambah Tahun Ajar
+                    </Button>
+                </Link>
             </div>
             <div className="rounded-md border">
                 <Table>
@@ -141,16 +107,7 @@ export function DataTable({ columns, dataTA, idKelas }) {
                         ))}
                     </TableHeader>
                     <TableBody>
-                        {isFetching ? (
-                            <TableRow>
-                                <TableCell
-                                    colSpan={columns.length}
-                                    className="h-24 text-center relative"
-                                >
-                                    <LoaderCircle className="h-5 w-5 animate-spin m-auto" />
-                                </TableCell>
-                            </TableRow>
-                        ) : table.getRowModel().rows?.length ? (
+                        {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
                                     key={row.id}
@@ -203,12 +160,6 @@ export function DataTable({ columns, dataTA, idKelas }) {
                     Next
                 </Button>
             </div>
-            <SiswaDialogForm
-                open={dialogOpen}
-                onOpenChange={setDialogOpen}
-                idKelas={idKelas}
-                kodeTA={taSelected}
-            />
         </div>
     );
 }

@@ -32,7 +32,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
-import { getSiswaByKelasAndTA } from "../_actions/kelas";
+import { getSiswaByKelasAndTA } from "../../_actions/kelas";
 
 export function DataTable({ columns, dataTA, idKelas }) {
     const [taSelected, setTASelected] = useState(

@@ -13,7 +13,7 @@ import kelasSchema from "./yup-kelas-schema";
 import KelasTable from "./KelasTable";
 import AlertNoneKelasInserted from "./AlertNoneKelasInserted";
 import AlertUnsavedKelas from "./AlertUnsavedKelas";
-import { addKelas } from "../_actions/kelas";
+import { addKelas } from "../../_actions/kelas";
 
 export default function CreatePage() {
     let [kelas, setKelas] = useContext(KelasContext);
