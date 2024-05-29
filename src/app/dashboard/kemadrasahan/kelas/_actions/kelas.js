@@ -2,113 +2,222 @@
 import prisma from "@/lib/prisma";
 import { auth } from "@/auth";
 
-export async function addKelas(data, isTaAktif) {
-    /**
-     1. Menambahkan TA
-     2. Menambahkan Tingkatan Kelas
-     3. Menambahkan Paralel Kelas
-     */
-
+export async function addKelas(data) {
     return new Promise(async (resolve, reject) => {
+        /**
+         1. Menambahkan Tingkatan Kelas
+         2. Menambahkan Kelas
+
+         PARALEL = NAMA_KELAS
+         */
         try {
             let session = await auth();
             let uniqueTingkatan = [
                 ...new Set(data.map((item) => item.tingkatan)),
             ];
-            let uniqueParalel = [...new Set(data.map((item) => item.paralel))];
 
-            let createTingkatan = prisma.TingkatanKelas.createMany({
+            //create tingkatan
+            await prisma.Tingkat.createMany({
                 data: uniqueTingkatan.map((item) => {
                     return {
-                        tingkatan: item,
+                        nama_tingkatan: item,
+                        keterangan: "-",
                         created_by_id: session.user.id,
                         last_update_by_id: session.user.id,
                     };
                 }),
                 skipDuplicates: true,
             });
-            let createParalel = prisma.ParalelKelas.createMany({
-                data: uniqueParalel.map((item) => {
-                    return {
-                        paralel: item,
-                        created_by_id: session.user.id,
-                        last_update_by_id: session.user.id,
-                    };
-                }),
-                skipDuplicates: true,
-            });
-
-            await Promise.all([createTingkatan, createParalel]);
-            let tingkatanData = prisma.TingkatanKelas.findMany({
+            let tingkatanData = await prisma.Tingkat.findMany({
                 where: {
-                    tingkatan: { in: uniqueTingkatan },
+                    nama_tingkatan: { in: uniqueTingkatan },
                 },
                 select: {
                     id: true,
-                    tingkatan: true,
+                    nama_tingkatan: true,
                 },
             });
-            let paralelData = prisma.ParalelKelas.findMany({
-                where: {
-                    paralel: { in: uniqueParalel },
-                },
-                select: {
-                    id: true,
-                    paralel: true,
-                },
-            });
-            let ta = {
-                mulai: data[0].ta.mulai,
-                selesai: data[0].ta.selesai,
-            };
-            let createTa = prisma.TahunAkademik.upsert({
-                where: {
-                    tahunIdentifier: {
-                        tahun_mulai: ta.mulai,
-                        tahun_berakhir: ta.selesai,
-                        aktif: isTaAktif,
-                    },
-                },
-                update: {},
-                create: {
-                    tahun_mulai: ta.mulai,
-                    tahun_berakhir: ta.selesai,
-                    aktif: isTaAktif,
-                    created_by_id: session.user.id,
-                    last_update_by_id: session.user.id,
-                },
-            });
-
-            let [dataTingkatan, dataParalel, dataTa] = await Promise.all([
-                tingkatanData,
-                paralelData,
-                createTa,
-            ]);
-            // console.log({ dataTingkatan, dataParalel, dataTa });
-
             let queryKelas = data.map((item) => {
                 return {
-                    tingkatan_id: dataTingkatan.find(
-                        (ting) => ting.tingkatan === item.tingkatan
+                    nama_kelas: item.tingkatan + "-" + item.paralel,
+                    tingkat_id: tingkatanData.find(
+                        (ting) => ting.nama_tingkatan === item.tingkatan
                     ).id,
-                    paralel_id: dataParalel.find(
-                        (par) => par.paralel === item.paralel
-                    ).id,
-                    ta_id: dataTa.id,
+                    keterangan: "-",
                     created_by_id: session.user.id,
                     last_update_by_id: session.user.id,
                 };
             });
-
-            let createKelas = await prisma.KelasAkademik.createMany({
+            let createKelas = await prisma.Kelas.createMany({
                 data: queryKelas,
                 skipDuplicates: true,
             });
-            console.log(createKelas);
+            console.log("Berhasil membuat kelas");
             resolve(createKelas);
         } catch (err) {
             console.log(err);
             reject(err);
         }
     });
+}
+
+export async function getSiswaByKelasAndTA(idKelas, kode_ta) {
+    let dataSiswa = await prisma.KelasSantri.findMany({
+        where: {
+            kelas_id: parseInt(idKelas),
+            TahunAjar: {
+                kode_ta,
+            },
+        },
+        select: {
+            id: true,
+            TahunAjar: {
+                select: {
+                    kode_ta: true,
+                },
+            },
+            Santri: {
+                select: {
+                    nama_lengkap: true,
+                },
+            },
+            status: true,
+        },
+    });
+
+    let res = dataSiswa.map((item) => {
+        return {
+            id: item.id,
+            nama_lengkap: item.Santri.nama_lengkap,
+            status: item.status,
+            kode_ta: item.TahunAjar.kode_ta,
+        };
+    });
+
+    return res;
+}
+
+export async function getTahunAjarSummaryByKelas(idKelas) {
+    let tahunAjar = await prisma.KelasSantri.groupBy({
+        by: ["ta_id"],
+        where: {
+            kelas_id: parseInt(idKelas),
+        },
+        _count: true,
+    });
+
+    let tahunAjarId = tahunAjar.map((item) => item.ta_id);
+
+    let dataTA = await prisma.TahunAjar.findMany({
+        where: {
+            id: {
+                in: tahunAjarId,
+            },
+        },
+    });
+
+    let result = dataTA.map((item) => {
+        return {
+            id: item.id,
+            kode_ta: item.kode_ta,
+            status: item.aktif ? "Aktif" : "Non-Aktif",
+            count: tahunAjar.find((item2) => item2.ta_id === item.id)._count,
+        };
+    });
+    return result;
+}
+
+export async function getSiswaAlreadyJoinKelas() {
+    let getTaAktif = await prisma.TahunAjar.findFirst({
+        where: {
+            aktif: true,
+        },
+    });
+
+    let getSantriNotJoin = await prisma.KelasSantri.findMany({
+        where: {
+            ta_id: getTaAktif.id,
+        },
+        select: {
+            santri_id: true,
+        },
+    });
+
+    return [...new Set(getSantriNotJoin.map((item) => item.santri_id))];
+}
+
+export async function getAllSiswaNotJoinKelas(idKelas) {
+    let santriAlreadyJoinKelas = await getSiswaAlreadyJoinKelas();
+    let santriFree = await prisma.Santri.findMany({
+        where: {
+            id: {
+                notIn: santriAlreadyJoinKelas,
+            },
+        },
+        select: {
+            id: true,
+            nama_lengkap: true,
+        },
+    });
+
+    return santriFree;
+}
+
+export async function addSiswaToKelas({ idKelas, idSantri, kodeTA, status }) {
+    let session = auth();
+    let checkJoin = prisma.KelasSantri.findFirst({
+        where: {
+            santri_id: idSantri,
+            TahunAjar: {
+                kode_ta: kodeTA,
+            },
+        },
+    });
+
+    let [sessionData, checkJoinData] = await Promise.all([session, checkJoin]);
+
+    if (!checkJoinData) {
+        let data = await prisma.KelasSantri.create({
+            data: {
+                Kelas: {
+                    connect: {
+                        id: parseInt(idKelas),
+                    },
+                },
+                Santri: {
+                    connect: {
+                        id: parseInt(idSantri),
+                    },
+                },
+                TahunAjar: {
+                    connect: {
+                        kode_ta: kodeTA,
+                    },
+                },
+                created_by: {
+                    connect: {
+                        id: sessionData.user.id,
+                    },
+                },
+                last_update_by: {
+                    connect: {
+                        id: sessionData.user.id,
+                    },
+                },
+                status: status,
+            },
+        });
+    } else {
+        throw new Error("Santri already join class");
+    }
+}
+
+export async function deleteSiswaFromKelas(idKelasSantri) {
+    await prisma.KelasSantri.delete({
+        where: {
+            id: idKelasSantri,
+        },
+    });
+
+    return null;
 }

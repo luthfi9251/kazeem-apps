@@ -10,7 +10,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { HREF_URL } from "@/navigation-data";
+
 import Link from "next/link";
 
 export const columns = [
@@ -22,12 +22,16 @@ export const columns = [
         },
     },
     {
-        accessorKey: "nama_kelas",
-        header: "Nama Kelas",
+        accessorKey: "nama_lengkap",
+        header: "Nama Siswa",
     },
     {
-        accessorKey: "nama_tingkatan",
-        header: "Tingkatan",
+        accessorKey: "status",
+        header: "Status",
+    },
+    {
+        accessorKey: "kode_ta",
+        header: "Tahun Akademik",
     },
     {
         id: "actions",
@@ -50,22 +54,11 @@ export const columns = [
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem>
                             <Link
-                                href={HREF_URL.KEMADRASAHAN_KELAS_DETAIL(
-                                    user.id
-                                )}
+                                href={`/dashboard/pelanggaran/kategori/detail/${user.id}`}
                                 className="w-full"
                                 data-e2e="btn-detail"
                             >
                                 Detail
-                            </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <Link
-                                href={HREF_URL.KEMADRASAHAN_KELAS_EDIT(user.id)}
-                                className="w-full"
-                                data-e2e="btn-edit"
-                            >
-                                Edit
                             </Link>
                         </DropdownMenuItem>
                     </DropdownMenuContent>

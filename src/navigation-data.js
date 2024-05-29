@@ -88,3 +88,10 @@ export const URL_PATH = [
         ],
     },
 ];
+
+export const HREF_URL = {
+    KEMADRASAHAN_KELAS_DETAIL: (id) =>
+        `/dashboard/kemadrasahan/kelas/detail/${id}`,
+    KEMADRASAHAN_KELAS_EDIT: (id) => `/dashboard/kemadrasahan/kelas/edit/${id}`,
+    KEMADRASAHAN_KELAS_HOME: `/dashboard/kemadrasahan/kelas`,
+};

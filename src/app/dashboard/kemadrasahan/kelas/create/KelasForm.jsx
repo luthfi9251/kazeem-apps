@@ -74,67 +74,6 @@ export default function KelasForm({ data, onSubmit, form, disabled = false }) {
                                 </FormItem>
                             )}
                         />
-                        <fieldset className="grid gap-6 rounded-lg border p-4">
-                            <legend className="-ml-1 px-1 text-sm font-medium">
-                                Tahun Ajaran
-                            </legend>
-                            <div className="flex flex-col w-ful gap-3">
-                                <div className="flex w-full gap-2 items-center">
-                                    <FormField
-                                        control={form.control}
-                                        name="tahun_ajaran_mulai"
-                                        render={({ field }) => (
-                                            <FormItem className="flex flex-col grow">
-                                                <FormControl>
-                                                    <Input
-                                                        {...field}
-                                                        type="number"
-                                                        placeholder="Tahun Awal"
-                                                    />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <p className="grow-0">-</p>
-                                    <FormField
-                                        control={form.control}
-                                        name="tahun_ajaran_selesai"
-                                        render={({ field }) => (
-                                            <FormItem className="flex flex-col grow">
-                                                <FormControl>
-                                                    <Input
-                                                        {...field}
-                                                        type="number"
-                                                        placeholder="Tahun Akhir"
-                                                    />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                </div>
-                                <FormField
-                                    control={form.control}
-                                    name="aktif"
-                                    render={({ field }) => (
-                                        <FormItem className="flex items-center space-y-0 gap-4 py-2">
-                                            <FormControl>
-                                                <Checkbox
-                                                    checked={field.value}
-                                                    onCheckedChange={
-                                                        field.onChange
-                                                    }
-                                                />
-                                            </FormControl>
-                                            <FormLabel className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                                                Aktif
-                                            </FormLabel>
-                                        </FormItem>
-                                    )}
-                                />
-                            </div>
-                        </fieldset>
                         <Button
                             type="submit"
                             className=" bg-kazeem-secondary hover:bg-kazeem-darker"

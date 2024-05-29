@@ -27,9 +27,6 @@ export default function CreatePage() {
         defaultValues: {
             tingkatan_kelas: "",
             paralel_kelas: "",
-            tahun_ajaran_mulai: new Date().getFullYear(),
-            tahun_ajaran_selesai: new Date().getFullYear() + 1,
-            aktif: isTaAktif,
         },
     });
 

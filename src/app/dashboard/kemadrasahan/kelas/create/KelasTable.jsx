@@ -50,7 +50,6 @@ export default function KelasTable() {
                             <TableHead className="w-[120px] text-center">
                                 Paralel
                             </TableHead>
-                            <TableHead>TA</TableHead>
                             <TableHead className="text-center">
                                 Action
                             </TableHead>
@@ -69,7 +68,6 @@ export default function KelasTable() {
                                     <TableCell className="text-center">
                                         {item.paralel}
                                     </TableCell>
-                                    <TableCell>{`${item.ta.mulai}/${item.ta.selesai}`}</TableCell>
                                     <TableCell className="text-center">
                                         <Button
                                             onClick={() => handleDeleteKelas(i)}

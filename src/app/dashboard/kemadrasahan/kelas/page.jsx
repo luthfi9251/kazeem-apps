@@ -14,123 +14,45 @@ import { DataTable } from "./data-table";
 import { columns } from "./columns";
 import prisma from "@/lib/prisma";
 
-async function getDataActive() {
-    let data = await prisma.KelasAkademik.findMany({
+async function getData() {
+    let taAktif = await prisma.TahunAjar.findFirst({
         where: {
-            TahunAkademik: {
-                aktif: true,
-            },
+            aktif: true,
         },
+    });
+    let data = await prisma.Kelas.findMany({
         select: {
             id: true,
-            Tingkatan: {
+            nama_kelas: true,
+            Tingkat: {
                 select: {
-                    tingkatan: true,
-                },
-            },
-            Paralel: {
-                select: {
-                    paralel: true,
-                },
-            },
-            TahunAkademik: {
-                select: {
-                    tahun_mulai: true,
-                    tahun_berakhir: true,
+                    nama_tingkatan: true,
                 },
             },
         },
     });
-    let result = data.map((item) => {
+
+    let res = data.map((item) => {
         return {
-            nama_kelas: item.Tingkatan.tingkatan + "-" + item.Paralel.paralel,
-            tingkatan: item.Tingkatan.tingkatan,
-            paralel: item.Paralel.paralel,
-            ta:
-                item.TahunAkademik.tahun_mulai +
-                "/" +
-                item.TahunAkademik.tahun_berakhir,
-            jumlah_siswa: 0,
+            id: item.id,
+            nama_kelas: item.nama_kelas,
+            nama_tingkatan: item.Tingkat.nama_tingkatan,
         };
     });
-    return result;
-}
-async function getDataArchive() {
-    let data = await prisma.KelasAkademik.findMany({
-        where: {
-            TahunAkademik: {
-                aktif: false,
-            },
-        },
-        select: {
-            id: true,
-            Tingkatan: {
-                select: {
-                    tingkatan: true,
-                },
-            },
-            Paralel: {
-                select: {
-                    paralel: true,
-                },
-            },
-            TahunAkademik: {
-                select: {
-                    tahun_mulai: true,
-                    tahun_berakhir: true,
-                },
-            },
-        },
-        orderBy: {
-            TahunAkademik: {
-                tahun_mulai: "desc",
-            },
-        },
-    });
-    let result = data.map((item) => {
-        return {
-            nama_kelas: item.Tingkatan.tingkatan + "-" + item.Paralel.paralel,
-            tingkatan: item.Tingkatan.tingkatan,
-            paralel: item.Paralel.paralel,
-            ta:
-                item.TahunAkademik.tahun_mulai +
-                "/" +
-                item.TahunAkademik.tahun_berakhir,
-            jumlah_siswa: 0,
-        };
-    });
-    return result;
+    return res;
 }
 
 export default async function Page() {
-    let [dataActive, dataArchive] = await Promise.all([
-        getDataActive(),
-        getDataArchive(),
-    ]);
+    let data = await getData();
     return (
         <div className="md:p-5 p-2">
             <Card>
                 <CardHeader>
-                    <CardTitle>Kategori Pelanggaran</CardTitle>
+                    <CardTitle>Data Kelas</CardTitle>
                     <CardDescription>Card Description</CardDescription>
                 </CardHeader>
-                <CardContent className=" border m-2 py-3 rounded">
-                    <Tabs defaultValue="active" className="w-full">
-                        <TabsList className="grid grid-cols-2 w-1/3">
-                            <TabsTrigger value="active">
-                                Kelas Aktif
-                            </TabsTrigger>
-                            <TabsTrigger value="archive">
-                                Kelas Archive
-                            </TabsTrigger>
-                        </TabsList>
-                        <TabsContent value="active">
-                            <DataTable columns={columns} data={dataActive} />
-                        </TabsContent>
-                        <TabsContent value="archive">
-                            <DataTable columns={columns} data={dataArchive} />
-                        </TabsContent>
-                    </Tabs>
+                <CardContent>
+                    <DataTable columns={columns} data={data} />
                 </CardContent>
             </Card>
         </div>

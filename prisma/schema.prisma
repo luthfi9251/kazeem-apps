@@ -28,10 +28,10 @@ model User {
   SantriUpdated      Santri[]              @relation("santri_updated_by")
   KategoriPelCreated KategoriPelanggaran[] @relation("kategoriPel_created_by")
   KategoriPelUpdated KategoriPelanggaran[] @relation("kategoriPel_updated_by")
-  KelasCreated       KelasAkademik[]       @relation("kelasAkademik_created_by")
-  KelasUpdated       KelasAkademik[]       @relation("kelasAkademik_updated_by")
   KelasSantriCreated KelasSantri[]         @relation("kelasSantri_created_by")
   KelasSantriUpdated KelasSantri[]         @relation("kelasSantri_updated_by")
+  KelasCreated       Kelas[]               @relation("kelas_created_by")
+  KelasUpdated       Kelas[]               @relation("kelas_updated_by")
 }
 
 model Group {
@@ -142,67 +142,57 @@ enum Kategori {
   RINGAN
 }
 
-model TingkatanKelas {
-  id                Int             @id @default(autoincrement())
-  tingkatan         String          @unique @db.VarChar(10)
-  created_at        DateTime        @default(now())
-  updated_at        DateTime        @updatedAt
+model Tingkat {
+  id                Int      @id @default(autoincrement())
+  nama_tingkatan    String   @unique @db.VarChar(100)
+  keterangan        String   @db.Text
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
   created_by_id     String?
   last_update_by_id String?
-  KelasAkademik     KelasAkademik[]
+  Kelas             Kelas[]
 }
 
-model ParalelKelas {
-  id                Int             @id @default(autoincrement())
-  paralel           String          @unique @db.VarChar(10)
-  created_at        DateTime        @default(now())
-  updated_at        DateTime        @updatedAt
-  created_by_id     String?
-  last_update_by_id String?
-  KelasAkademik     KelasAkademik[]
-}
-
-model TahunAkademik {
-  id                Int             @id @default(autoincrement())
-  tahun_mulai       Int
-  tahun_berakhir    Int
+model TahunAjar {
+  id                Int           @id @default(autoincrement())
+  kode_ta           String        @unique @db.VarChar(100)
+  tgl_mulai         DateTime      @db.Date
+  tgl_selesai       DateTime      @db.Date
   aktif             Boolean
   created_by_id     String?
   last_update_by_id String?
-  created_at        DateTime        @default(now())
-  updated_at        DateTime        @updatedAt
-  KelasAkademik     KelasAkademik[]
+  created_at        DateTime      @default(now())
+  updated_at        DateTime      @updatedAt
+  KelasSantri       KelasSantri[]
 
-  @@unique([tahun_mulai, tahun_berakhir, aktif], name: "tahunIdentifier")
+  @@unique([tgl_mulai, tgl_selesai], name: "tahunIdentifier")
 }
 
-model KelasAkademik {
-  id            Int            @id @default(autoincrement())
-  Tingkatan     TingkatanKelas @relation(fields: [tingkatan_id], references: [id])
-  tingkatan_id  Int
-  Paralel       ParalelKelas   @relation(fields: [paralel_id], references: [id])
-  paralel_id    Int
-  TahunAkademik TahunAkademik  @relation(fields: [ta_id], references: [id])
-  ta_id         Int
-
-  created_at        DateTime @default(now())
-  updated_at        DateTime @updatedAt
-  created_by        User?    @relation("kelasAkademik_created_by", fields: [created_by_id], references: [id])
+model Kelas {
+  id                Int           @id @default(autoincrement())
+  nama_kelas        String        @db.VarChar(200)
+  tingkat_id        Int
+  Tingkat           Tingkat       @relation(fields: [tingkat_id], references: [id])
+  keterangan        String        @db.Text()
+  KelasSantri       KelasSantri[]
+  created_at        DateTime      @default(now())
+  updated_at        DateTime      @updatedAt
+  created_by        User?         @relation("kelas_created_by", fields: [created_by_id], references: [id])
   created_by_id     String?
-  last_update_by    User?    @relation("kelasAkademik_updated_by", fields: [last_update_by_id], references: [id])
+  last_update_by    User?         @relation("kelas_updated_by", fields: [last_update_by_id], references: [id])
   last_update_by_id String?
 
-  KelasSantri KelasSantri[]
-
-  @@unique([tingkatan_id, paralel_id, ta_id], name: "kelasIdentifier")
+  @@unique([nama_kelas, tingkat_id], name: "kelasIdentifier")
 }
 
 model KelasSantri {
-  id        Int           @id @default(autoincrement())
-  Kelas     KelasAkademik @relation(fields: [kelas_id], references: [id])
+  id        Int         @id @default(autoincrement())
   kelas_id  Int
-  Santri    Santri        @relation(fields: [santri_id], references: [id])
+  Kelas     Kelas       @relation(fields: [kelas_id], references: [id])
+  ta_id     Int
+  TahunAjar TahunAjar   @relation(fields: [ta_id], references: [id])
   santri_id Int
+  Santri    Santri      @relation(fields: [santri_id], references: [id])
   status    StatusKelas
 
   created_at        DateTime @default(now())
@@ -212,7 +202,7 @@ model KelasSantri {
   last_update_by    User?    @relation("kelasSantri_updated_by", fields: [last_update_by_id], references: [id])
   last_update_by_id String?
 
-  @@unique([kelas_id, santri_id, status])
+  @@unique([kelas_id, ta_id, santri_id, status])
 }
 
 enum StatusKelas {
