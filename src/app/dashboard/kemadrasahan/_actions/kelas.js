@@ -1,36 +1,8 @@
 "use server";
 import prisma from "@/lib/prisma";
 import { auth } from "@/auth";
-
-export async function addTahunAjaran(tglMulai, tglSelesai, session = null) {
-    return new Promise(async (resolve, reject) => {
-        try {
-            if (!session) {
-                session = await auth();
-            }
-            let tgl = {
-                tgl_mulai: new Date(tglMulai),
-                tgl_selesai: new Date(tglSelesai),
-            };
-            let ta = await prisma.TahunAjar.create({
-                data: {
-                    tgl_mulai: tgl.tgl_mulai.toISOString(),
-                    tgl_selesai: tgl.tgl_selesai.toISOString(),
-                    kode_ta:
-                        tgl.tgl_mulai.getFullYear() +
-                        "/" +
-                        tgl.tgl_selesai.getFullYear(),
-                    aktif: true,
-                    created_by_id: session.user.id,
-                    last_update_by_id: session.user.id,
-                },
-            });
-            resolve(ta);
-        } catch (err) {
-            reject(err);
-        }
-    });
-}
+import { addTahunAjar } from "./tahunajar";
+import { HREF_URL } from "@/navigation-data";
 
 export async function addKelas(data) {
     return new Promise(async (resolve, reject) => {
@@ -50,10 +22,17 @@ export async function addKelas(data) {
             });
 
             if (checkTA.length < 1) {
-                let start = new Date();
-                let end = new Date(start);
-                end.setFullYear(start.getFullYear() + 1);
-                await addTahunAjaran(start, end, session);
+                let tgl_mulai = new Date();
+                let tgl_selesai = new Date(tgl_mulai);
+                tgl_selesai.setFullYear(tgl_mulai.getFullYear() + 1);
+                let kode_ta =
+                    tgl_mulai.getFullYear() + "/" + tgl_selesai.getFullYear();
+                await addTahunAjar({
+                    tgl_selesai,
+                    tgl_mulai,
+                    kode_ta,
+                    aktif: true,
+                });
             }
 
             let uniqueTingkatan = [
@@ -96,7 +75,7 @@ export async function addKelas(data) {
                 data: queryKelas,
                 skipDuplicates: true,
             });
-
+            revalidatePath(HREF_URL.KEMADRASAHAN_KELAS_HOME);
             resolve(createKelas);
         } catch (err) {
             console.log(err);
@@ -264,4 +243,37 @@ export async function deleteSiswaFromKelas(idKelasSantri) {
     });
 
     return null;
+}
+
+export async function deleteKelas({ idKelas }) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let deleteTa = await prisma.Kelas.delete({
+                where: {
+                    id: parseInt(idKelas),
+                    KelasSantri: {
+                        none: {},
+                    },
+                },
+            });
+            if (deleteTa) {
+                resolve("berhasil hapus");
+            } else {
+                reject({
+                    message:
+                        "Kelas tidak dapat dihapus karena memiliki data siswa!",
+                });
+            }
+            revalidatePath(HREF_URL.KEMADRASAHAN_KELAS_HOME);
+            return;
+        } catch (err) {
+            // console.log(err);
+            reject(
+                new Error(
+                    "Kelas tidak dapat dihapus karena memiliki data siswa!"
+                )
+            );
+            return;
+        }
+    });
 }

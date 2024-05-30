@@ -33,7 +33,7 @@ import SiswaDialogForm from "./SiswaDialogForm";
 
 export function DataTable({ columns, dataTA, idKelas }) {
     const [taSelected, setTASelected] = useState(
-        dataTA.find((item) => item.aktif).kode_ta
+        dataTA.find((item) => item.aktif)?.kode_ta || dataTA[0].kode_ta
     );
     const queryClient = useQueryClient();
 
@@ -107,6 +107,7 @@ export function DataTable({ columns, dataTA, idKelas }) {
                     className="max-w-sm"
                 />
                 <Button
+                    data-e2e="btn-add-siswa"
                     className="bg-kazeem-secondary"
                     onClick={() => setDialogOpen(true)}
                 >

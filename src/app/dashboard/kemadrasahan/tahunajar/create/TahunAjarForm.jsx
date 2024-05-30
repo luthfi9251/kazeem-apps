@@ -27,12 +27,13 @@ export default function TahunAjarForm({
     data,
     onSubmit,
     form,
+    title = "Tambah Tahun Ajar",
     disabled = false,
 }) {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Tambah Tahun Ajar</CardTitle>
+                <CardTitle>{title}</CardTitle>
                 <CardDescription>
                     Hanya boleh ada 1 TA Aktif, apabila sudah ada TA aktif, maka
                     TA tersebut akan dinon-aktifkan
@@ -85,7 +86,7 @@ export default function TahunAjarForm({
                                 <FormItem className="flex flex-col">
                                     <FormLabel>Kode TA</FormLabel>
                                     <FormControl>
-                                        <Input {...field} disabled />
+                                        <Input {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -119,7 +120,7 @@ export default function TahunAjarForm({
                             type="submit"
                             className=" bg-kazeem-secondary hover:bg-kazeem-darker"
                         >
-                            Tambah Tahun Ajar
+                            Simpan
                         </Button>
                     </form>
                 </Form>

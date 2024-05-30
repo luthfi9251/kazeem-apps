@@ -166,6 +166,7 @@ export default function SiswaDialogForm({
                                                                         false
                                                                     );
                                                                 }}
+                                                                data-e2e="select-item"
                                                             >
                                                                 {
                                                                     santri.nama_lengkap

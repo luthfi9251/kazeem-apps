@@ -36,7 +36,7 @@ import { getSiswaByKelasAndTA } from "../../_actions/kelas";
 
 export function DataTable({ columns, dataTA, idKelas }) {
     const [taSelected, setTASelected] = useState(
-        dataTA.find((item) => item.aktif).kode_ta
+        dataTA.find((item) => item.aktif)?.kode_ta || dataTA[0].kode_ta
     );
 
     let { data, isLoading, isError } = useQuery({

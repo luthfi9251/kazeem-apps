@@ -61,7 +61,7 @@ export const columns = [
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem>
                             <Link
-                                href={HREF_URL.KEMADRASAHAN_KELAS_EDIT(user.id)}
+                                href={HREF_URL.KEMADRASAHAN_TA_EDIT(user.id)}
                                 className="w-full"
                                 data-e2e="btn-edit"
                             >

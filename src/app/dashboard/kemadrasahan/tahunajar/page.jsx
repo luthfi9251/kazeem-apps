@@ -20,6 +20,14 @@ async function getData() {
             tgl_selesai: true,
             aktif: true,
         },
+        orderBy: [
+            {
+                aktif: "desc",
+            },
+            {
+                tgl_mulai: "desc",
+            },
+        ],
     });
     ta = ta.map((item) => {
         return {

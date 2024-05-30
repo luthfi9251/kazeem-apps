@@ -1,19 +1,14 @@
 "use client";
-
+import { useForm } from "react-hook-form";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { ArrowLeft } from "lucide-react";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
-import CardDataKelas from "./CardDataKelas";
-import CardDetailSiswa from "./CardDaftarSiswa";
-import CardTahunAjar from "./CardTahunAjar";
+import { useRouter } from "next/navigation";
+import taSchema from "../../yup-tahunajar-schema";
+import TahunAjarForm from "../../create/TahunAjarForm";
+import { editTahunAjar, deleteTahunAjar } from "../../../_actions/tahunajar";
+import { toast } from "react-toastify";
 import { HREF_URL } from "@/navigation-data";
 import {
     AlertDialog,
@@ -26,20 +21,54 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { deleteKelas } from "../../_actions/kelas";
-import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
 
-export default function EditPage({ dataKelas, dataTA }) {
+export default function EditPage({ data }) {
     let router = useRouter();
-    let onDeleteHandler = () => {
+
+    const form = useForm({
+        resolver: yupResolver(taSchema),
+        defaultValues: {
+            kode_ta: data?.kode_ta,
+            tgl_mulai: new Date(data?.tgl_mulai).toISOString().split("T")[0],
+            tgl_selesai: new Date(data?.tgl_selesai)
+                .toISOString()
+                .split("T")[0],
+            aktif: data?.aktif,
+        },
+    });
+
+    const onSubmitHandler = (dataForm) => {
         toast.promise(
-            () => deleteKelas({ idKelas: dataKelas.id }),
+            () => editTahunAjar({ ...dataForm, idTa: data.id }),
+            {
+                pending: "Menyimpan data",
+                success: {
+                    render({ data }) {
+                        router.push(HREF_URL.KEMADRASAHAN_TA_HOME);
+                        return "Data berhasil disimpan";
+                    },
+                },
+                error: {
+                    render({ data }) {
+                        // When the promise reject, data will contains the error
+                        return `${data}`;
+                    },
+                },
+            },
+            {
+                position: "bottom-right",
+            }
+        );
+    };
+
+    const onDeleteHandler = () => {
+        toast.promise(
+            () => deleteTahunAjar({ idTa: data.id }),
             {
                 pending: "Menghapus data",
                 success: {
                     render({ data }) {
-                        router.push(HREF_URL.KEMADRASAHAN_KELAS_HOME);
+                        router.push(HREF_URL.KEMADRASAHAN_TA_HOME);
                         return "Data berhasil dihapus";
                     },
                 },
@@ -60,7 +89,7 @@ export default function EditPage({ dataKelas, dataTA }) {
     return (
         <div className="md:p-5 p-2 grid md:grid-cols-2 grid-cols-1 gap-5">
             <div className="flex gap-2 col-span-1 md:col-span-2">
-                <Link href={HREF_URL.KEMADRASAHAN_KELAS_HOME}>
+                <Link href={HREF_URL.KEMADRASAHAN_TA_HOME}>
                     <Button variant="outline" className="mr-3">
                         <ArrowLeft />
                     </Button>
@@ -68,8 +97,8 @@ export default function EditPage({ dataKelas, dataTA }) {
                 <AlertDialog>
                     <AlertDialogTrigger asChild>
                         <Button
-                            variant="outline"
                             data-e2e="btn-delete"
+                            variant="outline"
                             className="md:w-36 bg-red-500 justify-items-end hover:bg-red-800"
                         >
                             Hapus
@@ -89,8 +118,8 @@ export default function EditPage({ dataKelas, dataTA }) {
                         <AlertDialogFooter>
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
                             <AlertDialogAction
-                                data-e2e="btn-confirm"
                                 onClick={onDeleteHandler}
+                                data-e2e="btn-confirm"
                             >
                                 Continue
                             </AlertDialogAction>
@@ -98,19 +127,11 @@ export default function EditPage({ dataKelas, dataTA }) {
                     </AlertDialogContent>
                 </AlertDialog>
             </div>
-            <Card className=" col-span-1 md:col-span-2">
-                <CardHeader>
-                    <CardTitle>{dataKelas.nama_kelas}</CardTitle>
-                    <CardDescription>
-                        Hanya dapat mengedit kelas pada TA Aktif saja
-                    </CardDescription>
-                </CardHeader>
-                <CardContent className="grid md:grid-cols-2 grid-cols-1 gap-3">
-                    <CardDataKelas dataKelas={dataKelas} dataTA={dataTA} />
-                    <CardTahunAjar dataKelas={dataKelas} />
-                    <CardDetailSiswa dataKelas={dataKelas} dataTA={dataTA} />
-                </CardContent>
-            </Card>
+            <TahunAjarForm
+                form={form}
+                onSubmit={onSubmitHandler}
+                title={"Edit Tahun Ajar"}
+            />
         </div>
     );
 }
