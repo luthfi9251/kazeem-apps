@@ -5,6 +5,16 @@ let pelanggaranSchema = yup.object({
         .string()
         .max(100, "Panjang maksimal 100 karakter")
         .required(),
+    nama_pelanggaran_option: yup.string(),
+    nama_pelanggaran: yup
+        .string()
+        .max(25)
+        .required("Nama Pelanggaran Wajib Diisi!"),
+    allow_edit: yup.boolean().default(false),
+    keterangan: yup.string().optional(),
+    kategori: yup.string().required(),
+    jenis: yup.string().required(),
+    poin: yup.number().optional(),
 });
 
 export default pelanggaranSchema;

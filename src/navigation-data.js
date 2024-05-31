@@ -17,6 +17,8 @@ export const HREF_URL = {
     KEMADRASAHAN_TA_CREATE: "/dashboard/kemadrasahan/tahunajar/create",
     KEMADRASAHAN_TA_EDIT: (id) =>
         `/dashboard/kemadrasahan/tahunajar/edit/${id}`,
+    PELANGGARAN_HOME: "/dashboard/pelanggaran",
+    PELANGGARAN_CREATE: "/dashboard/pelanggaran/create",
 };
 
 export const URL_PATH = [

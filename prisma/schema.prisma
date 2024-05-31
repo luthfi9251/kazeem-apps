@@ -32,6 +32,8 @@ model User {
   KelasSantriUpdated KelasSantri[]         @relation("kelasSantri_updated_by")
   KelasCreated       Kelas[]               @relation("kelas_created_by")
   KelasUpdated       Kelas[]               @relation("kelas_updated_by")
+  PelanggaranCreated Pelanggaran[]         @relation("pelanggaran_created_by")
+  PelanggaranUpdated Pelanggaran[]         @relation("pelanggaran_updated_by")
 }
 
 model Group {
@@ -121,6 +123,23 @@ enum PeranWali {
   lainnya
 }
 
+model Pelanggaran {
+  id             Int                 @id @default(autoincrement())
+  kategori_id    Int
+  Kategori       KategoriPelanggaran @relation(fields: [kategori_id], references: [id])
+  kelassantri_id Int
+  KelasSantri    KelasSantri         @relation(fields: [kelassantri_id], references: [id])
+  keterangan     String              @db.Text
+
+  last_update_by_id String?
+  last_update_by    User?   @relation("pelanggaran_updated_by", fields: [last_update_by_id], references: [id])
+  created_by_id     String?
+  created_by        User?   @relation("pelanggaran_created_by", fields: [created_by_id], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
 model KategoriPelanggaran {
   id               Int      @id @default(autoincrement())
   nama_pelanggaran String
@@ -128,12 +147,13 @@ model KategoriPelanggaran {
   jenis            String
   poin             Int
 
-  created_by        User?    @relation("kategoriPel_created_by", fields: [created_by_id], references: [id])
+  created_by        User?         @relation("kategoriPel_created_by", fields: [created_by_id], references: [id])
   created_by_id     String?
-  last_update_by    User?    @relation("kategoriPel_updated_by", fields: [last_update_by_id], references: [id])
+  last_update_by    User?         @relation("kategoriPel_updated_by", fields: [last_update_by_id], references: [id])
   last_update_by_id String?
-  created_at        DateTime @default(now())
-  updated_at        DateTime @updatedAt
+  created_at        DateTime      @default(now())
+  updated_at        DateTime      @updatedAt
+  Pelangaran        Pelanggaran[]
 }
 
 enum Kategori {
@@ -195,12 +215,13 @@ model KelasSantri {
   Santri    Santri      @relation(fields: [santri_id], references: [id])
   status    StatusKelas
 
-  created_at        DateTime @default(now())
-  updated_at        DateTime @updatedAt
-  created_by        User?    @relation("kelasSantri_created_by", fields: [created_by_id], references: [id])
+  created_at        DateTime      @default(now())
+  updated_at        DateTime      @updatedAt
+  created_by        User?         @relation("kelasSantri_created_by", fields: [created_by_id], references: [id])
   created_by_id     String?
-  last_update_by    User?    @relation("kelasSantri_updated_by", fields: [last_update_by_id], references: [id])
+  last_update_by    User?         @relation("kelasSantri_updated_by", fields: [last_update_by_id], references: [id])
   last_update_by_id String?
+  Pelangaran        Pelanggaran[]
 
   @@unique([kelas_id, ta_id, santri_id, status])
 }

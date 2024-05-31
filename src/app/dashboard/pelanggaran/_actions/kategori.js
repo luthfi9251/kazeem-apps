@@ -3,11 +3,15 @@ import prisma from "@/lib/prisma";
 import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
 
-export async function addKategoriPelanggaran(data) {
+export async function addKategoriPelanggaran({
+    nama_pelanggaran,
+    kategori,
+    jenis,
+    poin,
+}) {
     return new Promise(async (resolve, reject) => {
         try {
             let session = await auth();
-            let { nama_pelanggaran, kategori, jenis, poin } = data;
             let userActionId = {
                 connect: {
                     id: session.user.id,
