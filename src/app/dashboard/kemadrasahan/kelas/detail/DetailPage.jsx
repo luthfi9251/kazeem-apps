@@ -27,12 +27,14 @@ export default function DetailPage({ dataKelas, dataTA }) {
                         <ArrowLeft />
                     </Button>
                 </Link>
-                <Button
-                    className="md:w-36 bg-kazeem-primary hover:bg-kazeem-darker"
-                    data-e2e="btn-edit"
-                >
-                    Edit
-                </Button>
+                <Link href={HREF_URL.KEMADRASAHAN_KELAS_EDIT(dataKelas.id)}>
+                    <Button
+                        className="md:w-36 bg-kazeem-primary hover:bg-kazeem-darker"
+                        data-e2e="btn-edit"
+                    >
+                        Edit
+                    </Button>
+                </Link>
             </div>
             <Card className=" col-span-1 md:col-span-2">
                 <CardHeader>
