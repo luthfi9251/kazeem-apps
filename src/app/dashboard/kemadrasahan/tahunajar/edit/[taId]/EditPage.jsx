@@ -75,8 +75,7 @@ export default function EditPage({ data }) {
                 error: {
                     render({ data }) {
                         // When the promise reject, data will contains the error
-                        console.log(data);
-                        return `${data.message}`;
+                        return "Gagal menghapus data, pastikan Tahun Ajar tidak sedang aktif atau digunakan dalam data kelas!";
                     },
                 },
             },

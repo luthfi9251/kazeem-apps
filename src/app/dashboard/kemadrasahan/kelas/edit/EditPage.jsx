@@ -46,8 +46,7 @@ export default function EditPage({ dataKelas, dataTA }) {
                 error: {
                     render({ data }) {
                         // When the promise reject, data will contains the error
-                        console.log(data);
-                        return `${data.message}`;
+                        return `Gagal menghapus data, pastikan Kelas tidak memiliki siswa!`;
                     },
                 },
             },

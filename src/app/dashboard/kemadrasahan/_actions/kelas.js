@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import { auth } from "@/auth";
 import { addTahunAjar } from "./tahunajar";
 import { HREF_URL } from "@/navigation-data";
+import { revalidatePath } from "next/cache";
 
 export async function addKelas(data) {
     return new Promise(async (resolve, reject) => {

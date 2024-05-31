@@ -14,6 +14,7 @@ import KelasTable from "./KelasTable";
 import AlertNoneKelasInserted from "./AlertNoneKelasInserted";
 import AlertUnsavedKelas from "./AlertUnsavedKelas";
 import { addKelas } from "../../_actions/kelas";
+import { HREF_URL } from "@/navigation-data";
 
 export default function CreatePage() {
     let [kelas, setKelas] = useContext(KelasContext);
@@ -66,7 +67,7 @@ export default function CreatePage() {
                 pending: "Menyimpan data",
                 success: {
                     render({ data }) {
-                        // router.push("/dashboard/kemadrasahan/kelas");
+                        router.push(HREF_URL.KEMADRASAHAN_KELAS_HOME);
                         return "Data berhasil disimpan";
                     },
                 },

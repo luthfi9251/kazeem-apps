@@ -64,7 +64,7 @@ export const columns = [
                         <DropdownMenuItem>
                             <p
                                 className="w-full cursor-pointer"
-                                data-e2e="btn-detail"
+                                data-e2e="btn-hapus"
                                 onClick={() =>
                                     table.options.meta.deleteHandler(user.id)
                                 }
