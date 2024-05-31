@@ -21,18 +21,21 @@ export default function CreatePage({ data }) {
             kategori: "",
             jenis: "",
             keterangan: "",
+            konsekuensi: "",
             poin: 0,
             allow_edit: false,
         },
     });
 
     let handleSubmit = (data) => {
+        console.log(data);
         let dataPelanggaran = {
             nama_pelanggaran: data.nama_pelanggaran,
             kategori: data.kategori,
             jenis: data.jenis,
             poin: data.poin,
             keterangan: data.keterangan,
+            konsekuensi: data.konsekuensi,
         };
         toast.promise(
             () =>

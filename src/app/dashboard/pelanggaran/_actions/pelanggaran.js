@@ -17,8 +17,14 @@ export async function addPelanggaran({
                 },
             };
             if (isCreateNewKategori) {
-                let { nama_pelanggaran, kategori, jenis, poin, keterangan } =
-                    dataPelanggaran;
+                let {
+                    nama_pelanggaran,
+                    kategori,
+                    jenis,
+                    poin,
+                    keterangan,
+                    konsekuensi,
+                } = dataPelanggaran;
                 let createAll = await prisma.Pelanggaran.create({
                     data: {
                         KelasSantri: {
@@ -37,6 +43,7 @@ export async function addPelanggaran({
                             },
                         },
                         keterangan,
+                        konsekuensi,
                         created_by: connectUserID,
                         last_update_by: connectUserID,
                     },
@@ -55,6 +62,7 @@ export async function addPelanggaran({
                                 id: parseInt(pelanggaranId),
                             },
                         },
+                        konsekuensi: dataPelanggaran.konsekuensi,
                         keterangan: dataPelanggaran.keterangan,
                         created_by: connectUserID,
                         last_update_by: connectUserID,
