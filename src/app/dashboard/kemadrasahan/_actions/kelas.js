@@ -278,3 +278,28 @@ export async function deleteKelas({ idKelas }) {
         }
     });
 }
+
+export async function pindahKelasSiswa({ id, idKelas }) {
+    return await prisma.KelasSantri.update({
+        where: {
+            id,
+        },
+        data: {
+            Kelas: {
+                connect: {
+                    id: idKelas,
+                },
+            },
+        },
+    });
+}
+
+export async function getAllKelas() {
+    return await prisma.Kelas.findMany({
+        where: {},
+        select: {
+            id: true,
+            nama_kelas: true,
+        },
+    });
+}

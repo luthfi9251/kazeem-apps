@@ -15,7 +15,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
+import { toast } from "react-toastify";
 import {
     Table,
     TableBody,
@@ -30,6 +30,7 @@ import {
     deleteSiswaFromKelas,
 } from "../../_actions/kelas";
 import SiswaDialogForm from "./SiswaDialogForm";
+import PindahKelasDialogForm from "./PindahKelasDialogForm";
 
 export function DataTable({ columns, dataTA, idKelas }) {
     const [taSelected, setTASelected] = useState(
@@ -38,6 +39,8 @@ export function DataTable({ columns, dataTA, idKelas }) {
     const queryClient = useQueryClient();
 
     const [dialogOpen, setDialogOpen] = useState(false);
+    const [dialogPindahOpen, setDialogPindahOpen] = useState(false);
+    const [selectedID, setSelectedID] = useState(null);
 
     let { data, isFetching, isError } = useQuery({
         queryKey: ["siswa", idKelas, taSelected],
@@ -55,6 +58,11 @@ export function DataTable({ columns, dataTA, idKelas }) {
             });
             queryClient.invalidateQueries({
                 queryKey: ["santri", "notin", idKelas],
+            });
+        },
+        onError: () => {
+            toast.error("Gagal menghapus siswa!", {
+                position: "bottom-right",
             });
         },
     });
@@ -88,6 +96,10 @@ export function DataTable({ columns, dataTA, idKelas }) {
         },
         meta: {
             deleteHandler: (id) => deleteMutation.mutate(id),
+            openPindahDialog: (id) => {
+                setSelectedID(id);
+                setDialogPindahOpen(true);
+            },
         },
     });
 
@@ -207,6 +219,13 @@ export function DataTable({ columns, dataTA, idKelas }) {
             <SiswaDialogForm
                 open={dialogOpen}
                 onOpenChange={setDialogOpen}
+                idKelas={idKelas}
+                kodeTA={taSelected}
+            />
+            <PindahKelasDialogForm
+                open={dialogPindahOpen}
+                onOpenChange={setDialogPindahOpen}
+                id={selectedID}
                 idKelas={idKelas}
                 kodeTA={taSelected}
             />

@@ -130,6 +130,7 @@ model Pelanggaran {
   kelassantri_id Int
   KelasSantri    KelasSantri         @relation(fields: [kelassantri_id], references: [id])
   keterangan     String              @db.Text
+  konsekuensi    String
 
   last_update_by_id String?
   last_update_by    User?   @relation("pelanggaran_updated_by", fields: [last_update_by_id], references: [id])
@@ -145,7 +146,7 @@ model KategoriPelanggaran {
   nama_pelanggaran String
   kategori         Kategori
   jenis            String
-  poin             Int
+  poin             Int      @default(0)
 
   created_by        User?         @relation("kategoriPel_created_by", fields: [created_by_id], references: [id])
   created_by_id     String?

@@ -72,6 +72,17 @@ export const columns = [
                                 Hapus
                             </p>
                         </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <p
+                                className="w-full cursor-pointer"
+                                data-e2e="btn-pindah"
+                                onClick={() =>
+                                    table.options.meta.openPindahDialog(user.id)
+                                }
+                            >
+                                Pindah Kelas
+                            </p>
+                        </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             );
