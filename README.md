@@ -8,6 +8,7 @@ Fitur
 -   [x] Manajemen User
 -   [x] Manajemen Santri
 -   [x] Manajemen Wali Santri
+-   [x] Manajemen Kemadrasahan (Kelola Kelas, Tahun Ajar)
 
 ## Installation
 
@@ -53,6 +54,8 @@ atau End to End yang berarti hanya menguji tiap flow dari aplikasi Kazeem, untuk
 
 -   [x] Create, Read, Update, Delete Data Santri
 -   [x] Create, Read, Update, Delete Data Wali Santri
+-   [x] Create, Read, Update, Delete Data Kelas
+-   [x] Create, Read, Update, Delete Data Tahun Ajar
 -   added soon
 
 ## Contributing
