@@ -1,5 +1,12 @@
 const { PrismaClient } = require("@prisma/client");
-const { SANTRI, WALI } = require("./seedData");
+const {
+    SANTRI,
+    WALI,
+    KELAS,
+    TINGKATAN,
+    TAHUN_AJAR,
+    KELAS_SANTRI,
+} = require("./seedData");
 const prisma = new PrismaClient();
 
 // Ini merupakan script untuk melakukan seeding pada prisma
@@ -42,55 +49,80 @@ async function main() {
         },
     };
 
-    const createSantri = SANTRI.map((item, i) => {
-        let waliLoc = WALI[i];
-        return prisma.Santri.create({
-            data: {
-                nama_lengkap: item.nama_lengkap,
-                alamat: item.alamat,
-                email: item.email,
-                hp: item.hp,
-                tempat_lahir: item.tempat_lahir,
-                tgl_lhr: new Date(item.tgl_lhr).toISOString(),
-                foto: null,
-                created_by: userActionId,
-                last_update_by: userActionId,
-                WaliSantri: {
-                    create: {
-                        peran: waliLoc.list,
-                        created_by: userActionId,
-                        last_update_by: userActionId,
-                        wali: {
-                            connectOrCreate: {
-                                where: {
-                                    waliIdentifier: {
-                                        nama_wali: waliLoc.nama_wali,
-                                        tgl_lhr: new Date(
-                                            waliLoc.tgl_lhr
-                                        ).toISOString(),
-                                    },
-                                },
-                                create: {
-                                    nama_wali: waliLoc.nama_wali,
-                                    tgl_lhr: new Date(
-                                        waliLoc.tgl_lhr
-                                    ).toISOString(),
-                                    email: waliLoc.email,
-                                    hp: waliLoc.hp,
-                                    created_by: userActionId,
-                                    last_update_by: userActionId,
-                                },
-                            },
-                        },
-                    },
-                },
-            },
-        });
-    });
+    // const createSantri = SANTRI.map((item, i) => {
+    //     let waliLoc = WALI[i];
+    //     return prisma.Santri.create({
+    //         data: {
+    //             nama_lengkap: item.nama_lengkap,
+    //             alamat: item.alamat,
+    //             email: item.email,
+    //             hp: item.hp,
+    //             tempat_lahir: item.tempat_lahir,
+    //             tgl_lhr: new Date(item.tgl_lhr).toISOString(),
+    //             foto: null,
+    //             created_by: userActionId,
+    //             last_update_by: userActionId,
+    //             WaliSantri: {
+    //                 create: {
+    //                     peran: waliLoc.list,
+    //                     created_by: userActionId,
+    //                     last_update_by: userActionId,
+    //                     wali: {
+    //                         connectOrCreate: {
+    //                             where: {
+    //                                 waliIdentifier: {
+    //                                     nama_wali: waliLoc.nama_wali,
+    //                                     tgl_lhr: new Date(
+    //                                         waliLoc.tgl_lhr
+    //                                     ).toISOString(),
+    //                                 },
+    //                             },
+    //                             create: {
+    //                                 nama_wali: waliLoc.nama_wali,
+    //                                 tgl_lhr: new Date(
+    //                                     waliLoc.tgl_lhr
+    //                                 ).toISOString(),
+    //                                 email: waliLoc.email,
+    //                                 hp: waliLoc.hp,
+    //                                 created_by: userActionId,
+    //                                 last_update_by: userActionId,
+    //                             },
+    //                         },
+    //                     },
+    //                 },
+    //             },
+    //         },
+    //     });
+    // });
 
-    Promise.all(createSantri).then((data) => {
-        console.log({ adminUser, data });
-    });
+    // await Promise.all(createSantri).then((data) => {
+    //     console.log({ adminUser, data });
+    // });
+
+    // const createTingkatan = await prisma.Tingkat.createMany({
+    //     data: TINGKATAN,
+    // });
+
+    // const createKelas = await prisma.Kelas.createMany({
+    //     data: KELAS.map((item) => {
+    //         return {
+    //             id: item.id,
+    //             nama_kelas: item.nama_kelas,
+    //             tingkat_id: item.tingkat_id,
+    //             keterangan: item.keterangan,
+    //         };
+    //     }),
+    // });
+
+    // const createTA = await prisma.TahunAjar.createMany({
+    //     data: TAHUN_AJAR,
+    // });
+
+    // const createKelasSantri = await prisma.kelasSantri.createMany({
+    //     data: KELAS_SANTRI,
+    // });
+
+    // console.log({ createTingkatan, createKelas, createTA, createKelasSantri });
 }
 main()
     .then(async () => {

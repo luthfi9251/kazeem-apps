@@ -19,6 +19,8 @@ export const HREF_URL = {
         `/dashboard/kemadrasahan/tahunajar/edit/${id}`,
     PELANGGARAN_HOME: "/dashboard/pelanggaran",
     PELANGGARAN_CREATE: "/dashboard/pelanggaran/create",
+    PELANGGARAN_EDIT: (id) => `/dashboard/pelanggaran/edit/${id}`,
+    PELANGGARAN_REKAP: (id) => `/dashboard/pelanggaran/summary/${id}`,
 };
 
 export const URL_PATH = [

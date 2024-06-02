@@ -28,7 +28,6 @@ export default function CreatePage({ data }) {
     });
 
     let handleSubmit = (data) => {
-        console.log(data);
         let dataPelanggaran = {
             nama_pelanggaran: data.nama_pelanggaran,
             kategori: data.kategori,
@@ -42,7 +41,7 @@ export default function CreatePage({ data }) {
                 addPelanggaran({
                     dataPelanggaran,
                     isCreateNewKategori: data.allow_edit,
-                    santriId: data.id_santri,
+                    kelasSantriId: data.id_santri,
                     pelanggaranId: data.nama_pelanggaran_option,
                 }),
             {
@@ -80,6 +79,7 @@ export default function CreatePage({ data }) {
                 </Link>
                 <Button
                     className="md:w-36 bg-kazeem-primary hover:bg-kazeem-darker"
+                    data-e2e="btn-simpan"
                     onClick={handleSimpan}
                 >
                     Simpan

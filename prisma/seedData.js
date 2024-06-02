@@ -154,7 +154,110 @@ const WALI = [
     },
 ];
 
+const TAHUN_AJAR = [
+    {
+        id: 91,
+        kode_ta: "2000/2001",
+        tgl_mulai: new Date("2000-12-01").toISOString(),
+        tgl_selesai: new Date("2001-12-01").toISOString(),
+        aktif: false,
+    },
+    {
+        id: 92,
+        kode_ta: "2001/2002",
+        tgl_mulai: new Date("2001-12-01").toISOString(),
+        tgl_selesai: new Date("2002-12-01").toISOString(),
+        aktif: true,
+    },
+];
+
+const KELAS = [
+    {
+        id: 91,
+        nama_kelas: "1-TEST",
+        tingkat_id: 1,
+        keterangan: "1",
+    },
+    {
+        id: 92,
+        nama_kelas: "2-TEST",
+        tingkat_id: 1,
+        keterangan: "2",
+    },
+];
+
+const TINGKATAN = [
+    {
+        id: 1,
+        nama_tingkatan: "1",
+        keterangan: "1",
+    },
+];
+
+const KELAS_SANTRI = [
+    {
+        id: 91,
+        kelas_id: 91,
+        ta_id: 91,
+        santri_id: 1,
+        status: "BARU",
+    },
+    {
+        id: 92,
+        kelas_id: 91,
+        ta_id: 91,
+        santri_id: 2,
+        status: "BARU",
+    },
+    {
+        id: 93,
+        kelas_id: 92,
+        ta_id: 91,
+        santri_id: 3,
+        status: "BARU",
+    },
+    {
+        id: 94,
+        kelas_id: 92,
+        ta_id: 91,
+        santri_id: 4,
+        status: "BARU",
+    },
+    {
+        id: 95,
+        kelas_id: 91,
+        ta_id: 92,
+        santri_id: 1,
+        status: "BARU",
+    },
+    {
+        id: 96,
+        kelas_id: 91,
+        ta_id: 92,
+        santri_id: 2,
+        status: "BARU",
+    },
+    {
+        id: 97,
+        kelas_id: 92,
+        ta_id: 92,
+        santri_id: 3,
+        status: "BARU",
+    },
+    {
+        id: 98,
+        kelas_id: 92,
+        ta_id: 92,
+        santri_id: 4,
+        status: "BARU",
+    },
+];
+
 module.exports = {
     SANTRI,
     WALI,
+    TAHUN_AJAR,
+    KELAS,
+    KELAS_SANTRI,
+    TINGKATAN,
 };

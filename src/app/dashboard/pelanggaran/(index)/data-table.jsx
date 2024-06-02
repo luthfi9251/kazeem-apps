@@ -91,7 +91,11 @@ export function DataTable({ columns, selectData }) {
                     className="max-w-sm"
                 />
                 <div className=" grid grid-cols-3 gap-2">
-                    <Select value={namaKelas} onValueChange={setNamaKelas}>
+                    <Select
+                        value={namaKelas}
+                        onValueChange={setNamaKelas}
+                        defaultValue="undefined"
+                    >
                         <SelectTrigger className="w-full">
                             <SelectValue placeholder="Pilih Kelas" />
                         </SelectTrigger>
@@ -105,10 +109,21 @@ export function DataTable({ columns, selectData }) {
                                         </SelectItem>
                                     );
                                 })}
+                                <SelectItem
+                                    key="ALL"
+                                    value="undefined"
+                                    onClick={() => setNamaKelas(null)}
+                                >
+                                    Semua Kelas
+                                </SelectItem>
                             </SelectGroup>
                         </SelectContent>
                     </Select>
-                    <Select value={kodeTA} onValueChange={setKodeTA}>
+                    <Select
+                        defaultValue="undefined"
+                        value={kodeTA}
+                        onValueChange={setKodeTA}
+                    >
                         <SelectTrigger className="w-full">
                             <SelectValue placeholder="Pilih Tahun Ajaran" />
                         </SelectTrigger>
@@ -122,6 +137,13 @@ export function DataTable({ columns, selectData }) {
                                         </SelectItem>
                                     );
                                 })}
+                                <SelectItem
+                                    key="ALL"
+                                    value="undefined"
+                                    onClick={() => setKodeTA(null)}
+                                >
+                                    Semua TA
+                                </SelectItem>
                             </SelectGroup>
                         </SelectContent>
                     </Select>

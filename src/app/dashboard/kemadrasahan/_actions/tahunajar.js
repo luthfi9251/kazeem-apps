@@ -131,6 +131,25 @@ export async function editTahunAjar({
 export async function deleteTahunAjar({ idTa }) {
     return new Promise(async (resolve, reject) => {
         try {
+            let session = await auth();
+            let checkTA = await prisma.TahunAjar.findUnique({
+                where: {
+                    id: parseInt(idTa),
+                },
+            });
+
+            if (checkTA.aktif) {
+                let deactivateTahunAjar = prisma.TahunAjar.update({
+                    where: {
+                        id: checkTA.id,
+                    },
+                    data: {
+                        aktif: false,
+                        last_update_by_id: session.user.id,
+                    },
+                });
+            }
+
             let deleteTa = await prisma.TahunAjar.delete({
                 where: {
                     id: parseInt(idTa),
@@ -150,7 +169,7 @@ export async function deleteTahunAjar({ idTa }) {
             revalidatePath(HREF_URL.KEMADRASAHAN_TA_HOME);
             return;
         } catch (err) {
-            // console.log(err);
+            console.log(err.message);
             reject(
                 new Error(
                     "Tahun ajar tidak dapat dihapus karena memiliki data KelasSantri!"

@@ -1,13 +1,3 @@
-Cypress.Commands.add("login", (username, password) => {
-    cy.session([username, password], () => {
-        cy.visit("/login");
-        cy.get('input[name="email"]').type(username);
-        cy.get('input[name="password"]').type(password);
-        cy.get('button[type="submit"]').click();
-        cy.url().should("contain", "/dashboard");
-    });
-});
-
 describe("Kategori Pelanggaran Page CRUD", () => {
     beforeEach(() => {
         //login dulu dengan role admin

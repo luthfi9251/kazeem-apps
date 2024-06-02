@@ -10,7 +10,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { HREF_URL } from "@/navigation-data";
+
 import Link from "next/link";
 
 export const columns = [
@@ -22,11 +22,11 @@ export const columns = [
         },
     },
     {
-        accessorKey: "nama_santri",
-        header: "Nama Santri",
+        accessorKey: "nama_pelanggaran",
+        header: "Nama Pelanggaran",
     },
     {
-        accessorKey: "kelas",
+        accessorKey: "nama_kelas",
         header: "Kelas",
     },
     {
@@ -34,12 +34,28 @@ export const columns = [
         header: "TA",
     },
     {
-        accessorKey: "nama_pelanggaran",
-        header: "Pelanggaran",
+        accessorKey: "kategori",
+        header: "Kategori",
     },
     {
-        accessorKey: "tanggal",
-        header: "Tanggal",
+        accessorKey: "jenis",
+        header: "Jenis",
+    },
+    {
+        accessorKey: "poin",
+        header: "Poin",
+    },
+    {
+        accessorKey: "keterangan",
+        header: "Keterangan",
+    },
+    {
+        accessorKey: "konsekuensi",
+        header: "Konsekuensi",
+    },
+    {
+        accessorKey: "created_at",
+        header: "Dibuat tgl",
     },
     {
         id: "actions",
@@ -60,35 +76,12 @@ export const columns = [
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem>
-                            <Link
-                                href={HREF_URL.PELANGGARAN_EDIT(user.id)}
-                                className="w-full"
-                                data-e2e="btn-edit"
-                            >
-                                Edit
-                            </Link>
+                        <DropdownMenuItem
+                            data-e2e="btn-edit"
+                            className="cursor-pointer"
+                        >
+                            Edit
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <Link
-                                href={HREF_URL.PELANGGARAN_REKAP(
-                                    user.santri_id
-                                )}
-                                className="w-full"
-                                data-e2e="btn-rekap"
-                            >
-                                Rekap
-                            </Link>
-                        </DropdownMenuItem>
-                        {/* <DropdownMenuItem>
-                            <Link
-                                href={HREF_URL.KEMADRASAHAN_KELAS_EDIT(user.id)}
-                                className="w-full"
-                                data-e2e="btn-edit"
-                            >
-                                Edit
-                            </Link>
-                        </DropdownMenuItem> */}
                     </DropdownMenuContent>
                 </DropdownMenu>
             );

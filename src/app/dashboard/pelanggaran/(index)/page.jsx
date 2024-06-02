@@ -46,7 +46,6 @@ async function getData() {
 
 export default async function Page() {
     let data = await getData();
-    console.log(data);
     return (
         <div className="md:p-5 p-2">
             <Card>

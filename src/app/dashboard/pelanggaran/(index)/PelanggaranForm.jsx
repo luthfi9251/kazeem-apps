@@ -45,7 +45,12 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CheckIcon, ArrowUpDown } from "lucide-react";
 
-export default function PelanggaranForm({ data, form, disabled = false }) {
+export default function PelanggaranForm({
+    data,
+    form,
+    edit = false,
+    disabled = false,
+}) {
     let { namaSantri, kategoriPelanggaran } = data;
     const [openSantri, setOpenSantri] = useState(false);
     const [openKategori, setOpenKategori] = useState(false);
@@ -55,7 +60,9 @@ export default function PelanggaranForm({ data, form, disabled = false }) {
     return (
         <Card className="col-span-2">
             <CardHeader>
-                <CardTitle>Tambah Pelanggaran</CardTitle>
+                <CardTitle>
+                    {edit ? "Edit Pelanggaran" : "Tambah Pelanggaran"}
+                </CardTitle>
                 <CardDescription>Card Description</CardDescription>
             </CardHeader>
             <CardContent>
@@ -77,6 +84,8 @@ export default function PelanggaranForm({ data, form, disabled = false }) {
                                                     <Button
                                                         variant="outline"
                                                         role="combobox"
+                                                        data-e2e="btn-tambah-santri"
+                                                        disabled={edit}
                                                         className={cn(
                                                             "w-full justify-between",
                                                             !field.value &&
@@ -115,6 +124,7 @@ export default function PelanggaranForm({ data, form, disabled = false }) {
                                                                         key={
                                                                             santri.id
                                                                         }
+                                                                        data-e2e="select-item"
                                                                         onSelect={() => {
                                                                             form.setValue(
                                                                                 "id_santri",
@@ -172,6 +182,7 @@ export default function PelanggaranForm({ data, form, disabled = false }) {
                                                         disabled={
                                                             isEditedKategori
                                                         }
+                                                        data-e2e="btn-kategori-option"
                                                         className={cn(
                                                             "w-full justify-between",
                                                             !field.value &&
@@ -215,6 +226,7 @@ export default function PelanggaranForm({ data, form, disabled = false }) {
                                                                         key={
                                                                             pelanggaran.id
                                                                         }
+                                                                        data-e2e="select-item"
                                                                         onSelect={() => {
                                                                             form.setValue(
                                                                                 "nama_pelanggaran_option",
@@ -306,6 +318,7 @@ export default function PelanggaranForm({ data, form, disabled = false }) {
                                             <div className="flex items-center space-x-2">
                                                 <Checkbox
                                                     id="terms"
+                                                    data-e2e="btn-allow-edit"
                                                     checked={field.value}
                                                     onCheckedChange={(e) => {
                                                         field.onChange(e);
@@ -357,7 +370,10 @@ export default function PelanggaranForm({ data, form, disabled = false }) {
                                                 value={field.value}
                                                 disabled={!isEditedKategori}
                                             >
-                                                <SelectTrigger className="w-full">
+                                                <SelectTrigger
+                                                    className="w-full"
+                                                    data-e2e="btn-kategori"
+                                                >
                                                     <SelectValue placeholder="Pilih Kategori" />
                                                 </SelectTrigger>
                                                 <SelectContent>
