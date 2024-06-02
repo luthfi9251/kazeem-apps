@@ -1,5 +1,7 @@
 import EditPage from "../EditPage";
 import prisma from "@/lib/prisma";
+import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
+import { PAGE_NAME } from "@/security-config";
 
 async function getData(idKelas) {
     let dataTahunAjaran = prisma.TahunAjar.findMany({
@@ -28,7 +30,7 @@ async function getData(idKelas) {
     return await Promise.all([dataTahunAjaran, dataKelas]);
 }
 
-export default async function Page(props) {
+async function Page(props) {
     let idKelas = props.params.kelasId;
     let data = await getData(idKelas);
     return (
@@ -37,3 +39,5 @@ export default async function Page(props) {
         </>
     );
 }
+
+export default withAuthAndGroupCheck(Page, PAGE_NAME.MANAGE_MADRASAH_PAGE);

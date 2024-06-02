@@ -13,6 +13,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
 import prisma from "@/lib/prisma";
+import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
+import { PAGE_NAME } from "@/security-config";
 
 async function getData() {
     let data = await prisma.KelasSantri.findMany({
@@ -44,7 +46,7 @@ async function getData() {
     };
 }
 
-export default async function Page() {
+async function Page() {
     let data = await getData();
     return (
         <div className="md:p-5 p-2">
@@ -60,3 +62,5 @@ export default async function Page() {
         </div>
     );
 }
+
+export default withAuthAndGroupCheck(Page, PAGE_NAME.MANAGE_PELANGGARAN_PAGE);

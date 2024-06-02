@@ -9,13 +9,10 @@ import {
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
 import prisma from "@/lib/prisma";
+import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
+import { PAGE_NAME } from "@/security-config";
 
 async function getData() {
-    let taAktif = await prisma.TahunAjar.findFirst({
-        where: {
-            aktif: true,
-        },
-    });
     let data = await prisma.Kelas.findMany({
         select: {
             id: true,
@@ -38,7 +35,7 @@ async function getData() {
     return res;
 }
 
-export default async function Page() {
+async function Page() {
     let data = await getData();
     return (
         <div className="md:p-5 p-2">
@@ -54,3 +51,5 @@ export default async function Page() {
         </div>
     );
 }
+
+export default withAuthAndGroupCheck(Page, PAGE_NAME.MANAGE_MADRASAH_PAGE);

@@ -1,5 +1,7 @@
 import prisma from "@/lib/prisma";
 import DetailPage from "./DetailPage";
+import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
+import { PAGE_NAME } from "@/security-config";
 
 async function getData(id) {
     let data = await prisma.KategoriPelanggaran.findUnique({
@@ -10,7 +12,7 @@ async function getData(id) {
     return data;
 }
 
-export default async function Page(props) {
+async function Page(props) {
     let id = parseInt(props.params.id);
     let data = await getData(id);
     if (!data) {
@@ -22,3 +24,5 @@ export default async function Page(props) {
         </>
     );
 }
+
+export default withAuthAndGroupCheck(Page, PAGE_NAME.MANAGE_PELANGGARAN_PAGE);

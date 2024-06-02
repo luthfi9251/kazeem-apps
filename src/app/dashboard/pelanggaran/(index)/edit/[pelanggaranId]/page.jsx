@@ -1,5 +1,7 @@
 import EditPage from "./EditPage";
 import prisma from "@/lib/prisma";
+import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
+import { PAGE_NAME } from "@/security-config";
 
 async function getPelanggaranDetail(id) {
     return await prisma.Pelanggaran.findUnique({
@@ -30,7 +32,7 @@ async function getKategoriPelanggaran() {
     return kategori;
 }
 
-export default async function Page(props) {
+async function Page(props) {
     let idPelanggaran = props.params.pelanggaranId;
     let [pelanggaranDetail, kategoriPelanggaran] = await Promise.all([
         getPelanggaranDetail(idPelanggaran),
@@ -57,3 +59,5 @@ export default async function Page(props) {
         </>
     );
 }
+
+export default withAuthAndGroupCheck(Page, PAGE_NAME.MANAGE_PELANGGARAN_PAGE);

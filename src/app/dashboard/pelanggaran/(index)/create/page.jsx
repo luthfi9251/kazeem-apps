@@ -1,5 +1,7 @@
 import CreatePage from "./CreatePage";
 import prisma from "@/lib/prisma";
+import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
+import { PAGE_NAME } from "@/security-config";
 
 async function getNamaSantri() {
     let dataSantri = await prisma.KelasSantri.findMany({
@@ -39,7 +41,7 @@ async function getKategoriPelanggaran() {
     return kategori;
 }
 
-export default async function Page() {
+async function Page() {
     let [namaSantri, kategoriPelanggaran] = await Promise.all([
         getNamaSantri(),
         getKategoriPelanggaran(),
@@ -51,3 +53,5 @@ export default async function Page() {
         </>
     );
 }
+
+export default withAuthAndGroupCheck(Page, PAGE_NAME.MANAGE_PELANGGARAN_PAGE);

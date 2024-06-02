@@ -1,5 +1,7 @@
 import DetailPage from "../../summary/DetailPage";
 import prisma from "@/lib/prisma";
+import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
+import { PAGE_NAME } from "@/security-config";
 
 async function getData(idSantri) {
     let kelasAktifSantri = await prisma.KelasSantri.findFirst({
@@ -85,34 +87,6 @@ async function getData(idSantri) {
             },
         },
     });
-    /**
-     {
-    id: 5,
-    kategori_id: 3,
-    kelassantri_id: 9,
-    keterangan: '125',
-    konsekuensi: '1234',
-    last_update_by_id: 'c216277d-5be4-4b2f-867a-307e3b9b4348',
-    created_by_id: 'c216277d-5be4-4b2f-867a-307e3b9b4348',
-    created_at: 2024-05-31T14:19:05.322Z,
-    updated_at: 2024-05-31T14:19:05.322Z,
-    Kategori: {
-      id: 3,
-      nama_pelanggaran: 'Menyanyi',
-      kategori: 'BERAT',
-      jenis: 'Perilaku',
-      poin: 100,
-      created_by_id: 'c216277d-5be4-4b2f-867a-307e3b9b4348',
-      last_update_by_id: 'c216277d-5be4-4b2f-867a-307e3b9b4348',
-      created_at: 2024-05-31T12:43:07.911Z,
-      updated_at: 2024-05-31T12:43:07.911Z
-    },
-    KelasSantri: {
-      TahunAjar: { id: 2, kode_ta: '2025/2026' },
-      Kelas: { id: 1, nama_kelas: '1-A' }
-    }
-  }
-     */
 
     let dataSantri = {
         nama_kelas: kelasAktifSantri.Kelas.nama_kelas,
@@ -166,7 +140,7 @@ async function getData(idSantri) {
     return { dataSantri, dataSummary, dataPelanggaran };
 }
 
-export default async function Page(props) {
+async function Page(props) {
     let idSantri = props.params.santriId;
     let { dataSantri, dataSummary, dataPelanggaran } = await getData(
         parseInt(idSantri)
@@ -181,3 +155,5 @@ export default async function Page(props) {
         </>
     );
 }
+
+export default withAuthAndGroupCheck(Page, PAGE_NAME.MANAGE_PELANGGARAN_PAGE);
