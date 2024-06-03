@@ -34,6 +34,8 @@ model User {
   KelasUpdated       Kelas[]               @relation("kelas_updated_by")
   PelanggaranCreated Pelanggaran[]         @relation("pelanggaran_created_by")
   PelanggaranUpdated Pelanggaran[]         @relation("pelanggaran_updated_by")
+  KesehatanCreated   Kesehatan[]           @relation("kesehatan_created_by")
+  KesehatanUpdated   Kesehatan[]           @relation("kesehatan_updated_by")
 }
 
 model Group {
@@ -74,8 +76,9 @@ model Santri {
   created_by_id     String?
   created_by        User?   @relation("santri_created_by", fields: [created_by_id], references: [id])
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+  Kesehatan  Kesehatan[]
 }
 
 model WaliSantri {
@@ -230,4 +233,28 @@ model KelasSantri {
 enum StatusKelas {
   BARU
   ULANG
+}
+
+model Kesehatan {
+  id            Int             @id @default(autoincrement())
+  nama_penyakit String          @db.VarChar(100)
+  penanganan    String          @db.Text
+  kategori      Kategori
+  tgl_masuk     DateTime
+  tgl_keluar    DateTime
+  status        StatusKesehatan
+  santri_id     Int
+  Santri        Santri          @relation(fields: [santri_id], references: [id])
+
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+  created_by        User?    @relation("kesehatan_created_by", fields: [created_by_id], references: [id])
+  created_by_id     String?
+  last_update_by    User?    @relation("kesehatan_updated_by", fields: [last_update_by_id], references: [id])
+  last_update_by_id String?
+}
+
+enum StatusKesehatan {
+  PERAWATAN
+  SEMBUH
 }

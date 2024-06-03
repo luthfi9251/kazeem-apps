@@ -22,6 +22,7 @@ export const HREF_URL = {
     PELANGGARAN_EDIT: (id) => `/dashboard/pelanggaran/edit/${id}`,
     PELANGGARAN_REKAP: (id) => `/dashboard/pelanggaran/summary/${id}`,
     KESEHATAN_HOME: "/dashboard/santri/kesehatan",
+    KESEHATAN_CREATE: "/dashboard/santri/kesehatan/create",
 };
 
 export const URL_PATH = [
@@ -67,7 +68,7 @@ export const URL_PATH = [
             },
             {
                 name: "Kesehatan",
-                href: HREF_URL.KEMADRASAHAN_KELAS_HOME,
+                href: HREF_URL.KESEHATAN_HOME,
                 suffix: ["/edit", "/create", "/detail"],
                 icon: "",
             },
