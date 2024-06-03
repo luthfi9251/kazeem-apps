@@ -2,7 +2,7 @@
 import SantriForm from "../../SantriForm";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import santriSchema from "../../yup-santri-schema";
+import santriSchema from "../../../yup-santri-schema";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";

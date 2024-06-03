@@ -21,6 +21,7 @@ export const HREF_URL = {
     PELANGGARAN_CREATE: "/dashboard/pelanggaran/create",
     PELANGGARAN_EDIT: (id) => `/dashboard/pelanggaran/edit/${id}`,
     PELANGGARAN_REKAP: (id) => `/dashboard/pelanggaran/summary/${id}`,
+    KESEHATAN_HOME: "/dashboard/santri/kesehatan",
 };
 
 export const URL_PATH = [
@@ -61,6 +62,12 @@ export const URL_PATH = [
             {
                 name: "Wali Santri",
                 href: "/dashboard/santri/wali",
+                suffix: ["/edit", "/create", "/detail"],
+                icon: "",
+            },
+            {
+                name: "Kesehatan",
+                href: HREF_URL.KEMADRASAHAN_KELAS_HOME,
                 suffix: ["/edit", "/create", "/detail"],
                 icon: "",
             },

@@ -1,7 +1,7 @@
 "use client";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import santriSchema from "./yup-santri-schema";
+import santriSchema from "./../yup-santri-schema";
 import { useState } from "react";
 import {
     Form,

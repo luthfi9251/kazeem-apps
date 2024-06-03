@@ -40,7 +40,7 @@ import WaliSantriView from "./WaliSantriView";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import waliSantriSchema from "./yup-wali-santri-schema";
+import waliSantriSchema from "./../yup-wali-santri-schema";
 import {
     Dialog,
     DialogContent,
