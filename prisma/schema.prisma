@@ -241,7 +241,7 @@ model Kesehatan {
   penanganan    String          @db.Text
   kategori      Kategori
   tgl_masuk     DateTime
-  tgl_keluar    DateTime
+  tgl_keluar    DateTime?
   status        StatusKesehatan
   santri_id     Int
   Santri        Santri          @relation(fields: [santri_id], references: [id])

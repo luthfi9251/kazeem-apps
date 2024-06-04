@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -45,24 +45,62 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CheckIcon, ArrowUpDown } from "lucide-react";
 
+let FORM_CREATE = {
+    title: "Tambah Data Kesehatan",
+    santri: false,
+    nama_penyakit: false,
+    penanganan: false,
+    kategori: false,
+    tgl_masuk: false,
+    tgl_keluar: false,
+    status: false,
+};
+let FORM_EDIT = {
+    title: "Edit Data",
+    santri: true,
+    nama_penyakit: false,
+    penanganan: false,
+    kategori: false,
+    tgl_masuk: false,
+    tgl_keluar: false,
+    status: false,
+};
+let FORM_DETAIL = {
+    title: "Detail Kesehatan",
+    santri: true,
+    nama_penyakit: true,
+    penanganan: true,
+    kategori: true,
+    tgl_masuk: true,
+    tgl_keluar: true,
+    status: true,
+};
+
 export default function KesehatanForm({
     namaSantri = [],
     form,
-    edit = false,
-    disabled = false,
+    mode = "CREATE",
 }) {
     const [openSantri, setOpenSantri] = useState(false);
-    const [openKategori, setOpenKategori] = useState(false);
-    const [valKategori, setValKategori] = useState(null);
-    const [isEditedKategori, setIsEditedKategori] = useState(false);
-
+    const formState = useMemo(() => {
+        let val = null;
+        switch (mode) {
+            case "EDIT":
+                val = FORM_EDIT;
+                break;
+            case "DETAIL":
+                val = FORM_DETAIL;
+                break;
+            default:
+                val = FORM_CREATE;
+        }
+        return val;
+    }, [mode]);
     return (
         <div className="col-span-2">
             <Card className="max-h-min">
                 <CardHeader>
-                    <CardTitle>
-                        {edit ? "Edit Data" : "Tambah Data Kesehatan"}
-                    </CardTitle>
+                    <CardTitle>{formState.title}</CardTitle>
                     <CardDescription>Card Description</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -84,12 +122,14 @@ export default function KesehatanForm({
                                                         variant="outline"
                                                         role="combobox"
                                                         data-e2e="btn-tambah-santri"
-                                                        disabled={edit}
                                                         className={cn(
                                                             "w-full justify-between",
                                                             !field.value &&
                                                                 "text-muted-foreground"
                                                         )}
+                                                        disabled={
+                                                            formState.santri
+                                                        }
                                                     >
                                                         {field.value
                                                             ? namaSantri.find(
@@ -166,6 +206,7 @@ export default function KesehatanForm({
                             <FormField
                                 control={form.control}
                                 name="nama_penyakit"
+                                disabled={formState.nama_penyakit}
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
                                         <FormLabel>Sakit</FormLabel>
@@ -179,6 +220,7 @@ export default function KesehatanForm({
                             <FormField
                                 control={form.control}
                                 name="penanganan"
+                                disabled={formState.penanganan}
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
                                         <FormLabel>Penanganan</FormLabel>
@@ -202,7 +244,7 @@ export default function KesehatanForm({
                                             <Select
                                                 onValueChange={field.onChange}
                                                 value={field.value}
-                                                disabled={!isEditedKategori}
+                                                disabled={formState.kategori}
                                             >
                                                 <SelectTrigger
                                                     className="w-full"
@@ -230,6 +272,7 @@ export default function KesehatanForm({
                             <FormField
                                 control={form.control}
                                 name="tgl_masuk"
+                                disabled={formState.tgl_masuk}
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
                                         <FormLabel>Tanggal Masuk</FormLabel>
@@ -238,9 +281,6 @@ export default function KesehatanForm({
                                                 className=" border-slate-100 border-2 text-sm w-1/3 p-2 rounded-sm outline-slate-200"
                                                 type="date"
                                                 name="tgl_masuk"
-                                                disabled={
-                                                    disabled ? true : false
-                                                }
                                                 {...field}
                                             />
                                         </FormControl>
@@ -251,6 +291,7 @@ export default function KesehatanForm({
                             <FormField
                                 control={form.control}
                                 name="tgl_keluar"
+                                disabled={formState.tgl_keluar}
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
                                         <FormLabel>Tanggal Keluar</FormLabel>
@@ -259,9 +300,6 @@ export default function KesehatanForm({
                                                 className=" border-slate-100 border-2 text-sm w-1/3 p-2 rounded-sm outline-slate-200"
                                                 type="date"
                                                 name="tgl_keluar"
-                                                disabled={
-                                                    disabled ? true : false
-                                                }
                                                 {...field}
                                             />
                                         </FormControl>
@@ -279,7 +317,7 @@ export default function KesehatanForm({
                                             <Select
                                                 onValueChange={field.onChange}
                                                 value={field.value}
-                                                disabled={!isEditedKategori}
+                                                disabled={formState.status}
                                             >
                                                 <SelectTrigger
                                                     className="w-full"

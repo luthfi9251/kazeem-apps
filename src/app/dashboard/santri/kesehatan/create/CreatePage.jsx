@@ -1,8 +1,4 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
-import { useContext, createContext, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
@@ -10,8 +6,10 @@ import kesehatanSchema from "../yup-schema-kesehatan";
 import { useRouter } from "next/navigation";
 import { HREF_URL } from "@/navigation-data";
 import KesehatanForm from "../KesehatanForm";
+import { addDataKesehatan } from "../../_actions/kesehatan";
+import ActionBarCreate from "@/components/ActionBarCreate";
 
-function CreatePage() {
+function CreatePage({ namaSantri }) {
     const router = useRouter();
 
     const form = useForm({
@@ -20,34 +18,55 @@ function CreatePage() {
             nama_penyakit: "",
             penanganan: "",
             kategori: "RINGAN",
-            tgl_masuk: "",
+            tgl_masuk: new Date().toISOString().split("T")[0],
             tgl_keluar: "",
             status: "PERAWATAN",
         },
     });
 
+    let onSimpanHandler = (data) => {
+        let kesehatan = {
+            santri_id: data.id_santri,
+            nama_penyakit: data.nama_penyakit,
+            penanganan: data.penanganan,
+            kategori: data.kategori,
+            tgl_masuk: new Date(data.tgl_masuk).toISOString(),
+            tgl_keluar: data.tgl_keluar
+                ? new Date(data.tgl_keluar).toISOString()
+                : null,
+            status: data.status,
+        };
+
+        toast.promise(
+            () => addDataKesehatan(kesehatan),
+            {
+                pending: "Menyimpan data",
+                success: {
+                    render({ data }) {
+                        router.push(HREF_URL.KESEHATAN_HOME);
+                        return "Data berhasil disimpan";
+                    },
+                },
+                error: {
+                    render({ data }) {
+                        // When the promise reject, data will contains the error
+                        return `${data}`;
+                    },
+                },
+            },
+            {
+                position: "bottom-right",
+            }
+        );
+    };
+
     return (
         <div className="md:p-5 p-2 grid md:grid-cols-2 grid-cols-1 gap-5">
-            <div className="flex gap-2 col-span-1 md:col-span-2">
-                <Link href={HREF_URL.KESEHATAN_HOME}>
-                    <Button variant="outline" className="mr-3">
-                        <ArrowLeft />
-                    </Button>
-                </Link>
-                <Button
-                    data-e2e="btn-simpan"
-                    className="md:w-36 bg-kazeem-primary hover:bg-kazeem-darker"
-                >
-                    Simpan
-                </Button>
-                <Button
-                    data-e2e="btn-cancel"
-                    className="md:w-36 bg-red-500  hover:bg-red-800"
-                >
-                    Cancel
-                </Button>
-            </div>
-            <KesehatanForm form={form} />
+            <ActionBarCreate
+                backLink={HREF_URL.KESEHATAN_HOME}
+                handleSimpan={() => form.handleSubmit(onSimpanHandler)()}
+            />
+            <KesehatanForm form={form} namaSantri={namaSantri} mode="CREATE" />
         </div>
     );
 }

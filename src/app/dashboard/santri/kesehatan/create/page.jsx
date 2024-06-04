@@ -1,5 +1,17 @@
 import CreatePage from "./CreatePage";
+import prisma from "@/lib/prisma";
 
-export default function Page() {
-    return <CreatePage />;
+async function getAllSantri() {
+    let namaSantri = await prisma.Santri.findMany({
+        select: {
+            id: true,
+            nama_lengkap: true,
+        },
+    });
+    return namaSantri;
+}
+
+export default async function Page() {
+    let santri = await getAllSantri();
+    return <CreatePage namaSantri={santri} />;
 }

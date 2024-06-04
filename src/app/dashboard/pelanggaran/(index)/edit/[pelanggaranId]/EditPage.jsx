@@ -103,6 +103,7 @@ export default function EditPage({ data }) {
             }
         );
     };
+
     let handleSimpan = () => {
         formPelanggaran.handleSubmit(handleSubmit)();
     };

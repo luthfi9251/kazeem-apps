@@ -23,6 +23,8 @@ export const HREF_URL = {
     PELANGGARAN_REKAP: (id) => `/dashboard/pelanggaran/summary/${id}`,
     KESEHATAN_HOME: "/dashboard/santri/kesehatan",
     KESEHATAN_CREATE: "/dashboard/santri/kesehatan/create",
+    KESEHATAN_DETAIL: (id) => `/dashboard/santri/kesehatan/detail/${id}`,
+    KESEHATAN_EDIT: (id) => `/dashboard/santri/kesehatan/edit/${id}`,
 };
 
 export const URL_PATH = [

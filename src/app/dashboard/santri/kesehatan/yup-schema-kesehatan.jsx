@@ -14,7 +14,15 @@ let kesehatanSchema = yup.object({
         .required(),
     kategori: yup.string().required(),
     tgl_masuk: yup.date().required(),
-    tgl_keluar: yup.date().required(),
+    tgl_keluar: yup.string().when("status", (status, schema) => {
+        if (status[0] === "SEMBUH") {
+            return schema.required(
+                "Wajib isi tanggal Keluar saat status sembuh!"
+            );
+        } else {
+            return schema.optional();
+        }
+    }),
     status: yup.string().required(),
 });
 

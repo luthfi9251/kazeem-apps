@@ -13,7 +13,32 @@ import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
 import { PAGE_NAME } from "@/security-config";
 
 async function getData() {
-    return [];
+    let data = await prisma.Kesehatan.findMany({
+        orderBy: {
+            created_at: "desc",
+        },
+        select: {
+            id: true,
+            Santri: {
+                select: {
+                    nama_lengkap: true,
+                },
+            },
+            nama_penyakit: true,
+            penanganan: true,
+            kategori: true,
+            tgl_masuk: true,
+            status: true,
+        },
+    });
+
+    return data.map((item) => {
+        return {
+            ...item,
+            tgl_masuk: new Date(item.tgl_masuk).toISOString().split("T")[0],
+            nama_lengkap: item.Santri.nama_lengkap,
+        };
+    });
 }
 
 async function Page() {
