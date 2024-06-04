@@ -38,7 +38,7 @@ export default function EditPage({ namaSantri, data }) {
             tgl_masuk: new Date(dataForm.tgl_masuk).toISOString(),
             tgl_keluar: dataForm.tgl_keluar
                 ? new Date(dataForm.tgl_keluar).toISOString()
-                : null,
+                : "",
             status: dataForm.status,
         };
         toast.promise(

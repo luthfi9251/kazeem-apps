@@ -245,6 +245,7 @@ export default function KesehatanForm({
                                                 onValueChange={field.onChange}
                                                 value={field.value}
                                                 disabled={formState.kategori}
+                                                data-e2e="select-kategori"
                                             >
                                                 <SelectTrigger
                                                     className="w-full"
@@ -318,6 +319,7 @@ export default function KesehatanForm({
                                                 onValueChange={field.onChange}
                                                 value={field.value}
                                                 disabled={formState.status}
+                                                data-e2e="select-status"
                                             >
                                                 <SelectTrigger
                                                     className="w-full"

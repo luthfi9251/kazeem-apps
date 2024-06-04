@@ -43,61 +43,61 @@ async function main() {
         },
     });
 
-    let userActionId = {
-        connect: {
-            id: adminUser.id,
-        },
-    };
+    // let userActionId = {
+    //     connect: {
+    //         id: adminUser.id,
+    //     },
+    // };
 
-    const createSantri = SANTRI.map((item, i) => {
-        let waliLoc = WALI[i];
-        return prisma.Santri.create({
-            data: {
-                nama_lengkap: item.nama_lengkap,
-                alamat: item.alamat,
-                email: item.email,
-                hp: item.hp,
-                tempat_lahir: item.tempat_lahir,
-                tgl_lhr: new Date(item.tgl_lhr).toISOString(),
-                foto: null,
-                created_by: userActionId,
-                last_update_by: userActionId,
-                WaliSantri: {
-                    create: {
-                        peran: waliLoc.list,
-                        created_by: userActionId,
-                        last_update_by: userActionId,
-                        wali: {
-                            connectOrCreate: {
-                                where: {
-                                    waliIdentifier: {
-                                        nama_wali: waliLoc.nama_wali,
-                                        tgl_lhr: new Date(
-                                            waliLoc.tgl_lhr
-                                        ).toISOString(),
-                                    },
-                                },
-                                create: {
-                                    nama_wali: waliLoc.nama_wali,
-                                    tgl_lhr: new Date(
-                                        waliLoc.tgl_lhr
-                                    ).toISOString(),
-                                    email: waliLoc.email,
-                                    hp: waliLoc.hp,
-                                    created_by: userActionId,
-                                    last_update_by: userActionId,
-                                },
-                            },
-                        },
-                    },
-                },
-            },
-        });
-    });
+    // const createSantri = SANTRI.map((item, i) => {
+    //     let waliLoc = WALI[i];
+    //     return prisma.Santri.create({
+    //         data: {
+    //             nama_lengkap: item.nama_lengkap,
+    //             alamat: item.alamat,
+    //             email: item.email,
+    //             hp: item.hp,
+    //             tempat_lahir: item.tempat_lahir,
+    //             tgl_lhr: new Date(item.tgl_lhr).toISOString(),
+    //             foto: null,
+    //             created_by: userActionId,
+    //             last_update_by: userActionId,
+    //             WaliSantri: {
+    //                 create: {
+    //                     peran: waliLoc.list,
+    //                     created_by: userActionId,
+    //                     last_update_by: userActionId,
+    //                     wali: {
+    //                         connectOrCreate: {
+    //                             where: {
+    //                                 waliIdentifier: {
+    //                                     nama_wali: waliLoc.nama_wali,
+    //                                     tgl_lhr: new Date(
+    //                                         waliLoc.tgl_lhr
+    //                                     ).toISOString(),
+    //                                 },
+    //                             },
+    //                             create: {
+    //                                 nama_wali: waliLoc.nama_wali,
+    //                                 tgl_lhr: new Date(
+    //                                     waliLoc.tgl_lhr
+    //                                 ).toISOString(),
+    //                                 email: waliLoc.email,
+    //                                 hp: waliLoc.hp,
+    //                                 created_by: userActionId,
+    //                                 last_update_by: userActionId,
+    //                             },
+    //                         },
+    //                     },
+    //                 },
+    //             },
+    //         },
+    //     });
+    // });
 
-    await Promise.all(createSantri).then((data) => {
-        console.log({ adminUser, data });
-    });
+    // await Promise.all(createSantri).then((data) => {
+    //     console.log({ adminUser, data });
+    // });
 
     // const createTingkatan = await prisma.Tingkat.createMany({
     //     data: TINGKATAN,
