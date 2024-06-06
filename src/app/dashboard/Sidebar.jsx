@@ -1,39 +1,105 @@
 "use client";
 import Link from "next/link";
-import {
-    Bell,
-    FileText,
-    Home,
-    Menu,
-    Package2,
-    University,
-    User,
-    UserRoundCog,
-    Users,
-} from "lucide-react";
-
+import signOut from "./_action.js/signOut";
+import { Settings, Menu, LogOut } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+    Sheet,
+    SheetContent,
+    SheetTrigger,
+    SheetClose,
+} from "@/components/ui/sheet";
 import { usePathname } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
     Accordion,
     AccordionContent,
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { URL_PATH } from "@/navigation-data";
 import { PAGE_ACCESS_CONFIG } from "@/security-config";
 
+function AlertDialogLogout() {
+    return (
+        <AlertDialog>
+            <AlertDialogTrigger asChild>
+                <Button
+                    variant="ghost"
+                    className="w-10 p-1 text-red-500 bg-slate-100 hover:bg-red-500 hover:text-white"
+                >
+                    <LogOut className="w-5 h-5" />
+                </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent className="w-2/3 rounded">
+                <form
+                    action={async () => {
+                        await signOut();
+                    }}
+                    className="w-full"
+                >
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>
+                            Are you sure to logging out?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            You can log in anytime
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                            className="bg-kazeem-primary hover:bg-kazeem-darker"
+                            type="submit"
+                        >
+                            Continue
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </form>
+            </AlertDialogContent>
+        </AlertDialog>
+    );
+}
+
 export default function Sidebar(props) {
     let pathname = usePathname();
     let router = useRouter();
     let { children, session } = props;
+
+    let generateFallbackAvatar = () => {
+        if (session) {
+            let name = session.user.nama_lengkap;
+            let list = name.split(" ");
+            if (list.length > 1) {
+                return list[0].charAt(0) + list[list.length - 1].charAt(0);
+            } else {
+                return list[0].charAt(0);
+            }
+        }
+    };
 
     let getOpenedAcordion = () => {
         let index = -1;
@@ -68,7 +134,7 @@ export default function Sidebar(props) {
                 );
             let allowed = false;
             if (session) {
-                allowed = pageConfig.allowedGroup.every((role) =>
+                allowed = pageConfig.allowedGroup.some((role) =>
                     session.user.groups.includes(role)
                 );
             }
@@ -105,7 +171,7 @@ export default function Sidebar(props) {
                 <div className="flex h-full max-h-screen flex-col gap-2">
                     <div className="flex h-16 items-center border-b px-4 lg:h-[60px] lg:px-6 bg-white text-kazeem-primary">
                         <Link
-                            href="/"
+                            href="/dashboard"
                             className="flex items-center gap-2 font-semibold"
                         >
                             <Image
@@ -113,12 +179,13 @@ export default function Sidebar(props) {
                                 className=""
                                 width="36"
                                 height="36"
+                                alt="Logo Kazeem"
                             />
                             <span className="">Kazeem</span>
                         </Link>
                     </div>
-                    <div className="flex-1">
-                        <nav className="grid items-start px-2 text-md font-medium lg:px-4 gap-1 text-kazeem-primary">
+                    <div className="grow overflow-y-auto">
+                        <nav className="grid items-start px-1 text-md font-medium lg:px-2 gap-1 text-kazeem-primary max-h-full">
                             <Accordion
                                 type="single"
                                 collapsible
@@ -163,6 +230,38 @@ export default function Sidebar(props) {
                             </Accordion>
                         </nav>
                     </div>
+                    <div className="h-14 w-full border-t p-1 flex items-center">
+                        <Avatar className="">
+                            {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
+                            <AvatarFallback className="text-black">
+                                {generateFallbackAvatar()}
+                            </AvatarFallback>
+                        </Avatar>
+                        <div className="grow px-3">
+                            <p className="cursor-default text-base font-semibold line-clamp-1">
+                                {session?.user.nama_lengkap}
+                            </p>
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <p className="cursor-default text-xs font-light">
+                                            {session?.user.groups.length} Groups
+                                        </p>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p className="capitalize">
+                                            {session?.user.groups
+                                                .map((item) =>
+                                                    item.toLowerCase()
+                                                )
+                                                .join(", ")}
+                                        </p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+                        </div>
+                        <AlertDialogLogout />
+                    </div>
                 </div>
             </div>
             <div className="md:hidden flex h-14 items-center gap-4 border-b bg-kazeem-primary text-white px-4 py-2 lg:h-[60px] lg:px-6">
@@ -181,9 +280,9 @@ export default function Sidebar(props) {
                     </SheetTrigger>
                     <SheetContent
                         side="left"
-                        className="flex flex-col bg-kazeem-primary text-white"
+                        className="flex flex-col bg-kazeem-primary text-white px-3"
                     >
-                        <nav className="grid gap-2 text-lg font-medium">
+                        <nav className="flex flex-col gap-2 text-lg font-medium h-full">
                             <Link
                                 href="#"
                                 className="flex items-center gap-2 text-lg font-semibold"
@@ -200,6 +299,7 @@ export default function Sidebar(props) {
                             <Accordion
                                 type="single"
                                 collapsible
+                                className="grow overflow-y-auto"
                                 defaultValue={getOpenedAcordion() + 1}
                             >
                                 {dataLink.map((item, key) => {
@@ -217,20 +317,27 @@ export default function Sidebar(props) {
                                                 {item.children.map(
                                                     (item, key) => {
                                                         return (
-                                                            <Link
+                                                            <SheetClose
+                                                                asChild
                                                                 key={key}
-                                                                href={item.href}
-                                                                className={
-                                                                    calculateActivePage(
-                                                                        item
-                                                                    )
-                                                                        ? "mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-kazeem-primary hover:text-primary"
-                                                                        : "mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-white transition-all hover:bg-kazeem-darker"
-                                                                }
                                                             >
-                                                                {item.icon}
-                                                                {item.name}
-                                                            </Link>
+                                                                <Link
+                                                                    key={key}
+                                                                    href={
+                                                                        item.href
+                                                                    }
+                                                                    className={
+                                                                        calculateActivePage(
+                                                                            item
+                                                                        )
+                                                                            ? "mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-5 py-2 text-kazeem-primary hover:text-primary h-14"
+                                                                            : "mx-[-0.65rem] flex items-center gap-4 rounded-xl px-5 py-2 text-white transition-all hover:bg-kazeem-darker h-14"
+                                                                    }
+                                                                >
+                                                                    {item.icon}
+                                                                    {item.name}
+                                                                </Link>
+                                                            </SheetClose>
                                                         );
                                                     }
                                                 )}
@@ -239,6 +346,23 @@ export default function Sidebar(props) {
                                     );
                                 })}
                             </Accordion>
+                            <div className="h-14 w-full border-t p-1 flex items-center">
+                                <Avatar className="">
+                                    {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
+                                    <AvatarFallback className="text-black">
+                                        {generateFallbackAvatar()}
+                                    </AvatarFallback>
+                                </Avatar>
+                                <div className="grow px-3">
+                                    <p className="cursor-default text-base font-semibold line-clamp-1">
+                                        {session?.user.nama_lengkap}
+                                    </p>
+                                    <p className="cursor-default text-xs font-light">
+                                        {session?.user.groups.length} Groups
+                                    </p>
+                                </div>
+                                <AlertDialogLogout />
+                            </div>
                         </nav>
                     </SheetContent>
                 </Sheet>

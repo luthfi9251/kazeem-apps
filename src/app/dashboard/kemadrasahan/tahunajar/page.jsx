@@ -58,4 +58,4 @@ async function Page() {
     );
 }
 
-export default withAuthAndGroupCheck(Page, PAGE_NAME.MANAGE_SANTRI_PAGE);
+export default withAuthAndGroupCheck(Page, PAGE_NAME.MANAGE_MADRASAH_PAGE);
