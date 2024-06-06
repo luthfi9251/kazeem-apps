@@ -6,6 +6,7 @@ const {
     TINGKATAN,
     TAHUN_AJAR,
     KELAS_SANTRI,
+    GROUPS,
 } = require("./seedData");
 const prisma = new PrismaClient();
 
@@ -15,7 +16,12 @@ const prisma = new PrismaClient();
 //      2. Group Admin
 
 async function main() {
-    const adminUser = await prisma.User.upsert({
+    const createGroups = await prisma.Group.createMany({
+        data: GROUPS,
+        skipDuplicates: true,
+    });
+
+    const adminUser = prisma.User.upsert({
         where: { email: "admin@admin.com" },
         update: {},
         create: {
@@ -42,6 +48,62 @@ async function main() {
             },
         },
     });
+    const santriManajemen = prisma.User.upsert({
+        where: { email: "manajemen-santri@kazeem.com" },
+        update: {},
+        create: {
+            email: "manajemen-santri@kazeem.com",
+            username: "manajemen-santri",
+            password:
+                "$2a$10$fSzs9G09UjgGXP9/A7KBt.tRFIDFXrH31PfeTXsEntn9lFO92Uycu", //passwordadmin
+            nama_lengkap: "Manajemen Santri",
+            aktif: true,
+            UserGroup: {
+                create: {
+                    group: {
+                        connectOrCreate: {
+                            where: {
+                                nama_group: "KESANTRIAN",
+                            },
+                            create: {
+                                nama_group: "KESANTRIAN",
+                                deskripsi: "Grup Kesantrian",
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    });
+    const madrasahManajemen = prisma.User.upsert({
+        where: { email: "manajemen-madrasah@kazeem.com" },
+        update: {},
+        create: {
+            email: "manajemen-madrasah@kazeem.com",
+            username: "manajemen-madrasah",
+            password:
+                "$2a$10$fSzs9G09UjgGXP9/A7KBt.tRFIDFXrH31PfeTXsEntn9lFO92Uycu", //passwordadmin
+            nama_lengkap: "Manajemen Madrasah",
+            aktif: true,
+            UserGroup: {
+                create: {
+                    group: {
+                        connectOrCreate: {
+                            where: {
+                                nama_group: "KEMADRASAHAN",
+                            },
+                            create: {
+                                nama_group: "KEMADRASAHAN",
+                                deskripsi: "Grup Kemadrasahan",
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    });
+
+    await Promise.all([adminUser, santriManajemen, madrasahManajemen]);
 
     // let userActionId = {
     //     connect: {

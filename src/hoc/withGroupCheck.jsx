@@ -20,7 +20,7 @@ export default function withGroupCheck(Component, page_name) {
         //     session.groups.includes(item)
         // );
 
-        let checkUserisAllowed = config.allowedGroup.every((role) =>
+        let checkUserisAllowed = config.allowedGroup.some((role) =>
             session.groups.includes(role)
         );
 

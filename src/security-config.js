@@ -1,6 +1,8 @@
 export const ROLE = {
     ADMIN: "ADMIN",
     USER: "USER",
+    KEMADRASAHAN: "KEMADRASAHAN",
+    KESANTRIAN: "KESANTRIAN",
     ALL_USER: "ALL_USER",
 };
 
@@ -23,14 +25,14 @@ export const PAGE_ACCESS_CONFIG = [
     },
     {
         name: PAGE_NAME.MANAGE_SANTRI_PAGE,
-        allowedGroup: [ROLE.ADMIN],
+        allowedGroup: [ROLE.ADMIN, ROLE.KESANTRIAN],
     },
     {
         name: PAGE_NAME.MANAGE_PELANGGARAN_PAGE,
-        allowedGroup: [ROLE.ADMIN],
+        allowedGroup: [ROLE.ADMIN, ROLE.KESANTRIAN],
     },
     {
         name: PAGE_NAME.MANAGE_MADRASAH_PAGE,
-        allowedGroup: [ROLE.ADMIN],
+        allowedGroup: [ROLE.ADMIN, ROLE.KEMADRASAHAN],
     },
 ];

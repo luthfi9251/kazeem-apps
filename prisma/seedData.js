@@ -1,3 +1,18 @@
+const GROUPS = [
+    {
+        nama_group: "ADMIN",
+        deskripsi: "Grup Admin",
+    },
+    {
+        nama_group: "KEMADRASAHAN",
+        deskripsi: "Grup Kemadrasahan",
+    },
+    {
+        nama_group: "KESANTRIAN",
+        deskripsi: "Grup Kesantrian",
+    },
+];
+
 const SANTRI = [
     {
         nama_lengkap: "Travis Chan",
@@ -260,4 +275,5 @@ module.exports = {
     KELAS,
     KELAS_SANTRI,
     TINGKATAN,
+    GROUPS,
 };

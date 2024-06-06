@@ -3,6 +3,7 @@ import Credentials from "next-auth/providers/credentials";
 import { comparePassword } from "@/lib/bcrypt";
 import prisma from "./lib/prisma";
 export const { handlers, signIn, signOut, auth } = NextAuth({
+    debug: false,
     pages: {
         signIn: "/login",
     },
