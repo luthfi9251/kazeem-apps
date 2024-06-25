@@ -10,6 +10,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { HREF_URL } from "@/navigation-data";
 
 import Link from "next/link";
 
@@ -60,8 +61,9 @@ export const columns = [
     {
         id: "actions",
         header: "Actions",
-        cell: ({ row }) => {
-            const user = row.original;
+        cell: (data) => {
+            const user = data.row.original;
+            const idSantri = data.table.getState().idSantri;
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -76,11 +78,17 @@ export const columns = [
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem
-                            data-e2e="btn-edit"
-                            className="cursor-pointer"
-                        >
-                            Edit
+                        <DropdownMenuItem className="cursor-pointer">
+                            <Link
+                                href={HREF_URL.PELANGGARAN_EDIT(
+                                    user.id,
+                                    HREF_URL.PELANGGARAN_REKAP(idSantri)
+                                )}
+                                className="w-full"
+                                data-e2e="btn-edit"
+                            >
+                                Edit
+                            </Link>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

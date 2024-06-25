@@ -2,13 +2,28 @@ import CreatePage from "./CreatePage";
 import prisma from "@/lib/prisma";
 
 async function getAllSantri() {
-    let namaSantri = await prisma.Santri.findMany({
+    let dataSantri = await prisma.KelasSantri.findMany({
+        where: {
+            TahunAjar: {
+                aktif: true,
+            },
+        },
         select: {
             id: true,
-            nama_lengkap: true,
+            Santri: {
+                select: {
+                    nama_lengkap: true,
+                },
+            },
         },
     });
-    return namaSantri;
+
+    return dataSantri.map((item) => {
+        return {
+            id: item.id,
+            nama_lengkap: item.Santri.nama_lengkap,
+        };
+    });
 }
 
 export default async function Page() {

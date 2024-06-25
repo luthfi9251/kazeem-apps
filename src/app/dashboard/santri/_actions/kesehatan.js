@@ -8,7 +8,7 @@ export async function addDataKesehatan(data) {
     return new Promise(async (resolve, reject) => {
         try {
             let {
-                santri_id,
+                kelas_santri_id,
                 nama_penyakit,
                 penanganan,
                 kategori,
@@ -31,9 +31,9 @@ export async function addDataKesehatan(data) {
                     tgl_masuk,
                     tgl_keluar,
                     status,
-                    Santri: {
+                    KelasSantri: {
                         connect: {
-                            id: santri_id,
+                            id: kelas_santri_id,
                         },
                     },
                     created_by: connectUserId,
@@ -103,5 +103,63 @@ export async function deleteDataKesehatan(id) {
             console.log(err);
             reject(err.message);
         }
+    });
+}
+
+export async function getDataKesehatanByKelasAndTA({ nama_kelas, kode_ta }) {
+    let data = await prisma.Kesehatan.findMany({
+        where: {
+            KelasSantri: {
+                TahunAjar: {
+                    kode_ta: kode_ta === "undefined" ? undefined : kode_ta,
+                },
+                Kelas: {
+                    nama_kelas:
+                        nama_kelas === "undefined" ? undefined : nama_kelas,
+                },
+            },
+        },
+        orderBy: {
+            created_at: "desc",
+        },
+        select: {
+            id: true,
+            KelasSantri: {
+                select: {
+                    Kelas: {
+                        select: {
+                            nama_kelas: true,
+                        },
+                    },
+                    TahunAjar: {
+                        select: {
+                            kode_ta: true,
+                        },
+                    },
+                    Santri: {
+                        select: {
+                            nis: true,
+                            nama_lengkap: true,
+                        },
+                    },
+                },
+            },
+            nama_penyakit: true,
+            penanganan: true,
+            kategori: true,
+            tgl_masuk: true,
+            status: true,
+        },
+    });
+
+    return data.map((item) => {
+        return {
+            ...item,
+            tgl_masuk: new Date(item.tgl_masuk).toISOString().split("T")[0],
+            nis: item.KelasSantri.Santri.nis,
+            nama_lengkap: item.KelasSantri.Santri.nama_lengkap,
+            kelas: item.KelasSantri.Kelas.nama_kelas,
+            kode_ta: item.KelasSantri.TahunAjar.kode_ta,
+        };
     });
 }

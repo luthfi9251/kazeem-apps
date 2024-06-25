@@ -1,6 +1,13 @@
 "use client";
-
-import { useState } from "react";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useState, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { LoaderCircle } from "lucide-react";
 import {
@@ -12,7 +19,7 @@ import {
     getFilteredRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-
+import DebouncedInput from "@/components/DebouncedInput";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "react-toastify";
@@ -37,7 +44,7 @@ export function DataTable({ columns, dataTA, idKelas }) {
         dataTA.find((item) => item.aktif)?.kode_ta || dataTA[0].kode_ta
     );
     const queryClient = useQueryClient();
-
+    const [rowSelection, setRowSelection] = useState({});
     const [dialogOpen, setDialogOpen] = useState(false);
     const [dialogPindahOpen, setDialogPindahOpen] = useState(false);
     const [selectedID, setSelectedID] = useState(null);
@@ -69,7 +76,7 @@ export function DataTable({ columns, dataTA, idKelas }) {
 
     if (isError) throw new Error();
 
-    const [columnFilters, setColumnFilters] = useState();
+    const [globalFilter, setGlobalFilter] = useState();
     const [pagination, setPagination] = useState({
         pageIndex: 0, //initial page index
         pageSize: 10, //default page size
@@ -80,11 +87,14 @@ export function DataTable({ columns, dataTA, idKelas }) {
         columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
-        onColumnFiltersChange: setColumnFilters,
         getFilteredRowModel: getFilteredRowModel(),
         getSortedRowModel: getSortedRowModel(),
+        enableRowSelection: true,
+        onRowSelectionChange: setRowSelection,
         state: {
-            columnFilters,
+            globalFilter,
+            idKelas,
+            rowSelection,
         },
         initialState: {
             sorting: [
@@ -102,29 +112,46 @@ export function DataTable({ columns, dataTA, idKelas }) {
             },
         },
     });
+    const selectedRowId = useMemo(() => {
+        return table.getSelectedRowModel().rows.map((item) => item.original.id);
+    }, [rowSelection]);
+
+    const pindahKelasMany = () => {
+        setSelectedID(selectedRowId);
+        setDialogPindahOpen(true);
+    };
 
     return (
         <div>
             <div className="flex justify-between items-end pb-4 flex-wrap">
-                <Input
-                    placeholder="Cari Siswa"
-                    value={
-                        table.getColumn("nama_lengkap")?.getFilterValue() ?? ""
-                    }
-                    onChange={(event) =>
-                        table
-                            .getColumn("nama_lengkap")
-                            ?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-sm"
+                <DebouncedInput
+                    value={globalFilter ?? ""}
+                    onChange={(value) => setGlobalFilter(String(value))}
+                    className=" max-w-sm"
+                    placeholder="Search all columns..."
                 />
-                <Button
-                    data-e2e="btn-add-siswa"
-                    className="bg-kazeem-secondary"
-                    onClick={() => setDialogOpen(true)}
-                >
-                    Tambah Siswa
-                </Button>
+                <div className="flex gap-2">
+                    {selectedRowId.length > 0 && (
+                        <SelectedRowDropdown
+                            handlePindahKelas={pindahKelasMany}
+                        >
+                            <Button
+                                variant="outline"
+                                data-e2e="btn-select-dropdown"
+                                onClick={pindahKelasMany}
+                            >
+                                Action
+                            </Button>
+                        </SelectedRowDropdown>
+                    )}
+                    <Button
+                        data-e2e="btn-add-siswa"
+                        className="bg-kazeem-secondary"
+                        onClick={() => setDialogOpen(true)}
+                    >
+                        Tambah Siswa
+                    </Button>
+                </div>
             </div>
             <div className="rounded-md border">
                 <Table>
@@ -230,5 +257,25 @@ export function DataTable({ columns, dataTA, idKelas }) {
                 kodeTA={taSelected}
             />
         </div>
+    );
+}
+
+function SelectedRowDropdown({ handlePindahKelas, children }) {
+    return (
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuItem>
+                    <p
+                        className="w-full cursor-pointer"
+                        data-e2e="btn-pindah"
+                        onClick={handlePindahKelas}
+                    >
+                        Pindah Kelas
+                    </p>
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
     );
 }

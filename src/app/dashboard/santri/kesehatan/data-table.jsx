@@ -1,7 +1,7 @@
 "use client";
-
+import { LoaderCircle } from "lucide-react";
 import { useState } from "react";
-
+import DebouncedInput from "@/components/DebouncedInput";
 import {
     ColumnDef,
     flexRender,
@@ -14,7 +14,15 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import {
     Table,
     TableBody,
@@ -23,25 +31,40 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import { useQuery } from "@tanstack/react-query";
+import { getDataKesehatanByKelasAndTA } from "../_actions/kesehatan";
 import Link from "next/link";
 import { HREF_URL } from "@/navigation-data";
 
-export function DataTable({ columns, data }) {
-    const [columnFilters, setColumnFilters] = useState();
+export function DataTable({ columns, selectData }) {
+    const [namaKelas, setNamaKelas] = useState();
+    const [kodeTA, setKodeTA] = useState();
+    const [globalFilter, setGlobalFilter] = useState();
     const [pagination, setPagination] = useState({
         pageIndex: 0, //initial page index
         pageSize: 10, //default page size
     });
+
+    let { data, isFetching, refetch } = useQuery({
+        queryKey: ["kesehatan", namaKelas, kodeTA],
+        queryFn: () =>
+            getDataKesehatanByKelasAndTA({
+                nama_kelas: namaKelas,
+                kode_ta: kodeTA,
+            }),
+        initialData: [],
+    });
+
     const table = useReactTable({
         data,
         columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
-        onColumnFiltersChange: setColumnFilters,
         getFilteredRowModel: getFilteredRowModel(),
         getSortedRowModel: getSortedRowModel(),
         state: {
-            columnFilters,
+            globalFilter,
+            refetch,
         },
         initialState: {
             sorting: [
@@ -56,29 +79,79 @@ export function DataTable({ columns, data }) {
     return (
         <div>
             <div className="grid grid-cols-2 py-4">
-                <Input
-                    placeholder="Cari santri..."
-                    value={
-                        table.getColumn("nama_lengkap")?.getFilterValue() ?? ""
-                    }
-                    onChange={(event) =>
-                        table
-                            .getColumn("nama_lengkap")
-                            ?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-sm"
+                <DebouncedInput
+                    value={globalFilter ?? ""}
+                    onChange={(value) => setGlobalFilter(String(value))}
+                    className=" max-w-sm"
+                    placeholder="Search all columns..."
                 />
-                <Link
-                    href={HREF_URL.KESEHATAN_CREATE}
-                    className="w-1/4 justify-self-end flex justify-end"
-                >
-                    <Button
-                        className="self-end bg-kazeem-secondary "
-                        data-e2e="btn-tambah"
+                <div className=" grid grid-cols-3 gap-2">
+                    <Select
+                        value={namaKelas}
+                        onValueChange={setNamaKelas}
+                        defaultValue="undefined"
                     >
-                        Tambah Data
-                    </Button>
-                </Link>
+                        <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Pilih Kelas" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectLabel>Nama Kelas</SelectLabel>
+                                {selectData.kelas.map((item, key) => {
+                                    return (
+                                        <SelectItem key={key} value={item}>
+                                            {item}
+                                        </SelectItem>
+                                    );
+                                })}
+                                <SelectItem
+                                    key="ALL"
+                                    value="undefined"
+                                    onClick={() => setNamaKelas(null)}
+                                >
+                                    Semua Kelas
+                                </SelectItem>
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                    <Select
+                        defaultValue="undefined"
+                        value={kodeTA}
+                        onValueChange={setKodeTA}
+                    >
+                        <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Pilih Tahun Ajaran" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectLabel>Kode TA</SelectLabel>
+                                {selectData.kode_ta.map((item, key) => {
+                                    return (
+                                        <SelectItem key={key} value={item}>
+                                            {item}
+                                        </SelectItem>
+                                    );
+                                })}
+                                <SelectItem
+                                    key="ALL"
+                                    value="undefined"
+                                    onClick={() => setKodeTA(null)}
+                                >
+                                    Semua TA
+                                </SelectItem>
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                    <Link href={HREF_URL.KESEHATAN_CREATE}>
+                        <Button
+                            className="w-full bg-kazeem-secondary "
+                            id="tambah-kelas"
+                            data-e2e="btn-tambah"
+                        >
+                            Tambah
+                        </Button>
+                    </Link>
+                </div>
             </div>
             <div className="rounded-md border">
                 <Table>
@@ -108,7 +181,16 @@ export function DataTable({ columns, data }) {
                         ))}
                     </TableHeader>
                     <TableBody>
-                        {table.getRowModel().rows?.length ? (
+                        {isFetching ? (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={columns.length}
+                                    className="h-24 text-center relative"
+                                >
+                                    <LoaderCircle className="h-5 w-5 animate-spin m-auto" />
+                                </TableCell>
+                            </TableRow>
+                        ) : table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
                                     key={row.id}

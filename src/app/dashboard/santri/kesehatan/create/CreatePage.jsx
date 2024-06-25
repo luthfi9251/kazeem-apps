@@ -26,7 +26,7 @@ function CreatePage({ namaSantri }) {
 
     let onSimpanHandler = (data) => {
         let kesehatan = {
-            santri_id: data.id_santri,
+            kelas_santri_id: data.id_santri,
             nama_penyakit: data.nama_penyakit,
             penanganan: data.penanganan,
             kategori: data.kategori,

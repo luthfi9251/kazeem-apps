@@ -13,36 +13,37 @@ import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
 import { PAGE_NAME } from "@/security-config";
 
 async function getData() {
-    let data = await prisma.Kesehatan.findMany({
-        orderBy: {
-            created_at: "desc",
-        },
+    let data = await prisma.KelasSantri.findMany({
+        where: {},
+        distinct: ["kelas_id", "ta_id"],
         select: {
-            id: true,
-            Santri: {
+            Kelas: {
                 select: {
-                    nama_lengkap: true,
+                    nama_kelas: true,
                 },
             },
-            nama_penyakit: true,
-            penanganan: true,
-            kategori: true,
-            tgl_masuk: true,
-            status: true,
+            TahunAjar: {
+                select: {
+                    kode_ta: true,
+                },
+            },
         },
     });
-
-    return data.map((item) => {
-        return {
-            ...item,
-            tgl_masuk: new Date(item.tgl_masuk).toISOString().split("T")[0],
-            nama_lengkap: item.Santri.nama_lengkap,
-        };
-    });
+    /**{ Kelas: { nama_kelas: '1-A' }, TahunAjar: { kode_ta: '2024/2025' } } */
+    let uniqueNamaKelas = [
+        ...new Set(data.map((item) => item.Kelas.nama_kelas)),
+    ];
+    let uniqueTahunAjar = [
+        ...new Set(data.map((item) => item.TahunAjar.kode_ta)),
+    ];
+    return {
+        kelas: uniqueNamaKelas,
+        kode_ta: uniqueTahunAjar,
+    };
 }
 
 async function Page() {
-    const santri = await getData();
+    const data = await getData();
     return (
         <div className="md:p-5 p-2">
             <Card>
@@ -51,7 +52,7 @@ async function Page() {
                     <CardDescription>Card Description</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <DataTable columns={columns} data={santri} />
+                    <DataTable columns={columns} data={[]} selectData={data} />
                 </CardContent>
             </Card>
         </div>

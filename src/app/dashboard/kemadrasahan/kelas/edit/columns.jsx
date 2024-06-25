@@ -12,14 +12,44 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import Link from "next/link";
+import { HREF_URL } from "@/navigation-data";
+import IndeterminateCheckbox from "@/components/IndeterminateCheckbox";
 
 export const columns = [
+    {
+        id: "select",
+        header: ({ table }) => (
+            <IndeterminateCheckbox
+                {...{
+                    checked: table.getIsAllRowsSelected(),
+                    indeterminate: table.getIsSomeRowsSelected(),
+                    onChange: table.getToggleAllRowsSelectedHandler(),
+                }}
+            />
+        ),
+        cell: ({ row }) => (
+            <div className="px-1">
+                <IndeterminateCheckbox
+                    {...{
+                        checked: row.getIsSelected(),
+                        disabled: !row.getCanSelect(),
+                        indeterminate: row.getIsSomeSelected(),
+                        onChange: row.getToggleSelectedHandler(),
+                    }}
+                />
+            </div>
+        ),
+    },
     {
         id: "no",
         header: "No.",
         cell: ({ row }) => {
             return <span className="capitalize ">{row.index + 1}</span>;
         },
+    },
+    {
+        accessorKey: "nis",
+        header: "NIS",
     },
     {
         accessorKey: "nama_lengkap",
@@ -38,6 +68,7 @@ export const columns = [
         header: "Actions",
         cell: ({ row, table }) => {
             const user = row.original;
+            const idKelas = table.getState().idKelas;
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -54,7 +85,10 @@ export const columns = [
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem>
                             <Link
-                                href={`/dashboard/pelanggaran/kategori/detail/${user.id}`}
+                                href={HREF_URL.SANTRI_DETAIL(
+                                    user.santri_id,
+                                    HREF_URL.KEMADRASAHAN_KELAS_EDIT(idKelas)
+                                )}
                                 className="w-full"
                                 data-e2e="btn-detail"
                             >

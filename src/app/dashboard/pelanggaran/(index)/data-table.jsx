@@ -1,5 +1,5 @@
 "use client";
-
+import DebouncedInput from "@/components/DebouncedInput";
 import { useState } from "react";
 import { LoaderCircle } from "lucide-react";
 import {
@@ -39,13 +39,12 @@ import { HREF_URL } from "@/navigation-data";
 export function DataTable({ columns, selectData }) {
     const [namaKelas, setNamaKelas] = useState();
     const [kodeTA, setKodeTA] = useState();
-
-    const [columnFilters, setColumnFilters] = useState();
+    const [globalFilter, setGlobalFilter] = useState();
     const [pagination, setPagination] = useState({
         pageIndex: 0, //initial page index
         pageSize: 10, //default page size
     });
-    let { data, isFetching } = useQuery({
+    let { data, isFetching, refetch } = useQuery({
         queryKey: ["pelanggaran", namaKelas, kodeTA],
         queryFn: () =>
             getPelanggaranByKelasAndTA({
@@ -59,11 +58,11 @@ export function DataTable({ columns, selectData }) {
         columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
-        onColumnFiltersChange: setColumnFilters,
         getFilteredRowModel: getFilteredRowModel(),
         getSortedRowModel: getSortedRowModel(),
         state: {
-            columnFilters,
+            globalFilter,
+            refetch,
         },
         initialState: {
             sorting: [
@@ -78,17 +77,11 @@ export function DataTable({ columns, selectData }) {
     return (
         <div>
             <div className="grid grid-cols-1 gap-2 md:gap-0 md:grid-cols-2 py-4">
-                <Input
-                    placeholder="Cari Santri"
-                    value={
-                        table.getColumn("nama_santri")?.getFilterValue() ?? ""
-                    }
-                    onChange={(event) =>
-                        table
-                            .getColumn("nama_santri")
-                            ?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-sm"
+                <DebouncedInput
+                    value={globalFilter ?? ""}
+                    onChange={(value) => setGlobalFilter(String(value))}
+                    className=" max-w-sm"
+                    placeholder="Search all columns..."
                 />
                 <div className=" grid grid-cols-3 gap-2">
                     <Select

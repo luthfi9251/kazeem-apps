@@ -11,7 +11,9 @@
         "start-next": "next start",
         "start": "NODE_ENV=production node server.js",
         "lint": "next lint",
-        "cypress:open": "cypress open"
+        "cypress:open": "cypress open",
+        "prisma:seed": "npx prisma generate",
+        "prisma:reset": "npx prisma migrate reset --force"
     },
     "dependencies": {
         "@hookform/resolvers": "^3.3.4",

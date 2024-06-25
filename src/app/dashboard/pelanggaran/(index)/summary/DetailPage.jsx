@@ -22,7 +22,7 @@ export default function DetailPage({
     dataSantri,
     dataSummary,
     dataPelanggaran,
-    idPelanggaran,
+    idSantri,
 }) {
     return (
         <div className="md:p-5 p-2 grid md:grid-cols-2 grid-cols-1 gap-5">
@@ -42,7 +42,7 @@ export default function DetailPage({
                     <CardJumlahPelanggaran dataSummary={dataSummary} />
                     <CardPelanggaran
                         dataPelanggaran={dataPelanggaran}
-                        idPelanggaran={idPelanggaran}
+                        idSantri={idSantri}
                     />
                 </CardContent>
             </Card>

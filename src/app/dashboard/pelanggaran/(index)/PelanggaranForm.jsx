@@ -206,7 +206,7 @@ export default function PelanggaranForm({
                                             <PopoverContent className="w-[300px] p-0">
                                                 <Command>
                                                     <CommandInput
-                                                        placeholder="Cari Santri..."
+                                                        placeholder="Cari Kategori..."
                                                         className="h-9"
                                                     />
                                                     <CommandList>
@@ -311,7 +311,7 @@ export default function PelanggaranForm({
 
                             <FormField
                                 control={form.control}
-                                name="allow_edit"
+                                name="allow_add"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
                                         <FormControl>
@@ -323,13 +323,33 @@ export default function PelanggaranForm({
                                                     onCheckedChange={(e) => {
                                                         field.onChange(e);
                                                         setIsEditedKategori(e);
+                                                        form.setValue(
+                                                            "nama_pelanggaran_option",
+                                                            ""
+                                                        );
+                                                        form.setValue(
+                                                            "nama_pelanggaran",
+                                                            ""
+                                                        );
+                                                        form.setValue(
+                                                            "kategori",
+                                                            ""
+                                                        );
+                                                        form.setValue(
+                                                            "jenis",
+                                                            ""
+                                                        );
+                                                        form.setValue(
+                                                            "poin",
+                                                            ""
+                                                        );
                                                     }}
                                                 />
                                                 <label
                                                     htmlFor="terms"
                                                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                                 >
-                                                    Ubah Kategori Pelanggaran
+                                                    Tambah Kategori Pelanggaran
                                                 </label>
                                             </div>
                                         </FormControl>

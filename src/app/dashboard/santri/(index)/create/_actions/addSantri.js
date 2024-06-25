@@ -5,6 +5,7 @@ import path from "path";
 import crypto from "crypto";
 import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 async function saveFotoToLocal(file) {
     //handle image
@@ -79,9 +80,11 @@ export async function addSantri(santriFormData, waliSantriFormData) {
     let query = {
         data: {
             nama_lengkap: santri.get("nama_lengkap"),
+            nis: santri.get("nis"),
             alamat: santri.get("alamat"),
             email: santri.get("email"),
             hp: santri.get("hp") || null,
+            jenis_kel: santri.get("jenis_kel"),
             tempat_lahir: santri.get("tempat_lahir"),
             tgl_lhr: new Date(santri.get("tgl_lhr")).toISOString(),
             foto: fotoPath ? fotoPath : null,
@@ -127,7 +130,14 @@ export async function addSantri(santriFormData, waliSantriFormData) {
             revalidatePath("/dashboard/santri");
             resolve(santriSave);
         } catch (err) {
-            reject(err);
+            if (
+                err instanceof PrismaClientKnownRequestError &&
+                err.meta.target === "Santri_nis_key"
+            ) {
+                reject(new Error("NIS sudah ada!"));
+                throw err;
+            }
+            reject(new Error(err.message));
         }
     });
 }

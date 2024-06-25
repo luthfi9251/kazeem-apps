@@ -10,7 +10,7 @@ let pelanggaranSchema = yup.object({
         .string()
         .max(25)
         .required("Nama Pelanggaran Wajib Diisi!"),
-    allow_edit: yup.boolean().default(false),
+    allow_add: yup.boolean().default(false),
     keterangan: yup.string().optional(),
     konsekuensi: yup.string().required(),
     kategori: yup.string().required(),

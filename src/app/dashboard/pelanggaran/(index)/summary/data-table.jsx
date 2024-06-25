@@ -32,7 +32,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 
-export function DataTable({ columns, dataPelanggaran, idPelanggaran }) {
+export function DataTable({ columns, dataPelanggaran, idSantri }) {
     const [columnFilters, setColumnFilters] = useState();
 
     const table = useReactTable({
@@ -45,6 +45,7 @@ export function DataTable({ columns, dataPelanggaran, idPelanggaran }) {
         getSortedRowModel: getSortedRowModel(),
         state: {
             columnFilters,
+            idSantri,
         },
         initialState: {
             sorting: [
@@ -105,11 +106,6 @@ export function DataTable({ columns, dataPelanggaran, idPelanggaran }) {
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
                                     key={row.id}
-                                    onClick={() =>
-                                        console.log(
-                                            `${row.original.id} ${idPelanggaran}`
-                                        )
-                                    }
                                     // className={
                                     //     (clsx("..."),
                                     //     row.original.id == idPelanggaran

@@ -24,9 +24,12 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useSearchParams } from "next/navigation";
 
 export default function EditPage({ data }) {
     let router = useRouter();
+    let params = useSearchParams();
+    let backUrl = params.get("back");
     let activePelanggaran = data.pelanggaranDetail;
     const formPelanggaran = useForm({
         resolver: yupResolver(pelanggaranSchema),
@@ -63,7 +66,7 @@ export default function EditPage({ data }) {
                 pending: "Menyimpan data",
                 success: {
                     render({ data }) {
-                        router.push(HREF_URL.PELANGGARAN_HOME);
+                        router.push(backUrl || HREF_URL.PELANGGARAN_HOME);
                         return "Data berhasil disimpan";
                     },
                 },
@@ -87,7 +90,7 @@ export default function EditPage({ data }) {
                 pending: "Menghapus data",
                 success: {
                     render({ data }) {
-                        router.push(HREF_URL.PELANGGARAN_HOME);
+                        router.push(backUrl || HREF_URL.PELANGGARAN_HOME);
                         return "Data berhasil dihapus";
                     },
                 },
@@ -111,7 +114,7 @@ export default function EditPage({ data }) {
     return (
         <div className="md:p-5 p-2 grid md:grid-cols-2 grid-cols-1 gap-5">
             <div className="flex gap-2 col-span-1 md:col-span-2">
-                <Link href={HREF_URL.PELANGGARAN_HOME}>
+                <Link href={backUrl || HREF_URL.PELANGGARAN_HOME}>
                     <Button variant="outline" className="mr-3">
                         <ArrowLeft />
                     </Button>

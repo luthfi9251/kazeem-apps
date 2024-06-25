@@ -8,6 +8,20 @@ async function getData(id, mode) {
     let data = await prisma.Santri.findUnique({
         where: { id: parseInt(id) },
         include: {
+            KelasSantri: {
+                select: {
+                    Kelas: {
+                        select: {
+                            nama_kelas: true,
+                        },
+                    },
+                    TahunAjar: {
+                        select: {
+                            kode_ta: true,
+                        },
+                    },
+                },
+            },
             WaliSantri: {
                 select: {
                     peran: true,
@@ -26,6 +40,7 @@ async function PageDetailSantri(props) {
     let santriId = props.params.slug[0];
     let mode = props.params.slug[1] || false;
     let data = await getData(santriId, mode);
+
     if (!data) {
         throw new Error("Data tidak ditemukan!");
     }
@@ -40,9 +55,15 @@ async function PageDetailSantri(props) {
         };
     });
 
+    let dataKelas = data.KelasSantri.map((item) => {
+        return {
+            kelas: item.Kelas.nama_kelas,
+            kode_ta: item.TahunAjar.kode_ta,
+        };
+    });
     return (
         <WaliDataProvider data={waliSantri}>
-            <DetailPage data={data} foto={data.foto} />
+            <DetailPage data={data} foto={data.foto} dataKelas={dataKelas} />
         </WaliDataProvider>
     );
 }

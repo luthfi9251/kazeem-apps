@@ -3,10 +3,16 @@ const nextConfig = {
     images: {
         remotePatterns: [
             {
-                protocol: "https",
-                hostname: "awsimages.detik.net.id",
+                protocol: "http",
+                hostname: "kazeem.cloud",
                 port: "",
-                pathname: "/community/media/**",
+                pathname: "/**",
+            },
+            {
+                protocol: "https",
+                hostname: "kazeem.cloud",
+                port: "",
+                pathname: "/**",
             },
             {
                 protocol: "http",

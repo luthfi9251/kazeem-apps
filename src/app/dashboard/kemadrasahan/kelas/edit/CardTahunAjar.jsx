@@ -46,7 +46,7 @@ export default function CardTahunAjar({ dataKelas }) {
                     <TableBody>
                         {data.map((item, i) => {
                             return (
-                                <TableRow>
+                                <TableRow key={i}>
                                     <TableCell className="font-medium">
                                         {i + 1}
                                     </TableCell>

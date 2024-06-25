@@ -61,6 +61,7 @@ model UserGroup {
 
 model Santri {
   id           Int           @id @default(autoincrement())
+  nis          String        @unique @db.VarChar(255)
   nama_lengkap String        @db.VarChar(100)
   alamat       String        @db.VarChar(255)
   email        String        @db.VarChar(100)
@@ -68,6 +69,7 @@ model Santri {
   tempat_lahir String        @db.VarChar(100)
   tgl_lhr      DateTime      @db.Date
   foto         String?       @db.VarChar(100)
+  jenis_kel    JenisKel      @default(LAKI_LAKI)
   WaliSantri   WaliSantri[]
   KelasSantri  KelasSantri[]
 
@@ -76,9 +78,13 @@ model Santri {
   created_by_id     String?
   created_by        User?   @relation("santri_created_by", fields: [created_by_id], references: [id])
 
-  created_at DateTime    @default(now())
-  updated_at DateTime    @updatedAt
-  Kesehatan  Kesehatan[]
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+enum JenisKel {
+  LAKI_LAKI
+  PEREMPUAN
 }
 
 model WaliSantri {
@@ -146,7 +152,7 @@ model Pelanggaran {
 
 model KategoriPelanggaran {
   id               Int      @id @default(autoincrement())
-  nama_pelanggaran String
+  nama_pelanggaran String   @unique
   kategori         Kategori
   jenis            String
   poin             Int      @default(0)
@@ -226,6 +232,7 @@ model KelasSantri {
   last_update_by    User?         @relation("kelasSantri_updated_by", fields: [last_update_by_id], references: [id])
   last_update_by_id String?
   Pelangaran        Pelanggaran[]
+  Kesehatan         Kesehatan[]
 
   @@unique([kelas_id, ta_id, santri_id, status])
 }
@@ -236,15 +243,15 @@ enum StatusKelas {
 }
 
 model Kesehatan {
-  id            Int             @id @default(autoincrement())
-  nama_penyakit String          @db.VarChar(100)
-  penanganan    String          @db.Text
-  kategori      Kategori
-  tgl_masuk     DateTime
-  tgl_keluar    DateTime?
-  status        StatusKesehatan
-  santri_id     Int
-  Santri        Santri          @relation(fields: [santri_id], references: [id])
+  id             Int             @id @default(autoincrement())
+  nama_penyakit  String          @db.VarChar(100)
+  penanganan     String          @db.Text
+  kategori       Kategori
+  tgl_masuk      DateTime
+  tgl_keluar     DateTime?
+  status         StatusKesehatan
+  kelassantri_id Int
+  KelasSantri    KelasSantri     @relation(fields: [kelassantri_id], references: [id])
 
   created_at        DateTime @default(now())
   updated_at        DateTime @updatedAt

@@ -8,35 +8,55 @@ async function getData(id) {
         },
         select: {
             id: true,
-            Santri: {
+            KelasSantri: {
                 select: {
                     id: true,
-                    nama_lengkap: true,
+                    Santri: {
+                        select: {
+                            nama_lengkap: true,
+                        },
+                    },
                 },
             },
             nama_penyakit: true,
             penanganan: true,
             kategori: true,
             tgl_masuk: true,
+            tgl_keluar: true,
             status: true,
         },
     });
 
     return {
         ...data,
-        nama_lengkap: data.Santri.nama_lengkap,
-        santri_id: data.Santri.id,
+        nama_lengkap: data.KelasSantri.Santri.nama_lengkap,
+        santri_id: data.KelasSantri.id,
     };
 }
 
 async function getAllSantri() {
-    let namaSantri = await prisma.Santri.findMany({
+    let dataSantri = await prisma.KelasSantri.findMany({
+        where: {
+            TahunAjar: {
+                aktif: true,
+            },
+        },
         select: {
             id: true,
-            nama_lengkap: true,
+            Santri: {
+                select: {
+                    nama_lengkap: true,
+                },
+            },
         },
     });
-    return namaSantri;
+
+    return dataSantri.map((item) => {
+        return {
+            id: item.id,
+            nama_lengkap: item.Santri.nama_lengkap,
+        };
+    });
 }
 
 export default async function Page(props) {

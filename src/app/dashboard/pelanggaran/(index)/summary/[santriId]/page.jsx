@@ -5,12 +5,14 @@ import { PAGE_NAME } from "@/security-config";
 
 async function getData(idSantri) {
     let kelasAktifSantri = await prisma.KelasSantri.findFirst({
+        orderBy: [
+            {
+                created_at: "desc",
+            },
+        ],
         where: {
             Santri: {
                 id: idSantri,
-            },
-            TahunAjar: {
-                aktif: true,
             },
         },
         select: {
@@ -151,6 +153,7 @@ async function Page(props) {
                 dataSantri={dataSantri}
                 dataSummary={dataSummary}
                 dataPelanggaran={dataPelanggaran}
+                idSantri={idSantri}
             />
         </>
     );

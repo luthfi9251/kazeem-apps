@@ -6,6 +6,12 @@ let santriSchema = yup.object({
         .min(1, "Panjang minimal 1 Karakter")
         .max(100, "Panjang maksimal 100 karakter")
         .required(),
+    nis: yup
+        .string()
+        .min(1, "Panjang minimal 1 Karakter")
+        .max(255, "Panjang maksimal 255 karakter")
+        .required(),
+    jenis_kel: yup.string().required(),
     alamat: yup
         .string()
         .min(1, "Panjang minimal 1 Karakter")

@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 import { getSiswaByKelasAndTA } from "../../_actions/kelas";
+import DebouncedInput from "@/components/DebouncedInput";
 
 export function DataTable({ columns, dataTA, idKelas }) {
     const [taSelected, setTASelected] = useState(
@@ -47,7 +48,7 @@ export function DataTable({ columns, dataTA, idKelas }) {
 
     if (isError) throw new Error();
 
-    const [columnFilters, setColumnFilters] = useState();
+    const [globalFilter, setGlobalFilter] = useState();
     const [pagination, setPagination] = useState({
         pageIndex: 0, //initial page index
         pageSize: 10, //default page size
@@ -58,11 +59,11 @@ export function DataTable({ columns, dataTA, idKelas }) {
         columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
-        onColumnFiltersChange: setColumnFilters,
         getFilteredRowModel: getFilteredRowModel(),
         getSortedRowModel: getSortedRowModel(),
         state: {
-            columnFilters,
+            globalFilter,
+            idKelas,
         },
         initialState: {
             sorting: [
@@ -77,17 +78,11 @@ export function DataTable({ columns, dataTA, idKelas }) {
     return (
         <div>
             <div className="flex justify-between items-end pb-4 flex-wrap">
-                <Input
-                    placeholder="Cari Siswa"
-                    value={
-                        table.getColumn("nama_lengkap")?.getFilterValue() ?? ""
-                    }
-                    onChange={(event) =>
-                        table
-                            .getColumn("nama_lengkap")
-                            ?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-sm"
+                <DebouncedInput
+                    value={globalFilter ?? ""}
+                    onChange={(value) => setGlobalFilter(String(value))}
+                    className=" max-w-sm"
+                    placeholder="Search all columns..."
                 />
                 <div className="d">
                     <p>Tahun Ajaran</p>

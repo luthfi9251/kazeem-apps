@@ -41,6 +41,7 @@ export default function EditPage({ namaSantri, data }) {
                 : null,
             status: dataForm.status,
         };
+
         toast.promise(
             () => editDataKesehatan(data.id, kesehatan),
             {

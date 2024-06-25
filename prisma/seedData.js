@@ -16,6 +16,8 @@ const GROUPS = [
 const SANTRI = [
     {
         nama_lengkap: "Travis Chan",
+        nis: "33210",
+        jenis_kel: "LAKI_LAKI",
         alamat: "745-1464 Ultricies St.",
         email: "morbi.quis@yahoo.com",
         hp: "1-355-758-7364",
@@ -24,6 +26,8 @@ const SANTRI = [
     },
     {
         nama_lengkap: "Jescie Ding",
+        nis: "33211",
+        jenis_kel: "PEREMPUAN",
         alamat: "P.O. Box 816, 1254 Leo Av.",
         email: "rutrum.urna@outlook.com",
         hp: "1-575-231-2312",
@@ -32,6 +36,8 @@ const SANTRI = [
     },
     {
         nama_lengkap: "Oprah Mo",
+        nis: "33212",
+        jenis_kel: "PEREMPUAN",
         alamat: "Ap #806-5865 Cras Rd.",
         email: "eros.non.enim@aol.net",
         hp: "376-5804",
@@ -40,6 +46,8 @@ const SANTRI = [
     },
     {
         nama_lengkap: "Charles Guan",
+        nis: "33213",
+        jenis_kel: "LAKI_LAKI",
         alamat: "Ap #132-4594 Aliquam Street",
         email: "ligula.eu@aol.com",
         hp: "1-955-255-6196",
@@ -48,6 +56,8 @@ const SANTRI = [
     },
     {
         nama_lengkap: "Thaddeus Ban",
+        nis: "33214",
+        jenis_kel: "LAKI_LAKI",
         alamat: "P.O. Box 573, 5005 Dictum Street",
         email: "faucibus.lectus@google.org",
         hp: "1-257-234-9437",
@@ -56,6 +66,8 @@ const SANTRI = [
     },
     {
         nama_lengkap: "Porter Cheang",
+        nis: "33215",
+        jenis_kel: "LAKI_LAKI",
         alamat: "Ap #506-4325 Integer Rd.",
         email: "posuere.vulputate.lacus@aol.org",
         hp: "510-7828",
@@ -64,6 +76,8 @@ const SANTRI = [
     },
     {
         nama_lengkap: "Barclay Liu",
+        nis: "33216",
+        jenis_kel: "LAKI_LAKI",
         alamat: "3914 Dictum Rd.",
         email: "vitae.aliquam@yahoo.com",
         hp: "221-5775",
@@ -72,6 +86,8 @@ const SANTRI = [
     },
     {
         nama_lengkap: "Louis Choong",
+        nis: "33217",
+        jenis_kel: "LAKI_LAKI",
         alamat: "420-9225 Ridiculus Rd.",
         email: "placerat.orci@hotmail.couk",
         hp: "1-412-635-2931",
@@ -80,6 +96,8 @@ const SANTRI = [
     },
     {
         nama_lengkap: "Lana Lew",
+        nis: "33218",
+        jenis_kel: "PEREMPUAN",
         alamat: "373-4284 In Avenue",
         email: "lectus.justo@icloud.couk",
         hp: "620-1878",
@@ -88,6 +106,8 @@ const SANTRI = [
     },
     {
         nama_lengkap: "Nina Zhong",
+        nis: "33219",
+        jenis_kel: "PEREMPUAN",
         alamat: "Ap #361-6852 Mi Av.",
         email: "vitae.erat@outlook.edu",
         hp: "135-2165",

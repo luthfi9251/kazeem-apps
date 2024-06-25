@@ -53,6 +53,7 @@ import {
 import { useState, useContext } from "react";
 import { Label } from "@/components/ui/label";
 import { WaliContext } from "./WaliDataProvider";
+import CardKelas from "./detail/[[...slug]]/CardKelas";
 
 function DialogFormWali({ open, openChange, context }) {
     let [dataWali, setWaliGroup] = context;
@@ -214,13 +215,15 @@ function DialogFormWali({ open, openChange, context }) {
 export default function WaliSantriForm({
     disabled = false,
     allowDetail = true,
+    showKelas = false,
+    dataKelas = [],
 }) {
     let [isOpen, setIsOpen] = useState(false);
     const waliContextVal = useContext(WaliContext);
 
     return (
         <div>
-            <Card className="max-h-min">
+            <Card className="">
                 <CardHeader>
                     <CardTitle>Data Wali</CardTitle>
                     <CardDescription> </CardDescription>
@@ -246,6 +249,7 @@ export default function WaliSantriForm({
                     />
                 </CardContent>
             </Card>
+            {showKelas && <CardKelas dataKelas={dataKelas} />}
         </div>
     );
 }

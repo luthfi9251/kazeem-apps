@@ -15,6 +15,7 @@ import Link from "next/link";
 
 export const columns = [
     {
+        id: "no",
         header: "No.",
         cell: ({ row }) => {
             return <span className="capitalize ">{row.index + 1}</span>;

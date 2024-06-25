@@ -2,6 +2,7 @@
 import prisma from "@/lib/prisma";
 import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 export async function addKategoriPelanggaran({
     nama_pelanggaran,
@@ -30,8 +31,16 @@ export async function addKategoriPelanggaran({
             revalidatePath("/dashboard/pelanggaran/kategori");
             resolve(create);
         } catch (err) {
+            if (err instanceof PrismaClientKnownRequestError) {
+                if (
+                    err.meta.target ===
+                    "KategoriPelanggaran_nama_pelanggaran_key"
+                ) {
+                    reject(new Error("Nama Pelanggaran harus unik!"));
+                }
+            }
             reject({
-                error: "Gagal Mmenambahkan Kategori Pelanggaran",
+                error: "Gagal Menambahkan Kategori Pelanggaran",
                 errMessage: err.message,
             });
         }

@@ -23,7 +23,7 @@ export default function CreatePage({ data }) {
             keterangan: "",
             konsekuensi: "",
             poin: 0,
-            allow_edit: false,
+            allow_add: false,
         },
     });
 
@@ -36,11 +36,12 @@ export default function CreatePage({ data }) {
             keterangan: data.keterangan,
             konsekuensi: data.konsekuensi,
         };
+        console.log(data);
         toast.promise(
             () =>
                 addPelanggaran({
                     dataPelanggaran,
-                    isCreateNewKategori: data.allow_edit,
+                    isCreateNewKategori: data.allow_add,
                     kelasSantriId: data.id_santri,
                     pelanggaranId: data.nama_pelanggaran_option,
                 }),

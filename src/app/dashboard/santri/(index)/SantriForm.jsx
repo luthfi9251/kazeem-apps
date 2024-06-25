@@ -1,7 +1,13 @@
 "use client";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import santriSchema from "./../yup-santri-schema";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import { useState } from "react";
 import {
     Form,
@@ -61,6 +67,24 @@ export default function SantriForm({ form, disabled, foto = null }) {
                             />
                             <FormField
                                 control={form.control}
+                                name="nis"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>NIS</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                {...field}
+                                                disabled={
+                                                    disabled ? true : false
+                                                }
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
                                 name="email"
                                 render={({ field }) => (
                                     <FormItem>
@@ -91,6 +115,35 @@ export default function SantriForm({ form, disabled, foto = null }) {
                                                 }
                                             />
                                         </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="jenis_kel"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Jenis Kelamin</FormLabel>
+                                        <Select
+                                            onValueChange={field.onChange}
+                                            defaultValue={field.value}
+                                            disabled={disabled ? true : false}
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Pilih jenis Kelamin" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                <SelectItem value="LAKI_LAKI">
+                                                    Laki-Laki
+                                                </SelectItem>
+                                                <SelectItem value="PEREMPUAN">
+                                                    Perempuan
+                                                </SelectItem>
+                                            </SelectContent>
+                                        </Select>
                                         <FormMessage />
                                     </FormItem>
                                 )}

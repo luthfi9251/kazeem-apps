@@ -22,8 +22,10 @@ async function getData() {
         select: {
             id: true,
             nama_lengkap: true,
+            nis: true,
             hp: true,
             alamat: true,
+            foto: true,
             WaliSantri: {
                 select: {
                     wali: {
@@ -46,7 +48,9 @@ async function getData() {
     let data = santriData.map((item) => {
         return {
             id: item.id,
+            nis: item.nis,
             nama_lengkap: item.nama_lengkap,
+            foto: item.foto,
             hp: item.hp,
             alamat: item.alamat,
             nama_wali: item.WaliSantri[0].wali.nama_wali,

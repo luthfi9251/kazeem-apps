@@ -8,22 +8,27 @@ async function getData(id) {
         },
         select: {
             id: true,
-            Santri: {
+            KelasSantri: {
                 select: {
-                    nama_lengkap: true,
+                    Santri: {
+                        select: {
+                            nama_lengkap: true,
+                        },
+                    },
                 },
             },
             nama_penyakit: true,
             penanganan: true,
             kategori: true,
             tgl_masuk: true,
+            tgl_keluar: true,
             status: true,
         },
     });
 
     return {
         ...data,
-        nama_lengkap: data.Santri.nama_lengkap,
+        nama_lengkap: data.KelasSantri.Santri.nama_lengkap,
     };
 }
 

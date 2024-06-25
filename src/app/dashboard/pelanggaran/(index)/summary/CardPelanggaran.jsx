@@ -9,7 +9,7 @@ import {
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
 
-export default function CardDetailSiswa({ dataPelanggaran, idPelanggaran }) {
+export default function CardDetailSiswa({ dataPelanggaran, idSantri }) {
     return (
         <Card className="col-span-1 md:col-span-2">
             <CardHeader>
@@ -21,7 +21,7 @@ export default function CardDetailSiswa({ dataPelanggaran, idPelanggaran }) {
                 <DataTable
                     columns={columns}
                     dataPelanggaran={dataPelanggaran}
-                    idPelanggaran={idPelanggaran}
+                    idSantri={idSantri}
                 />
             </CardContent>
         </Card>

@@ -3,18 +3,21 @@ import SantriForm from "../../SantriForm";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import santriSchema from "../../../yup-santri-schema";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { HREF_URL } from "@/navigation-data";
 import WaliSantriForm from "../../WaliSantrForm";
+import ActionBarDetail from "@/components/ActionBarDetail";
 
 export default function DetailPage(props) {
     let { data } = props;
+    let params = useSearchParams();
     const formSantri = useForm({
         resolver: yupResolver(santriSchema),
         defaultValues: {
             nama_lengkap: data ? data.nama_lengkap : "",
             alamat: data ? data.alamat : "",
+            nis: data ? data.nis : "",
+            jenis_kel: data ? data.jenis_kel : "",
             email: data ? data.email : "",
             hp: data ? data.hp : "",
             tempat_lahir: data ? data.tempat_lahir : "",
@@ -25,27 +28,20 @@ export default function DetailPage(props) {
     });
     return (
         <div className="md:p-5 p-2 grid md:grid-cols-2 grid-cols-1 gap-5">
-            <div className="flex gap-2 md:col-span-2 col-span-1">
-                <Link href="/dashboard/santri/">
-                    <Button variant="outline" className="mr-3">
-                        <ArrowLeft />
-                    </Button>
-                </Link>
-                <Link href={`/dashboard/santri/edit/${data.id}`}>
-                    <Button
-                        // onClick={onSubmitBothForms}
-                        className="md:w-36 bg-kazeem-primary hover:bg-kazeem-darker text-white"
-                    >
-                        Edit
-                    </Button>
-                </Link>
-            </div>
+            <ActionBarDetail
+                backLink={params.get("back") || HREF_URL.SANTRI_HOME}
+                editLink={HREF_URL.SANTRI_EDIT(data.id)}
+            />
             <SantriForm
                 form={formSantri}
                 disabled={props.mode != "edit"}
                 foto={data.foto}
             />
-            <WaliSantriForm disabled={true} />
+            <WaliSantriForm
+                disabled={true}
+                showKelas
+                dataKelas={props.dataKelas}
+            />
         </div>
     );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import {
     ColumnDef,
@@ -25,8 +25,38 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 
+function DebouncedInput({
+    value: initialValue,
+    onChange,
+    debounce = 500,
+    ...props
+}) {
+    const [value, setValue] = useState(initialValue);
+
+    useEffect(() => {
+        setValue(initialValue);
+    }, [initialValue]);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            onChange(value);
+        }, debounce);
+
+        return () => clearTimeout(timeout);
+    }, [value]);
+
+    return (
+        <Input
+            {...props}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+        />
+    );
+}
+
 export function DataTable({ columns, data }) {
     const [columnFilters, setColumnFilters] = useState();
+    const [globalFilter, setGlobalFilter] = useState();
     const [pagination, setPagination] = useState({
         pageIndex: 0, //initial page index
         pageSize: 10, //default page size
@@ -36,11 +66,12 @@ export function DataTable({ columns, data }) {
         columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
-        onColumnFiltersChange: setColumnFilters,
+        // onColumnFiltersChange: setColumnFilters,
         getFilteredRowModel: getFilteredRowModel(),
         getSortedRowModel: getSortedRowModel(),
         state: {
-            columnFilters,
+            // columnFilters,
+            globalFilter,
         },
         initialState: {
             sorting: [
@@ -55,17 +86,11 @@ export function DataTable({ columns, data }) {
     return (
         <div>
             <div className="grid grid-cols-2 py-4">
-                <Input
-                    placeholder="Cari santri..."
-                    value={
-                        table.getColumn("nama_lengkap")?.getFilterValue() ?? ""
-                    }
-                    onChange={(event) =>
-                        table
-                            .getColumn("nama_lengkap")
-                            ?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-sm"
+                <DebouncedInput
+                    value={globalFilter ?? ""}
+                    onChange={(value) => setGlobalFilter(String(value))}
+                    className=" max-w-sm"
+                    placeholder="Search all columns..."
                 />
                 <Link
                     href="/dashboard/santri/create"

@@ -33,6 +33,8 @@ export default function EditSantriPage(props) {
         defaultValues: {
             nama_lengkap: data ? data.nama_lengkap : "",
             alamat: data ? data.alamat : "",
+            nis: data ? data.nis : "",
+            jenis_kel: data ? data.jenis_kel : "",
             email: data ? data.email : "",
             hp: data ? data.hp : "",
             tempat_lahir: data ? data.tempat_lahir : "",

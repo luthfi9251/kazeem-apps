@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import Link from "next/link";
+import { HREF_URL } from "@/navigation-data";
 
 export const columns = [
     {
@@ -20,6 +21,10 @@ export const columns = [
         cell: ({ row }) => {
             return <span className="capitalize ">{row.index + 1}</span>;
         },
+    },
+    {
+        accessorKey: "nis",
+        header: "NIS",
     },
     {
         accessorKey: "nama_lengkap",
@@ -36,8 +41,9 @@ export const columns = [
     {
         id: "actions",
         header: "Actions",
-        cell: ({ row }) => {
-            const user = row.original;
+        cell: (data) => {
+            const user = data.row.original;
+            const idKelas = data.table.getState().idKelas;
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -54,7 +60,10 @@ export const columns = [
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem>
                             <Link
-                                href={`/dashboard/pelanggaran/kategori/detail/${user.id}`}
+                                href={HREF_URL.SANTRI_DETAIL(
+                                    user.santri_id,
+                                    HREF_URL.KEMADRASAHAN_KELAS_DETAIL(idKelas)
+                                )}
                                 className="w-full"
                                 data-e2e="btn-detail"
                             >

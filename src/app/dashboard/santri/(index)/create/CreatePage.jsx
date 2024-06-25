@@ -22,6 +22,8 @@ function PageCreateSantri() {
         resolver: yupResolver(santriSchema),
         defaultValues: {
             nama_lengkap: "",
+            nis: "",
+            jenis_kel: "LAKI_LAKI",
             alamat: "",
             email: "",
             hp: "",
@@ -54,7 +56,7 @@ function PageCreateSantri() {
                 error: {
                     render({ data }) {
                         // When the promise reject, data will contains the error
-                        return `${data}`;
+                        return `${data.message}`;
                     },
                 },
             },

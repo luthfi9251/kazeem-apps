@@ -102,7 +102,9 @@ export async function getSiswaByKelasAndTA(idKelas, kode_ta) {
             },
             Santri: {
                 select: {
+                    id: true,
                     nama_lengkap: true,
+                    nis: true,
                 },
             },
             status: true,
@@ -112,6 +114,8 @@ export async function getSiswaByKelasAndTA(idKelas, kode_ta) {
     let res = dataSiswa.map((item) => {
         return {
             id: item.id,
+            santri_id: item.Santri.id,
+            nis: item.Santri.nis,
             nama_lengkap: item.Santri.nama_lengkap,
             status: item.status,
             kode_ta: item.TahunAjar.kode_ta,
@@ -280,18 +284,36 @@ export async function deleteKelas({ idKelas }) {
 }
 
 export async function pindahKelasSiswa({ id, idKelas }) {
-    return await prisma.KelasSantri.update({
-        where: {
-            id,
-        },
-        data: {
-            Kelas: {
-                connect: {
-                    id: idKelas,
+    if (typeof id === "number") {
+        return await prisma.KelasSantri.update({
+            where: {
+                id,
+            },
+            data: {
+                Kelas: {
+                    connect: {
+                        id: idKelas,
+                    },
                 },
             },
-        },
-    });
+        });
+    } else {
+        let updateMany = id.map((item) =>
+            prisma.KelasSantri.update({
+                where: {
+                    id: item,
+                },
+                data: {
+                    Kelas: {
+                        connect: {
+                            id: idKelas,
+                        },
+                    },
+                },
+            })
+        );
+        return await prisma.$transaction(updateMany);
+    }
 }
 
 export async function getAllKelas() {

@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import { auth } from "@/auth";
 import { HREF_URL } from "@/navigation-data";
 import { revalidatePath } from "next/cache";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 export async function addPelanggaran({
     isCreateNewKategori,
     kelasSantriId,
@@ -75,6 +76,14 @@ export async function addPelanggaran({
             }
         } catch (err) {
             console.log(err);
+            if (err instanceof PrismaClientKnownRequestError) {
+                if (
+                    err.meta.target ===
+                    "KategoriPelanggaran_nama_pelanggaran_key"
+                ) {
+                    reject(new Error("Nama Pelanggaran harus unik!"));
+                }
+            }
             reject(err);
         }
     });
@@ -106,6 +115,7 @@ export async function getPelanggaranByKelasAndTA({ nama_kelas, kode_ta }) {
                         select: {
                             id: true,
                             nama_lengkap: true,
+                            nis: true,
                         },
                     },
                     TahunAjar: {
@@ -130,6 +140,7 @@ export async function getPelanggaranByKelasAndTA({ nama_kelas, kode_ta }) {
         return {
             id: item.id,
             santri_id: item.KelasSantri.Santri.id,
+            nis: item.KelasSantri.Santri.nis,
             nama_santri: item.KelasSantri.Santri.nama_lengkap,
             kelas: item.KelasSantri.Kelas.nama_kelas,
             kode_ta: item.KelasSantri.TahunAjar.kode_ta,
