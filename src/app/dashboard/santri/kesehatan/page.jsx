@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import prisma from "@/lib/prisma";
 import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
-import { PAGE_NAME } from "@/security-config";
+import { PAGE_NAME } from "@/variables/page-name";
 
 async function getData() {
     let data = await prisma.KelasSantri.findMany({
@@ -59,4 +59,4 @@ async function Page() {
     );
 }
 
-export default withAuthAndGroupCheck(Page, PAGE_NAME.MANAGE_SANTRI_PAGE);
+export default withAuthAndGroupCheck(Page, PAGE_NAME.KESANTRIAN_KESEHATAN);

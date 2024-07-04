@@ -1,5 +1,7 @@
 import CreatePage from "./CreatePage";
 import prisma from "@/lib/prisma";
+import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
+import { PAGE_NAME } from "@/variables/page-name";
 
 async function getAllSantri() {
     let dataSantri = await prisma.KelasSantri.findMany({
@@ -26,7 +28,9 @@ async function getAllSantri() {
     });
 }
 
-export default async function Page() {
+async function Page() {
     let santri = await getAllSantri();
     return <CreatePage namaSantri={santri} />;
 }
+
+export default withAuthAndGroupCheck(Page, PAGE_NAME.KESANTRIAN_KESEHATAN);

@@ -1,7 +1,7 @@
 import EditPage from "./EditPage";
 import prisma from "@/lib/prisma";
 import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
-import { PAGE_NAME } from "@/security-config";
+import { PAGE_NAME } from "@/variables/page-name";
 
 async function getData(taId) {
     return await prisma.TahunAjar.findUnique({
@@ -16,4 +16,4 @@ async function Page({ params }) {
     return <EditPage data={data} />;
 }
 
-export default withAuthAndGroupCheck(Page, PAGE_NAME.MANAGE_SANTRI_PAGE);
+export default withAuthAndGroupCheck(Page, PAGE_NAME.KEMADRASAHAN_TAHUN_AJAR);

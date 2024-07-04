@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import prisma from "@/lib/prisma";
 import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
-import { PAGE_NAME } from "@/security-config";
+import { PAGE_NAME } from "@/variables/page-name";
 
 async function getData() {
     let santriData = await prisma.Santri.findMany({
@@ -38,13 +38,6 @@ async function getData() {
         },
     });
 
-    // let a = {
-    //     id: 1,
-    //     nama_lengkap: "Muhammad Luthfi Irfan",
-    //     hp: "adaada",
-    //     alamat: "adadada",
-    //     WaliSantri: [{ wali: { nama_wali: "Rohmad Widodo" } }],
-    // };
     let data = santriData.map((item) => {
         return {
             id: item.id,
@@ -56,7 +49,7 @@ async function getData() {
             nama_wali: item.WaliSantri[0].wali.nama_wali,
         };
     });
-    // console.log(data);
+
     return data;
 }
 
@@ -77,4 +70,4 @@ async function Page() {
     );
 }
 
-export default withAuthAndGroupCheck(Page, PAGE_NAME.MANAGE_SANTRI_PAGE);
+export default withAuthAndGroupCheck(Page, PAGE_NAME.KESANTRIAN_KELOLA_SANTRI);

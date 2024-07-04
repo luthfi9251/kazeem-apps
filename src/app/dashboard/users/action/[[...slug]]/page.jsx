@@ -2,7 +2,7 @@ import ActionPage from "./ActionPage";
 import getUserById from "../_actions/getUserById";
 import getAllAvailableGroups from "../_actions/getAllAvailableGroups";
 import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
-import { PAGE_NAME } from "@/security-config";
+import { PAGE_NAME } from "@/variables/page-name";
 
 async function getData(id) {
     let getUserData = getUserById(id);
@@ -20,4 +20,4 @@ async function Page({ params }) {
     );
 }
 
-export default withAuthAndGroupCheck(Page, PAGE_NAME.MANAGE_USER_PAGE);
+export default withAuthAndGroupCheck(Page, PAGE_NAME.USER_HOME);

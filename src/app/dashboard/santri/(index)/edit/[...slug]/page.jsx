@@ -2,7 +2,7 @@ import prisma from "@/lib/prisma";
 import WaliDataProvider from "../../WaliDataProvider";
 import EditSantriPage from "./EditSantri";
 import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
-import { PAGE_NAME } from "@/security-config";
+import { PAGE_NAME } from "@/variables/page-name";
 
 async function getData(id) {
     let data = await prisma.Santri.findUnique({
@@ -46,4 +46,7 @@ async function PageEdit(props) {
     );
 }
 
-export default withAuthAndGroupCheck(PageEdit, PAGE_NAME.MANAGE_SANTRI_PAGE);
+export default withAuthAndGroupCheck(
+    PageEdit,
+    PAGE_NAME.KESANTRIAN_KELOLA_SANTRI
+);

@@ -10,7 +10,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
-import { PAGE_NAME } from "@/security-config";
+import { PAGE_NAME } from "@/variables/page-name";
 
 async function getData() {
     let data = await prisma.KategoriPelanggaran.findMany({
@@ -48,4 +48,7 @@ async function Page() {
     );
 }
 
-export default withAuthAndGroupCheck(Page, PAGE_NAME.MANAGE_PELANGGARAN_PAGE);
+export default withAuthAndGroupCheck(
+    Page,
+    PAGE_NAME.KESANTRIAN_KATEGORI_PELANGGARAN
+);

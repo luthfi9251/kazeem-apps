@@ -7,11 +7,9 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { getAllGroups } from "./_actions/group";
-import GroupsForm from "./GroupsForm";
-import GroupsTable from "./GroupsTable";
-import GroupDataProvider from "./GroupDataProvider";
 import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
-import { PAGE_NAME } from "@/security-config";
+import { PAGE_NAME } from "@/variables/page-name";
+import { DataTable } from "./data-table";
 
 async function getData() {
     let data = await getAllGroups();
@@ -28,15 +26,12 @@ async function PageGroups() {
                     <CardTitle>Card Title</CardTitle>
                     <CardDescription>Card Description</CardDescription>
                 </CardHeader>
-                <CardContent className="grid grid-cols-1 md:grid-cols-2 divide-y gap-2 md:divide-x md:divide-y-0">
-                    <GroupDataProvider data={groupData}>
-                        <GroupsTable />
-                        <GroupsForm />
-                    </GroupDataProvider>
+                <CardContent>
+                    <DataTable data={groupData} />
                 </CardContent>
             </Card>
         </div>
     );
 }
 
-export default withAuthAndGroupCheck(PageGroups, PAGE_NAME.MANAGE_ROLE_PAGE);
+export default withAuthAndGroupCheck(PageGroups, PAGE_NAME.USER_GROUP_HOME);

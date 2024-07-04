@@ -1,7 +1,7 @@
 import EditPage from "./EditPage";
 import prisma from "@/lib/prisma";
 import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
-import { PAGE_NAME } from "@/security-config";
+import { PAGE_NAME } from "@/variables/page-name";
 
 async function getPelanggaranDetail(id) {
     return await prisma.Pelanggaran.findUnique({
@@ -60,4 +60,4 @@ async function Page(props) {
     );
 }
 
-export default withAuthAndGroupCheck(Page, PAGE_NAME.MANAGE_PELANGGARAN_PAGE);
+export default withAuthAndGroupCheck(Page, PAGE_NAME.KESANTRIAN_PELANGGARAN);

@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import prisma from "@/lib/prisma";
 import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
-import { PAGE_NAME } from "@/security-config";
+import { PAGE_NAME } from "@/variables/page-name";
 
 async function getData() {
     let usersData = await prisma.user.findMany({
@@ -43,4 +43,4 @@ async function Users(props) {
     );
 }
 
-export default withAuthAndGroupCheck(Users, PAGE_NAME.MANAGE_USER_PAGE);
+export default withAuthAndGroupCheck(Users, PAGE_NAME.USER_HOME);

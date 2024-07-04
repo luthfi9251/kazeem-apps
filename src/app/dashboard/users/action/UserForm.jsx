@@ -61,7 +61,12 @@ export default function UserForm({ reference, user }) {
             {
                 pending: "Menyimpan data",
                 success: "Data berhasil disimpan",
-                error: "Gagal Menyimpan Data",
+                error: {
+                    render({ data }) {
+                        // When the promise reject, data will contains the error
+                        return `${data}`;
+                    },
+                },
             },
             {
                 position: "bottom-right",

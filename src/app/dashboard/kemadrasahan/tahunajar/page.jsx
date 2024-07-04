@@ -11,7 +11,7 @@ import { DataTable } from "./data-table";
 import { columns } from "./columns";
 import prisma from "@/lib/prisma";
 import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
-import { PAGE_NAME } from "@/security-config";
+import { PAGE_NAME } from "@/variables/page-name";
 
 async function getData() {
     let ta = await prisma.TahunAjar.findMany({
@@ -58,4 +58,4 @@ async function Page() {
     );
 }
 
-export default withAuthAndGroupCheck(Page, PAGE_NAME.MANAGE_MADRASAH_PAGE);
+export default withAuthAndGroupCheck(Page, PAGE_NAME.KEMADRASAHAN_TAHUN_AJAR);

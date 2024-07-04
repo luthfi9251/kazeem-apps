@@ -145,8 +145,23 @@ export default function Sidebar(props) {
         });
         return nav;
     };
+    let getAllowedNavLink2 = () => {
+        let nav = [];
+        URL_PATH.forEach((item) => {
+            let allowedChildren = item.children.filter((item2) =>
+                session.user.accessPage.includes(item2.page_name)
+            );
 
-    let dataLink = getAllowedNavLink();
+            if (allowedChildren.length > 0) {
+                item.children = allowedChildren;
+                nav.push(item);
+            }
+        });
+
+        return nav;
+    };
+
+    let dataLink = getAllowedNavLink2();
 
     let calculateActivePage = (navItem) => {
         if (pathname.includes(navItem.href)) {

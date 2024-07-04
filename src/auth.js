@@ -2,6 +2,8 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { comparePassword } from "@/lib/bcrypt";
 import prisma from "./lib/prisma";
+import { reducePageAccessGroups } from "./actions/group";
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
     debug: false,
     pages: {
@@ -57,16 +59,29 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     group: {
                         select: {
                             nama_group: true,
+                            PageAccess: {
+                                select: {
+                                    Page: {
+                                        select: {
+                                            nama: true,
+                                            kategori: true,
+                                        },
+                                    },
+                                },
+                            },
                         },
                     },
                 },
             });
+
+            let accessPage = await reducePageAccessGroups(groups);
             session.user.id = token.id;
             session.user.username = token.username;
             session.user.email = token.email;
             session.user.nama_lengkap = token.nama_lengkap;
             session.user.aktif = token.aktif;
             session.user.groups = groups.map((item) => item.group.nama_group);
+            session.user.accessPage = accessPage;
             return session;
         },
     },

@@ -30,21 +30,22 @@ export default function ActionButton({ form }) {
     };
 
     let handleDelete = () => {
-        toast
-            .promise(
-                () => deleteUser(userId),
-                {
-                    pending: "Menghapus data",
-                    success: "Data berhasil dihapus",
-                    error: "Gagal menghapus Data",
+        toast.promise(
+            () => deleteUser(userId),
+            {
+                pending: "Menghapus data",
+                success: "Data berhasil dihapus",
+                error: {
+                    render({ data }) {
+                        // When the promise reject, data will contains the error
+                        return `${data}`;
+                    },
                 },
-                {
-                    position: "bottom-right",
-                }
-            )
-            .then(() => {
-                router.push("/dashboard/users");
-            });
+            },
+            {
+                position: "bottom-right",
+            }
+        );
     };
 
     return (
