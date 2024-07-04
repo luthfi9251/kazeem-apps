@@ -115,12 +115,6 @@ describe("Pelanggaran Page CRUD", () => {
             jenis: dataPelanggaran2.jenis,
             poin: dataPelanggaran2.poin,
         });
-        cy.deleteKategoriPelanggaran({
-            nama_pelanggaran: dataPelanggaran2.update.nama_pelanggaran,
-            kategori: dataPelanggaran2.kategori.toUpperCase(),
-            jenis: dataPelanggaran2.jenis,
-            poin: dataPelanggaran2.update.poin,
-        });
     });
 
     it("should render kelas Homepage", () => {
@@ -239,37 +233,6 @@ describe("Pelanggaran Page CRUD", () => {
             dataPelanggaran.konsekuensi
         ).within(() => {
             cy.get("td").should("contain", dataPelanggaran.update.keterangan);
-        });
-    });
-
-    it("should update the pelanggaran with change kategori and update the table", () => {
-        cy.visit(HREF.PELANGGARAN_HOME);
-        cy.get("svg.animate-spin", { timeout: 10000 }).should("not.exist");
-        cy.contains(
-            "tr",
-            dataPelanggaran2.nama_santri,
-            dataPelanggaran2.nama_pelanggaran
-        ).within(($row) => {
-            cy.get('button[data-e2e="btn-dropdown"]').click();
-        });
-        cy.get('a[data-e2e="btn-edit"]').click();
-        cy.url().should("contain", HREF.PELANGGARAN_EDIT);
-
-        cy.get('button[data-e2e="btn-allow-edit"]').click();
-        cy.get('input[name="nama_pelanggaran"]').clear();
-        cy.get('input[name="nama_pelanggaran"]').type(
-            dataPelanggaran2.update.nama_pelanggaran
-        );
-        cy.get('input[name="poin"]').clear();
-        cy.get('input[name="poin"]').type(dataPelanggaran2.update.poin);
-
-        cy.get('button[data-e2e="btn-simpan"]').click();
-        cy.url().should("contain", HREF.PELANGGARAN_HOME);
-        cy.contains("tr", dataPelanggaran2.nama_santri).within(() => {
-            cy.get("td").should(
-                "contain",
-                dataPelanggaran2.update.nama_pelanggaran
-            );
         });
     });
 

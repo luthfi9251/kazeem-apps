@@ -1,7 +1,7 @@
 import DetailPage from "./DetailPage";
 import WaliDataProvider from "../../WaliDataProvider";
 import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
-import { PAGE_NAME } from "@/security-config";
+import { PAGE_NAME } from "@/variables/page-name";
 import prisma from "@/lib/prisma";
 
 async function getData(id, mode) {
@@ -70,5 +70,5 @@ async function PageDetailSantri(props) {
 
 export default withAuthAndGroupCheck(
     PageDetailSantri,
-    PAGE_NAME.MANAGE_SANTRI_PAGE
+    PAGE_NAME.KESANTRIAN_KELOLA_SANTRI
 );

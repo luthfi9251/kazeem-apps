@@ -1,5 +1,7 @@
 import DetailPage from "./DetailPage";
 import prisma from "@/lib/prisma";
+import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
+import { PAGE_NAME } from "@/variables/page-name";
 
 async function getData(id) {
     let data = await prisma.Kesehatan.findUnique({
@@ -32,7 +34,7 @@ async function getData(id) {
     };
 }
 
-export default async function Page(props) {
+async function Page(props) {
     let id = props.params.id;
     let data = await getData(id);
 
@@ -43,3 +45,5 @@ export default async function Page(props) {
         />
     );
 }
+
+export default withAuthAndGroupCheck(Page, PAGE_NAME.KESANTRIAN_KESEHATAN);

@@ -1,7 +1,7 @@
 import DetailPage from "../DetailPage";
 import prisma from "@/lib/prisma";
 import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
-import { PAGE_NAME } from "@/security-config";
+import { PAGE_NAME } from "@/variables/page-name";
 
 async function getData(idKelas) {
     let dataTahunAjaran = prisma.TahunAjar.findMany({
@@ -40,4 +40,4 @@ async function Page(props) {
     );
 }
 
-export default withAuthAndGroupCheck(Page, PAGE_NAME.MANAGE_MADRASAH_PAGE);
+export default withAuthAndGroupCheck(Page, PAGE_NAME.KEMADRASAHAN_KELOLA_KELAS);

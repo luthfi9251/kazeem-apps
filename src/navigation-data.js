@@ -1,4 +1,4 @@
-import { PAGE_NAME } from "./security-config";
+import { PAGE_NAME } from "./variables/page-name";
 import {
     School,
     User,
@@ -9,6 +9,9 @@ import {
 } from "lucide-react";
 
 export const HREF_URL = {
+    USER_HOME: "/dashboard/users",
+    USER_GROUP_HOME: "/dashboard/users/groups",
+    USER_GROUP_EDIT: (id) => `/dashboard/users/groups/edit/${id}`,
     SANTRI_HOME: `/dashboard/santri`,
     SANTRI_EDIT: (id) => `/dashboard/santri/edit/${id}`,
     SANTRI_DETAIL: (id, back = null) =>
@@ -37,18 +40,20 @@ export const URL_PATH = [
     {
         name: "Users",
         icon: <User className="h-5 w-5" />,
-        page_name: PAGE_NAME.MANAGE_USER_PAGE,
+        page_name: "",
         href: "",
         hasChild: true,
         children: [
             {
                 name: "User",
+                page_name: PAGE_NAME.USER_HOME,
                 href: "/dashboard/users",
                 suffix: ["/action", "/create", "/detail"],
                 icon: <UserRoundCog className="h-5 w-5" />,
             },
             {
                 name: "Group",
+                page_name: PAGE_NAME.USER_GROUP_HOME,
                 href: "/dashboard/users/groups",
                 suffix: ["/edit", "/create", "/detail"],
                 icon: <Users className="h-5 w-5" />,
@@ -58,24 +63,27 @@ export const URL_PATH = [
     {
         name: "Santri",
         icon: <UsersRound className="h-5 w-5" />,
-        page_name: PAGE_NAME.MANAGE_SANTRI_PAGE,
+        page_name: "",
         href: "",
         hasChild: true,
         children: [
             {
                 name: "Kelola Santri",
+                page_name: PAGE_NAME.KESANTRIAN_KELOLA_SANTRI,
                 href: HREF_URL.SANTRI_HOME,
                 suffix: ["/edit", "/create", "/detail"],
                 icon: "",
             },
             {
                 name: "Wali Santri",
+                page_name: PAGE_NAME.KESANTRIAN_WALI_SANTRI,
                 href: "/dashboard/santri/wali",
                 suffix: ["/edit", "/create", "/detail"],
                 icon: "",
             },
             {
                 name: "Kesehatan",
+                page_name: PAGE_NAME.KESANTRIAN_KESEHATAN,
                 href: HREF_URL.KESEHATAN_HOME,
                 suffix: ["/edit", "/create", "/detail"],
                 icon: "",
@@ -83,11 +91,13 @@ export const URL_PATH = [
             {
                 name: "Data Pelanggaran",
                 href: HREF_URL.PELANGGARAN_HOME,
+                page_name: PAGE_NAME.KESANTRIAN_PELANGGARAN,
                 suffix: ["/edit", "/create", "/detail", "/summary"],
                 icon: "",
             },
             {
                 name: "Kategori Pelanggaran",
+                page_name: PAGE_NAME.KESANTRIAN_KATEGORI_PELANGGARAN,
                 href: HREF_URL.KATEGORI_PELANGGARAN_HOME,
                 suffix: ["/edit", "/create", "/detail"],
                 icon: "",
@@ -97,18 +107,20 @@ export const URL_PATH = [
     {
         name: "Kemadrasahan",
         icon: <School className="h-5 w-5" />,
-        page_name: PAGE_NAME.MANAGE_MADRASAH_PAGE,
+        page_name: "",
         href: "",
         hasChild: true,
         children: [
             {
                 name: "Kelola Kelas",
+                page_name: PAGE_NAME.KEMADRASAHAN_KELOLA_KELAS,
                 href: "/dashboard/kemadrasahan/kelas",
                 suffix: ["/edit", "/create", "/detail"],
                 icon: "",
             },
             {
                 name: "Tahun Ajar",
+                page_name: PAGE_NAME.KEMADRASAHAN_TAHUN_AJAR,
                 href: HREF_URL.KEMADRASAHAN_TA_HOME,
                 suffix: ["/edit", "/create"],
                 icon: "",

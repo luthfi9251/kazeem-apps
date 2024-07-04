@@ -36,6 +36,33 @@ model User {
   PelanggaranUpdated Pelanggaran[]         @relation("pelanggaran_updated_by")
   KesehatanCreated   Kesehatan[]           @relation("kesehatan_created_by")
   KesehatanUpdated   Kesehatan[]           @relation("kesehatan_updated_by")
+  PageAccessCreated  PageAccess[]          @relation("pageaccess_updated_by")
+  PageAccessUpdated  PageAccess[]          @relation("pageaccess_created_by")
+}
+
+model Page {
+  id         Int          @id @default(autoincrement())
+  nama       String
+  kategori   String
+  PageAccess PageAccess[]
+  created_at DateTime     @default(now())
+  updated_at DateTime     @updatedAt
+
+  @@unique([nama, kategori], name: "pageIdentifier")
+}
+
+model PageAccess {
+  id                Int      @id @default(autoincrement())
+  Page              Page     @relation(fields: [page_id], references: [id], onDelete: Cascade)
+  Group             Group    @relation(fields: [group_id], references: [id], onDelete: Cascade)
+  page_id           Int
+  group_id          Int
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+  last_update_by_id String?
+  last_update_by    User?    @relation("pageaccess_updated_by", fields: [last_update_by_id], references: [id])
+  created_by_id     String?
+  created_by        User?    @relation("pageaccess_created_by", fields: [created_by_id], references: [id])
 }
 
 model Group {
@@ -44,16 +71,17 @@ model Group {
   deskripsi  String
   UserGroup  UserGroup[]
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  created_at DateTime     @default(now())
+  updated_at DateTime     @updatedAt
+  PageAccess PageAccess[]
 }
 
 model UserGroup {
   id       Int    @id @default(autoincrement())
   user_id  String
   group_id Int
-  group    Group  @relation(fields: [group_id], references: [id])
-  user     User   @relation(fields: [user_id], references: [id])
+  group    Group  @relation(fields: [group_id], references: [id], onDelete: Cascade)
+  user     User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt

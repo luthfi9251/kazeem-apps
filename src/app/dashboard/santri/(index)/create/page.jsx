@@ -1,7 +1,7 @@
 import PageCreateSantri from "./CreatePage";
 import WaliDataProvider from "../WaliDataProvider";
 import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
-import { PAGE_NAME } from "@/security-config";
+import { PAGE_NAME } from "@/variables/page-name";
 async function Page() {
     return (
         <WaliDataProvider data={[]}>
@@ -10,4 +10,4 @@ async function Page() {
     );
 }
 
-export default withAuthAndGroupCheck(Page, PAGE_NAME.MANAGE_SANTRI_PAGE);
+export default withAuthAndGroupCheck(Page, PAGE_NAME.KESANTRIAN_KELOLA_SANTRI);

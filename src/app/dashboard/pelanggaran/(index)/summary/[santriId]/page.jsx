@@ -1,7 +1,7 @@
 import DetailPage from "../../summary/DetailPage";
 import prisma from "@/lib/prisma";
 import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
-import { PAGE_NAME } from "@/security-config";
+import { PAGE_NAME } from "@/variables/page-name";
 
 async function getData(idSantri) {
     let kelasAktifSantri = await prisma.KelasSantri.findFirst({
@@ -159,4 +159,4 @@ async function Page(props) {
     );
 }
 
-export default withAuthAndGroupCheck(Page, PAGE_NAME.MANAGE_PELANGGARAN_PAGE);
+export default withAuthAndGroupCheck(Page, PAGE_NAME.KESANTRIAN_PELANGGARAN);

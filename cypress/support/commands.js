@@ -54,6 +54,7 @@ Cypress.Commands.add("addSantri", (dataSantri) => {
         //isi data santri
         cy.get('input[name="nama_lengkap"]').type(item.nama_lengkap);
         cy.get('input[name="email"]').type(item.email);
+        cy.get('input[name="nis"]').type(new Date().toISOString());
         cy.get('textarea[name="alamat"]').type(item.alamat);
         cy.get('input[name="hp"]').type(item.hp);
         cy.get('input[name="tempat_lahir"]').type(item.tempat_lahir);

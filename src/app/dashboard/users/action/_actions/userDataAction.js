@@ -22,23 +22,44 @@ import { redirect } from "next/navigation";
     [ { id: 2, group_id: 1 } ]
 */
 
-export async function deleteUser(id) {
-    let deleteUserGroup = prisma.userGroup.deleteMany({
+export const checkIsSuperAdminUser = async (idUser) => {
+    let user = await prisma.User.findUnique({
         where: {
-            user_id: id,
+            email: process.env.SUPER_ADMIN_EMAIL,
+        },
+        select: {
+            id: true,
         },
     });
+    return user.id === idUser;
+};
 
-    let deleteUser = prisma.user.delete({
-        where: {
-            id: id,
-        },
-    });
+export const deleteUser = async (id) => {
+    try {
+        if (await checkIsSuperAdminUser(id)) {
+            throw new Error("Tidak dapat hapus user Super Admin!");
+        }
 
-    revalidatePath("/dashboard/users");
+        let deleteUserGroup = prisma.userGroup.deleteMany({
+            where: {
+                user_id: id,
+            },
+        });
 
-    return Promise.all([deleteUserGroup, deleteUser]);
-}
+        let deleteUser = prisma.user.delete({
+            where: {
+                id: id,
+            },
+        });
+        await Promise.all([deleteUserGroup, deleteUser]);
+        revalidatePath("/dashboard/users");
+        redirect("/dashboard/users");
+
+        return "success";
+    } catch (err) {
+        throw err;
+    }
+};
 
 export async function createUserData(data) {
     let password = hashPassword(data.user.password);
@@ -64,85 +85,93 @@ export async function createUserData(data) {
 }
 
 export async function saveUserData(data) {
-    // step 1
-    const userGroups = await prisma.UserGroup.findMany({
-        where: {
-            user_id: data.user.id,
-        },
-        select: {
-            id: true,
-            group_id: true,
-        },
-    });
-
-    //step 2 3
-    let deletedId = userGroups.filter(
-        (item1) =>
-            !data.groups.find((item2) => {
-                return item2.group.id === item1.group_id;
-            })
-    );
-
-    //diambil id userGroup nya bukan id Group nya
-    deletedId = deletedId.flatMap((item) => item.id);
-
-    //step 4 5
-    let addId = data.groups.filter(
-        (item2) => !userGroups.find((item1) => item1.group_id == item2.group.id)
-    );
-
-    addId = addId.flatMap((item) => item.group.id);
-
-    //step 6
-    let deleteGroupProm = Promise.resolve(null);
-    let addGroupProm = Promise.resolve(null);
-    let updateUserProm = Promise.resolve(null);
-    if (deletedId.length > 0) {
-        deleteGroupProm = prisma.UserGroup.deleteMany({
+    try {
+        if (await checkIsSuperAdminUser(data.user.id)) {
+            throw new Error("Tidak dapat update user Super Admin!");
+        }
+        // step 1
+        const userGroups = await prisma.UserGroup.findMany({
             where: {
-                id: {
-                    in: deletedId,
+                user_id: data.user.id,
+            },
+            select: {
+                id: true,
+                group_id: true,
+            },
+        });
+
+        //step 2 3
+        let deletedId = userGroups.filter(
+            (item1) =>
+                !data.groups.find((item2) => {
+                    return item2.group.id === item1.group_id;
+                })
+        );
+
+        //diambil id userGroup nya bukan id Group nya
+        deletedId = deletedId.flatMap((item) => item.id);
+
+        //step 4 5
+        let addId = data.groups.filter(
+            (item2) =>
+                !userGroups.find((item1) => item1.group_id == item2.group.id)
+        );
+
+        addId = addId.flatMap((item) => item.group.id);
+
+        //step 6
+        let deleteGroupProm = Promise.resolve(null);
+        let addGroupProm = Promise.resolve(null);
+        let updateUserProm = Promise.resolve(null);
+        if (deletedId.length > 0) {
+            deleteGroupProm = prisma.UserGroup.deleteMany({
+                where: {
+                    id: {
+                        in: deletedId,
+                    },
                 },
-            },
-        });
-    }
+            });
+        }
 
-    if (addId.length > 0) {
-        addGroupProm = prisma.UserGroup.createMany({
-            data: addId.map((item) => {
-                return { user_id: data.user.id, group_id: item };
-            }),
-        });
-    }
+        if (addId.length > 0) {
+            addGroupProm = prisma.UserGroup.createMany({
+                data: addId.map((item) => {
+                    return { user_id: data.user.id, group_id: item };
+                }),
+            });
+        }
 
-    if (data.user.password === "") {
-        updateUserProm = prisma.user.update({
-            where: {
-                id: data.user.id,
-            },
-            data: {
-                nama_lengkap: data.user.nama_lengkap,
-                email: data.user.email,
-                aktif: data.user.aktif,
-                username: data.user.username,
-            },
-        });
-    } else {
-        let password = hashPassword(data.user.password);
-        updateUserProm = prisma.user.update({
-            where: {
-                id: data.user.id,
-            },
-            data: {
-                nama_lengkap: data.user.nama_lengkap,
-                email: data.user.email,
-                password,
-                aktif: data.user.aktif,
-                username: data.user.username,
-            },
-        });
-    }
+        if (data.user.password === "") {
+            updateUserProm = prisma.user.update({
+                where: {
+                    id: data.user.id,
+                },
+                data: {
+                    nama_lengkap: data.user.nama_lengkap,
+                    email: data.user.email,
+                    aktif: data.user.aktif,
+                    username: data.user.username,
+                },
+            });
+        } else {
+            let password = hashPassword(data.user.password);
+            updateUserProm = prisma.user.update({
+                where: {
+                    id: data.user.id,
+                },
+                data: {
+                    nama_lengkap: data.user.nama_lengkap,
+                    email: data.user.email,
+                    password,
+                    aktif: data.user.aktif,
+                    username: data.user.username,
+                },
+            });
+        }
 
-    revalidatePath("/dashboard/users/" + data.user.id);
-    return Promise.all([deleteGroupProm, addGroupProm, updateUserProm]);
+        revalidatePath("/dashboard/users/" + data.user.id);
+        return Promise.all([deleteGroupProm, addGroupProm, updateUserProm]);
+    } catch (err) {
+        throw err;
+    }
 }

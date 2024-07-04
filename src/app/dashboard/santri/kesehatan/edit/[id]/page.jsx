@@ -1,5 +1,7 @@
 import EditPage from "./EditPage";
 import prisma from "@/lib/prisma";
+import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
+import { PAGE_NAME } from "@/variables/page-name";
 
 async function getData(id) {
     let data = await prisma.Kesehatan.findUnique({
@@ -59,7 +61,7 @@ async function getAllSantri() {
     });
 }
 
-export default async function Page(props) {
+async function Page(props) {
     let id = props.params.id;
     let data = getData(id);
     let allSantri = getAllSantri();
@@ -67,3 +69,5 @@ export default async function Page(props) {
 
     return <EditPage namaSantri={result[0]} data={result[1]} />;
 }
+
+export default withAuthAndGroupCheck(Page, PAGE_NAME.KESANTRIAN_KESEHATAN);
