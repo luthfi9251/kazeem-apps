@@ -50,6 +50,7 @@ describe("Wali Santri Page CRUD", () => {
         cy.get('input[name="nama_lengkap"]').type(dataSantri.nama_lengkap);
         cy.get('input[name="email"]').type(dataSantri.email);
         cy.get('textarea[name="alamat"]').type(dataSantri.alamat);
+        cy.get('input[name="nis"]').type(new Date().toISOString());
         cy.get('input[name="hp"]').type(dataSantri.no_hp);
         cy.get('input[name="tempat_lahir"]').type(dataSantri.tempat_lhr);
         cy.get('input[name="tgl_lhr"]').type(dataSantri.tgl_lhr);

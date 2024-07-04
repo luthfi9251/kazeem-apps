@@ -11,6 +11,7 @@ describe("Santri Page CRUD", () => {
 
     let dataSantri = {
         nama_lengkap: "TEST SANTRI1",
+        nis: "A12.2021.06685",
         email: "testsantri1@gmail.com",
         alamat: "INI ALAMAT SANTRI 1",
         no_hp: "0888888445421554",
@@ -48,6 +49,7 @@ describe("Santri Page CRUD", () => {
         //isi data santri
         cy.get('input[name="nama_lengkap"]').type(dataSantri.nama_lengkap);
         cy.get('input[name="email"]').type(dataSantri.email);
+        cy.get('input[name="nis"]').type(dataSantri.nis);
         cy.get('textarea[name="alamat"]').type(dataSantri.alamat);
         cy.get('input[name="hp"]').type(dataSantri.no_hp);
         cy.get('input[name="tempat_lahir"]').type(dataSantri.tempat_lhr);
