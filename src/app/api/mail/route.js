@@ -7,7 +7,7 @@ export async function POST(req) {
     try {
         await sendMail(
             "Contact : " + body.get("name"),
-            "luthfi.irfan11@gmail.com",
+            "officialkazeem.id@gmail.com",
             `Got email from ${body.get("email")} as ${body.get(
                 "name"
             )} \nMessage: ${body.get("message")}`
