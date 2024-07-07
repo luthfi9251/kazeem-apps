@@ -32,7 +32,7 @@ async function Users(props) {
         <div className="md:p-5 p-2">
             <Card>
                 <CardHeader>
-                    <CardTitle>Card Title</CardTitle>
+                    <CardTitle>Kelola User</CardTitle>
                     <CardDescription>Card Description</CardDescription>
                 </CardHeader>
                 <CardContent>

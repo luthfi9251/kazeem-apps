@@ -17,7 +17,7 @@ import { addKelas } from "../../_actions/kelas";
 import { HREF_URL } from "@/navigation-data";
 
 export default function CreatePage() {
-    let [kelas, setKelas] = useContext(KelasContext);
+    let [kelas, setKelas, allNamaKelas] = useContext(KelasContext);
     let [alertZeroKelas, setAlertZeroKelas] = useState(false);
     let [alertUnsavedKelas, setAlertUnsavedKelas] = useState(false);
     let [isTaAktif, setIsTaAktif] = useState(true);

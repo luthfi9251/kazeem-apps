@@ -1,6 +1,6 @@
 "use client";
 
-import { Trash2 } from "lucide-react";
+import { Trash2, Info } from "lucide-react";
 import {
     Table,
     TableBody,
@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/card";
 
 export default function KelasTable() {
-    let [kelas, setKelas] = useContext(KelasContext);
+    let [kelas, setKelas, allNamaKelas] = useContext(KelasContext);
 
     let handleDeleteKelas = (index) => {
         let copyKelas = [...kelas];
@@ -58,25 +58,37 @@ export default function KelasTable() {
                     <TableBody>
                         {kelas.map((item, i) => {
                             return (
-                                <TableRow key={i}>
-                                    <TableCell className="font-medium">
-                                        {`${item.tingkatan} - ${item.paralel}`}
-                                    </TableCell>
-                                    <TableCell className="text-center">
-                                        {item.tingkatan}
-                                    </TableCell>
-                                    <TableCell className="text-center">
-                                        {item.paralel}
-                                    </TableCell>
-                                    <TableCell className="text-center">
-                                        <Button
-                                            onClick={() => handleDeleteKelas(i)}
-                                            className=" bg-red-600 hover:bg-red-300"
-                                        >
-                                            <Trash2 className="h-4 w-4" />
-                                        </Button>
-                                    </TableCell>
-                                </TableRow>
+                                <>
+                                    <TableRow key={i} className="relative">
+                                        <TableCell className="font-medium">
+                                            {`${item.tingkatan} - ${item.paralel}`}
+                                            {allNamaKelas.includes(
+                                                `${item.tingkatan}-${item.paralel}`
+                                            ) && (
+                                                <p className="bottom-0 left-3 flex items-center bg-yellow-300 p-1 text-xs gap-2 rounded-sm cursor-default">
+                                                    <Info className="h-4 w-4" />
+                                                    Kelas sudah ada
+                                                </p>
+                                            )}
+                                        </TableCell>
+                                        <TableCell className="text-center">
+                                            {item.tingkatan}
+                                        </TableCell>
+                                        <TableCell className="text-center">
+                                            {item.paralel}
+                                        </TableCell>
+                                        <TableCell className="text-center">
+                                            <Button
+                                                onClick={() =>
+                                                    handleDeleteKelas(i)
+                                                }
+                                                className=" bg-red-600 hover:bg-red-300"
+                                            >
+                                                <Trash2 className="h-4 w-4" />
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                </>
                             );
                         })}
                     </TableBody>

@@ -12,7 +12,7 @@ export async function POST(req) {
                 "name"
             )} \nMessage: ${body.get("message")}`
         );
-        return Response.json({ status: "success", msg: "berhasil" });
+        return Response.json({ status: "success", msg: "Pesan terkirim" });
     } catch (err) {
         return Response.json({ status: "fail", msg: "err" });
     }

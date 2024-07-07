@@ -23,7 +23,7 @@ async function PageGroups() {
         <div className="md:p-5 p-2">
             <Card>
                 <CardHeader>
-                    <CardTitle>Card Title</CardTitle>
+                    <CardTitle>Kelola Group</CardTitle>
                     <CardDescription>Card Description</CardDescription>
                 </CardHeader>
                 <CardContent>
