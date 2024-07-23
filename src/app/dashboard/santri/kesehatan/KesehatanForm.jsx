@@ -44,7 +44,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CheckIcon, ArrowUpDown } from "lucide-react";
-
 let FORM_CREATE = {
     title: "Tambah Data Kesehatan",
     santri: false,
@@ -96,6 +95,10 @@ export default function KesehatanForm({
         }
         return val;
     }, [mode]);
+    const [enabledTglKeluar, setEnabledTglKeluar] = useState(
+        formState.tgl_keluar
+    );
+
     return (
         <div className="col-span-2">
             <Card className="max-h-min">
@@ -289,25 +292,46 @@ export default function KesehatanForm({
                                     </FormItem>
                                 )}
                             />
-                            <FormField
-                                control={form.control}
-                                name="tgl_keluar"
-                                disabled={formState.tgl_keluar}
-                                render={({ field }) => (
-                                    <FormItem className="flex flex-col">
-                                        <FormLabel>Tanggal Keluar</FormLabel>
-                                        <FormControl>
-                                            <input
-                                                className=" border-slate-100 border-2 text-sm w-1/3 p-2 rounded-sm outline-slate-200"
-                                                type="date"
-                                                name="tgl_keluar"
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+                            <div className="flex flex-col gap-2">
+                                <FormField
+                                    control={form.control}
+                                    name="tgl_keluar"
+                                    disabled={!enabledTglKeluar}
+                                    render={({ field }) => (
+                                        <FormItem className="flex flex-col">
+                                            <FormLabel>
+                                                Tanggal Keluar
+                                            </FormLabel>
+                                            <FormControl>
+                                                <input
+                                                    className=" border-slate-100 border-2 text-sm w-1/3 p-2 rounded-sm outline-slate-200"
+                                                    type="date"
+                                                    name="tgl_keluar"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <div className="items-top flex space-x-3">
+                                    <Checkbox
+                                        id="terms1"
+                                        checked={enabledTglKeluar}
+                                        onCheckedChange={(check) =>
+                                            setEnabledTglKeluar(check)
+                                        }
+                                    />
+                                    <div className="grid gap-1.5 leading-none">
+                                        <label
+                                            htmlFor="terms1"
+                                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                        >
+                                            Tambahkan tanggal keluar
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                             <FormField
                                 control={form.control}
                                 name="status"

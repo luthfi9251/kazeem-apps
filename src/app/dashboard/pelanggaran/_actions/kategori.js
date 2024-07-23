@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { serverResponse } from "@/lib/utils";
 
 export async function addKategoriPelanggaran({
     nama_pelanggaran,
@@ -10,41 +11,43 @@ export async function addKategoriPelanggaran({
     jenis,
     poin,
 }) {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let session = await auth();
-            let userActionId = {
-                connect: {
-                    id: session.user.id,
-                },
-            };
-            let create = await prisma.KategoriPelanggaran.create({
-                data: {
-                    nama_pelanggaran,
-                    kategori,
-                    jenis,
-                    poin,
-                    last_update_by: userActionId,
-                    created_by: userActionId,
-                },
-            });
-            revalidatePath("/dashboard/pelanggaran/kategori");
-            resolve(create);
-        } catch (err) {
-            if (err instanceof PrismaClientKnownRequestError) {
-                if (
-                    err.meta.target ===
-                    "KategoriPelanggaran_nama_pelanggaran_key"
-                ) {
-                    reject(new Error("Nama Pelanggaran harus unik!"));
-                }
+    try {
+        let session = await auth();
+        let userActionId = {
+            connect: {
+                id: session.user.id,
+            },
+        };
+        let create = await prisma.KategoriPelanggaran.create({
+            data: {
+                nama_pelanggaran,
+                kategori,
+                jenis,
+                poin,
+                last_update_by: userActionId,
+                created_by: userActionId,
+            },
+        });
+        revalidatePath("/dashboard/pelanggaran/kategori");
+        resolve(create);
+    } catch (err) {
+        if (err instanceof PrismaClientKnownRequestError) {
+            if (
+                err.meta.target === "KategoriPelanggaran_nama_pelanggaran_key"
+            ) {
+                return serverResponse(
+                    null,
+                    true,
+                    "Gagal menambahkan kategori, Nama Pelanggaran harus unik!"
+                );
             }
-            reject({
-                error: "Gagal Menambahkan Kategori Pelanggaran",
-                errMessage: err.message,
-            });
         }
-    });
+        return serverResponse(
+            null,
+            false,
+            "Gagal Menambahkan Kategori Pelanggaran"
+        );
+    }
 }
 
 export async function editKategoriPelanggaran(id, data) {

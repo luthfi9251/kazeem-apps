@@ -23,6 +23,7 @@ export default function CardDetailSiswa({ dataKelas, dataTA }) {
                     data={[]}
                     idKelas={dataKelas.id}
                     dataTA={dataTA}
+                    dataKelas={dataKelas}
                 />
             </CardContent>
         </Card>

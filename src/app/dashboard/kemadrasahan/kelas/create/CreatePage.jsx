@@ -27,11 +27,12 @@ export default function CreatePage() {
         resolver: yupResolver(kelasSchema),
         defaultValues: {
             tingkatan_kelas: "",
+            separator_kelas: "STRIP",
             paralel_kelas: "",
         },
     });
 
-    let generateKelas = (tingkatan, paralel, ta) => {
+    let generateKelas = (tingkatan, paralel, separator) => {
         let tingkatanSplitted = tingkatan.split(",");
         let paralelSplitted = paralel.split(",");
 
@@ -41,7 +42,7 @@ export default function CreatePage() {
                 let kelas = {
                     tingkatan: item,
                     paralel: item2,
-                    ta,
+                    separator,
                 };
 
                 result.push(kelas);
@@ -51,11 +52,17 @@ export default function CreatePage() {
     };
 
     const onSubmitHandler = (data) => {
-        let kelas = generateKelas(data.tingkatan_kelas, data.paralel_kelas, {
-            mulai: data.tahun_ajaran_mulai,
-            selesai: data.tahun_ajaran_selesai,
-        });
-        // console.log({ kelas, data });
+        let separator =
+            data.separator_kelas === "STRIP"
+                ? "-"
+                : data.separator_kelas === "SPASI"
+                ? " "
+                : "";
+        let kelas = generateKelas(
+            data.tingkatan_kelas,
+            data.paralel_kelas,
+            separator
+        );
         setKelas(kelas);
         setIsTaAktif(data.aktif);
     };

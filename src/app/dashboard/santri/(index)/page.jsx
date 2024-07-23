@@ -26,6 +26,7 @@ async function getData() {
             hp: true,
             alamat: true,
             foto: true,
+            tgl_lhr: true,
             WaliSantri: {
                 select: {
                     wali: {
@@ -46,6 +47,7 @@ async function getData() {
             foto: item.foto,
             hp: item.hp,
             alamat: item.alamat,
+            tgl_lhr: item.tgl_lhr,
             nama_wali: item.WaliSantri[0].wali.nama_wali,
         };
     });

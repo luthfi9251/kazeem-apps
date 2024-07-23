@@ -16,6 +16,8 @@ import { HREF_URL } from "@/navigation-data";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { deleteDataKesehatan } from "../_actions/kesehatan";
+import "dayjs/locale/id";
+import dayjs from "dayjs";
 
 export const columns = [
     {
@@ -40,6 +42,18 @@ export const columns = [
     {
         accessorKey: "tgl_masuk",
         header: "Tanggal Masuk",
+        cell: ({ row }) =>
+            dayjs(row.original.tgl_masuk).locale("id").format("DD MMMM YYYY"),
+    },
+    {
+        accessorKey: "tgl_keluar",
+        header: "Tanggal Keluar",
+        cell: ({ row }) =>
+            row.original.tgl_keluar
+                ? dayjs(row.original.tgl_keluar)
+                      .locale("id")
+                      .format("DD MMMM YYYY")
+                : "-",
     },
     {
         accessorKey: "kelas",

@@ -28,8 +28,9 @@ export async function addDataKesehatan(data) {
                     nama_penyakit,
                     penanganan,
                     kategori,
-                    tgl_masuk,
-                    tgl_keluar,
+                    tgl_masuk: new Date(tgl_masuk).toISOString(),
+                    tgl_keluar:
+                        tgl_keluar && new Date(tgl_keluar).toISOString(),
                     status,
                     KelasSantri: {
                         connect: {
@@ -74,8 +75,8 @@ export async function editDataKesehatan(id, data) {
                     nama_penyakit,
                     penanganan,
                     kategori,
-                    tgl_masuk,
-                    tgl_keluar,
+                    tgl_masuk: new Date(tgl_masuk).toISOString(),
+                    tgl_keluar: new Date(tgl_keluar).toISOString(),
                     status,
                     last_update_by: connectUserId,
                 },
@@ -148,6 +149,7 @@ export async function getDataKesehatanByKelasAndTA({ nama_kelas, kode_ta }) {
             penanganan: true,
             kategori: true,
             tgl_masuk: true,
+            tgl_keluar: true,
             status: true,
         },
     });
@@ -156,6 +158,9 @@ export async function getDataKesehatanByKelasAndTA({ nama_kelas, kode_ta }) {
         return {
             ...item,
             tgl_masuk: new Date(item.tgl_masuk).toISOString().split("T")[0],
+            tgl_keluar: item.tgl_keluar
+                ? new Date(item.tgl_keluar).toISOString().split("T")[0]
+                : null,
             nis: item.KelasSantri.Santri.nis,
             nama_lengkap: item.KelasSantri.Santri.nama_lengkap,
             kelas: item.KelasSantri.Kelas.nama_kelas,

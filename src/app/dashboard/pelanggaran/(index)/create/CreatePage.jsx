@@ -10,9 +10,12 @@ import { addPelanggaran } from "../../_actions/pelanggaran";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { HREF_URL } from "@/navigation-data";
+import AlertAddAnotherData from "@/components/AlertAddAnotherData";
+import { useState } from "react";
 
 export default function CreatePage({ data }) {
     let router = useRouter();
+    const [openDialog, setOpenDialog] = useState(false);
     const formPelanggaran = useForm({
         resolver: yupResolver(pelanggaranSchema),
         defaultValues: {
@@ -36,7 +39,7 @@ export default function CreatePage({ data }) {
             keterangan: data.keterangan,
             konsekuensi: data.konsekuensi,
         };
-        console.log(data);
+
         toast.promise(
             () =>
                 addPelanggaran({
@@ -49,7 +52,11 @@ export default function CreatePage({ data }) {
                 pending: "Menyimpan data",
                 success: {
                     render({ data }) {
-                        router.push(HREF_URL.PELANGGARAN_HOME);
+                        if (data.isError) {
+                            throw data.error;
+                        }
+                        setOpenDialog(true);
+                        // router.push(HREF_URL.PELANGGARAN_HOME);
                         return "Data berhasil disimpan";
                     },
                 },
@@ -70,23 +77,39 @@ export default function CreatePage({ data }) {
         formPelanggaran.handleSubmit(handleSubmit)();
     };
 
+    const afterSuccessAction = {
+        onYes: () => {
+            formPelanggaran.reset();
+        },
+        onNo: () => {
+            router.push(HREF_URL.PELANGGARAN_HOME);
+        },
+    };
+
     return (
-        <div className="md:p-5 p-2 grid md:grid-cols-2 grid-cols-1 gap-5">
-            <div className="flex gap-2 col-span-1 md:col-span-2">
-                <Link href={HREF_URL.PELANGGARAN_HOME}>
-                    <Button variant="outline" className="mr-3">
-                        <ArrowLeft />
+        <>
+            <AlertAddAnotherData
+                open={openDialog}
+                openChange={setOpenDialog}
+                successAction={afterSuccessAction}
+            />
+            <div className="md:p-5 p-2 grid md:grid-cols-2 grid-cols-1 gap-5">
+                <div className="flex gap-2 col-span-1 md:col-span-2">
+                    <Link href={HREF_URL.PELANGGARAN_HOME}>
+                        <Button variant="outline" className="mr-3">
+                            <ArrowLeft />
+                        </Button>
+                    </Link>
+                    <Button
+                        className="md:w-36 bg-kazeem-primary hover:bg-kazeem-darker"
+                        data-e2e="btn-simpan"
+                        onClick={handleSimpan}
+                    >
+                        Simpan
                     </Button>
-                </Link>
-                <Button
-                    className="md:w-36 bg-kazeem-primary hover:bg-kazeem-darker"
-                    data-e2e="btn-simpan"
-                    onClick={handleSimpan}
-                >
-                    Simpan
-                </Button>
+                </div>
+                <PelanggaranForm form={formPelanggaran} data={data} />
             </div>
-            <PelanggaranForm form={formPelanggaran} data={data} />
-        </div>
+        </>
     );
 }

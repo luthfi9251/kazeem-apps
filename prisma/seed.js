@@ -101,6 +101,64 @@ const seedPageName = async () => {
     return returned;
 };
 
+const seedSantri = async (idAdmin) => {
+    let userActionId = {
+        connect: {
+            id: idAdmin,
+        },
+    };
+
+    const createSantri = SANTRI.map((item, i) => {
+        let waliLoc = WALI[i];
+        return prisma.Santri.create({
+            data: {
+                nama_lengkap: item.nama_lengkap,
+                nis: item.nis,
+                jenis_kel: item.jenis_kel,
+                alamat: item.alamat,
+                email: item.email,
+                hp: item.hp,
+                tempat_lahir: item.tempat_lahir,
+                tgl_lhr: new Date(item.tgl_lhr).toISOString(),
+                foto: null,
+                created_by: userActionId,
+                last_update_by: userActionId,
+                WaliSantri: {
+                    create: {
+                        peran: waliLoc.list,
+                        created_by: userActionId,
+                        last_update_by: userActionId,
+                        wali: {
+                            connectOrCreate: {
+                                where: {
+                                    waliIdentifier: {
+                                        nama_wali: waliLoc.nama_wali,
+                                        tgl_lhr: new Date(
+                                            waliLoc.tgl_lhr
+                                        ).toISOString(),
+                                    },
+                                },
+                                create: {
+                                    nama_wali: waliLoc.nama_wali,
+                                    tgl_lhr: new Date(
+                                        waliLoc.tgl_lhr
+                                    ).toISOString(),
+                                    email: waliLoc.email,
+                                    hp: waliLoc.hp,
+                                    created_by: userActionId,
+                                    last_update_by: userActionId,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        });
+    });
+
+    return await Promise.all(createSantri);
+};
+
 async function main() {
     // const createGroups = await prisma.Group.createMany({
     //     data: GROUPS,
@@ -254,8 +312,9 @@ async function main() {
     let seedAdmin = await seedAdminSuperData();
     let seedPage = await seedPageName();
     let seedGroupAcces = await seedSuperAdminGroup(seedPage);
+    let seedSantriDummy = await seedSantri(seedAdmin.id);
 
-    console.log({ seedAdmin, seedPage, seedGroupAcces });
+    console.log({ seedAdmin, seedPage, seedGroupAcces, seedSantriDummy });
 }
 main()
     .then(async () => {

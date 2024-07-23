@@ -4,13 +4,13 @@ const nextConfig = {
         remotePatterns: [
             {
                 protocol: "http",
-                hostname: "kazeem.cloud",
+                hostname: process.env.NEXT_PUBLIC_APP_URL,
                 port: "",
                 pathname: "/**",
             },
             {
                 protocol: "https",
-                hostname: "kazeem.cloud",
+                hostname: process.env.NEXT_PUBLIC_APP_URL,
                 port: "",
                 pathname: "/**",
             },

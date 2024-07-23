@@ -9,14 +9,17 @@ import { ArrowLeft } from "lucide-react";
 import { addKategoriPelanggaran } from "../../_actions/kategori";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import AlertAddAnotherData from "@/components/AlertAddAnotherData";
 
 export default function CreatePage() {
     let router = useRouter();
+    const [openDialog, setOpenDialog] = useState(false);
     const formKategori = useForm({
         resolver: yupResolver(kategoriPelanggaranSchema),
         defaultValues: {
             nama_pelanggaran: "",
-            kategori: "",
+            kategori: "RINGAN",
             jenis: "",
             poin: 0,
         },
@@ -33,7 +36,10 @@ export default function CreatePage() {
                 pending: "Menyimpan data",
                 success: {
                     render({ data }) {
-                        router.push("/dashboard/pelanggaran/kategori");
+                        if (data.isError) {
+                            throw data.error;
+                        }
+                        setOpenDialog(true);
                         return "Data berhasil disimpan";
                     },
                 },
@@ -50,31 +56,49 @@ export default function CreatePage() {
         );
     };
 
+    const afterSuccessAction = {
+        onYes: () => {
+            formKategori.reset();
+            // window.location.reload();
+            // setWaliGroup([]);
+        },
+        onNo: () => {
+            router.push("/dashboard/pelanggaran/kategori");
+        },
+    };
+
     return (
-        <div className="md:p-5 p-2 grid md:grid-cols-2 grid-cols-1 gap-5">
-            <div className="flex gap-2 col-span-1 md:col-span-2">
-                <Link href="/dashboard/pelanggaran/kategori">
-                    <Button variant="outline" className="mr-3">
-                        <ArrowLeft />
-                    </Button>
-                </Link>
-                <Button
-                    onClick={onSimpanClick}
-                    className="md:w-36 bg-kazeem-primary hover:bg-kazeem-darker"
-                    data-e2e="btn-simpan"
-                >
-                    Simpan
-                </Button>
-                <Link href={`/dashboard/pelanggaran/kategori`}>
+        <>
+            <AlertAddAnotherData
+                open={openDialog}
+                openChange={setOpenDialog}
+                successAction={afterSuccessAction}
+            />
+            <div className="md:p-5 p-2 grid md:grid-cols-2 grid-cols-1 gap-5">
+                <div className="flex gap-2 col-span-1 md:col-span-2">
+                    <Link href="/dashboard/pelanggaran/kategori">
+                        <Button variant="outline" className="mr-3">
+                            <ArrowLeft />
+                        </Button>
+                    </Link>
                     <Button
-                        className="md:w-36 border-kazeem-primary hover:bg-slate-200"
-                        variant="outline"
+                        onClick={onSimpanClick}
+                        className="md:w-36 bg-kazeem-primary hover:bg-kazeem-darker"
+                        data-e2e="btn-simpan"
                     >
-                        Cancel
+                        Simpan
                     </Button>
-                </Link>
+                    <Link href={`/dashboard/pelanggaran/kategori`}>
+                        <Button
+                            className="md:w-36 border-kazeem-primary hover:bg-slate-200"
+                            variant="outline"
+                        >
+                            Cancel
+                        </Button>
+                    </Link>
+                </div>
+                <KategoriForm form={formKategori} />
             </div>
-            <KategoriForm form={formKategori} />
-        </div>
+        </>
     );
 }

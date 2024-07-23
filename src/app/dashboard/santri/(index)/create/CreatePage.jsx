@@ -12,10 +12,13 @@ import { addSantri } from "./_actions/addSantri";
 import { toast } from "react-toastify";
 import { WaliContext } from "../WaliDataProvider";
 import { useRouter } from "next/navigation";
+import { Checkbox } from "@/components/ui/checkbox";
+import AlertAddAnotherData from "@/components/AlertAddAnotherData";
 
 function PageCreateSantri() {
     const user = null;
     const [dataWali, setWaliGroup] = useContext(WaliContext);
+    const [openDialog, setOpenDialog] = useState(false);
     const router = useRouter();
 
     const formSantri = useForm({
@@ -31,6 +34,17 @@ function PageCreateSantri() {
             tgl_lhr: new Date(Date.now()),
         },
     });
+
+    const afterSuccessAction = {
+        onYes: () => {
+            // formSantri.reset();
+            window.location.reload();
+            // setWaliGroup([]);
+        },
+        onNo: () => {
+            router.push("/dashboard/santri");
+        },
+    };
 
     const sendToServer = async (dataSantri, dataWaliSantri) => {
         const santriFormData = new FormData();
@@ -49,14 +63,19 @@ function PageCreateSantri() {
                 pending: "Menyimpan data",
                 success: {
                     render({ data }) {
-                        router.push("/dashboard/santri");
+                        if (data.isError) {
+                            throw data.error;
+                        }
+                        setOpenDialog(true);
+                        // router.push("/dashboard/santri");
                         return "Data berhasil disimpan";
                     },
                 },
                 error: {
                     render({ data }) {
+                        console.log(data);
                         // When the promise reject, data will contains the error
-                        return `${data.message}`;
+                        return `${data}`;
                     },
                 },
             },
@@ -86,26 +105,33 @@ function PageCreateSantri() {
     };
 
     return (
-        <div className="md:p-5 p-2 grid md:grid-cols-2 grid-cols-1 gap-5">
-            <div className="flex gap-2 col-span-1 md:col-span-2">
-                <Link href="/dashboard/santri/">
-                    <Button variant="outline" className="mr-3">
-                        <ArrowLeft />
+        <>
+            <AlertAddAnotherData
+                open={openDialog}
+                openChange={setOpenDialog}
+                successAction={afterSuccessAction}
+            />
+            <div className="md:p-5 p-2 grid md:grid-cols-2 grid-cols-1 gap-5">
+                <div className="flex gap-2 col-span-1 md:col-span-2">
+                    <Link href="/dashboard/santri/">
+                        <Button variant="outline" className="mr-3">
+                            <ArrowLeft />
+                        </Button>
+                    </Link>
+                    <Button
+                        onClick={onSubmitBothForms}
+                        className="md:w-36 bg-kazeem-primary hover:bg-kazeem-darker"
+                    >
+                        Simpan
                     </Button>
-                </Link>
-                <Button
-                    onClick={onSubmitBothForms}
-                    className="md:w-36 bg-kazeem-primary hover:bg-kazeem-darker"
-                >
-                    Simpan
-                </Button>
-                <Button className="md:w-36 bg-red-500  hover:bg-red-800">
-                    Cancel
-                </Button>
+                    <Button className="md:w-36 bg-red-500  hover:bg-red-800">
+                        Cancel
+                    </Button>
+                </div>
+                <SantriForm form={formSantri} />
+                <WaliSantriForm allowDetail={false} />
             </div>
-            <SantriForm form={formSantri} />
-            <WaliSantriForm allowDetail={false} />
-        </div>
+        </>
     );
 }
 

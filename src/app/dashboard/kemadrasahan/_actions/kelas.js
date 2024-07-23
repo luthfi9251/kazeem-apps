@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import { addTahunAjar } from "./tahunajar";
 import { HREF_URL } from "@/navigation-data";
 import { revalidatePath } from "next/cache";
+import { generateNamaKelas } from "@/lib/utils";
 
 export async function addKelas(data) {
     return new Promise(async (resolve, reject) => {
@@ -63,7 +64,11 @@ export async function addKelas(data) {
             });
             let queryKelas = data.map((item) => {
                 return {
-                    nama_kelas: item.tingkatan + "-" + item.paralel,
+                    nama_kelas: generateNamaKelas(
+                        item.tingkatan,
+                        item.separator,
+                        item.paralel
+                    ),
                     tingkat_id: tingkatanData.find(
                         (ting) => ting.nama_tingkatan === item.tingkatan
                     ).id,

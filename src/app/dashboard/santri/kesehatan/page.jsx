@@ -48,7 +48,7 @@ async function Page() {
         <div className="md:p-5 p-2">
             <Card>
                 <CardHeader>
-                    <CardTitle>Data Kesahatan</CardTitle>
+                    <CardTitle>Data Kesehatan</CardTitle>
                     <CardDescription>Card Description</CardDescription>
                 </CardHeader>
                 <CardContent>

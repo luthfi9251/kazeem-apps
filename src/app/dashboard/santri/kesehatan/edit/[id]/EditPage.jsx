@@ -12,6 +12,7 @@ import {
     deleteDataKesehatan,
 } from "../../../_actions/kesehatan";
 import { useRouter } from "next/navigation";
+import { formatDate } from "@/lib/utils";
 
 export default function EditPage({ namaSantri, data }) {
     const router = useRouter();
@@ -24,7 +25,7 @@ export default function EditPage({ namaSantri, data }) {
             kategori: data.kategori,
             tgl_masuk: new Date(data.tgl_masuk).toISOString().split("T")[0],
             tgl_keluar: data.tgl_keluar
-                ? new Date(data.tgl_masuk).toISOString().split("T")[0]
+                ? new Date(data.tgl_keluar).toISOString().split("T")[0]
                 : "",
             status: data.status,
         },
@@ -35,9 +36,9 @@ export default function EditPage({ namaSantri, data }) {
             nama_penyakit: dataForm.nama_penyakit,
             penanganan: dataForm.penanganan,
             kategori: dataForm.kategori,
-            tgl_masuk: new Date(dataForm.tgl_masuk).toISOString(),
+            tgl_masuk: formatDate(dataForm.tgl_masuk),
             tgl_keluar: dataForm.tgl_keluar
-                ? new Date(dataForm.tgl_keluar).toISOString()
+                ? formatDate(dataForm.tgl_keluar)
                 : null,
             status: dataForm.status,
         };

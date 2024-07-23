@@ -62,6 +62,7 @@ export const deleteUser = async (id) => {
 };
 
 export async function createUserData(data) {
+    console.log(data);
     let password = hashPassword(data.user.password);
     const user = await prisma.user.create({
         data: {
@@ -74,7 +75,7 @@ export async function createUserData(data) {
     });
 
     let addId = data.groups.flatMap((item) => item.group.id);
-    let addGroupProm = prisma.UserGroup.createMany({
+    let addGroupProm = await prisma.UserGroup.createMany({
         data: addId.map((item) => {
             return { user_id: user.id, group_id: item };
         }),

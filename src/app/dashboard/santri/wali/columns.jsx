@@ -15,6 +15,8 @@ import MenuItemDeleteAction from "@/components/MenuItemDeleteAction";
 import { deleteWaliSantri } from "./_actions/walisantri";
 import Link from "next/link";
 import { toast } from "react-toastify";
+import "dayjs/locale/id";
+import dayjs from "dayjs";
 
 export const columns = [
     {
@@ -31,13 +33,9 @@ export const columns = [
         accessorKey: "tgl_lhr",
         header: "Tanggal Lahir",
         cell: ({ row }) => {
-            const tgl = new Date(row.original.tgl_lhr);
-            let date = `${tgl.getDate()}/${
-                tgl.getMonth() + 1 > 9
-                    ? tgl.getMonth() + 1
-                    : "0" + (tgl.getMonth() + 1)
-            }/${tgl.getFullYear()}`;
-            return date;
+            return dayjs(row.original.tgl_lhr)
+                .locale("id")
+                .format("DD MMMM YYYY");
         },
     },
     {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { MoreVertical } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import {
     Select,
@@ -9,7 +10,14 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
     ColumnDef,
     flexRender,
@@ -19,7 +27,7 @@ import {
     getFilteredRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-
+import generatePDFKelas from "@/lib/generate-pdf";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -35,7 +43,7 @@ import Link from "next/link";
 import { getSiswaByKelasAndTA } from "../../_actions/kelas";
 import DebouncedInput from "@/components/DebouncedInput";
 
-export function DataTable({ columns, dataTA, idKelas }) {
+export function DataTable({ columns, dataTA, idKelas, dataKelas }) {
     const [taSelected, setTASelected] = useState(
         dataTA.find((item) => item.aktif)?.kode_ta || dataTA[0].kode_ta
     );
@@ -84,25 +92,57 @@ export function DataTable({ columns, dataTA, idKelas }) {
                     className=" max-w-sm"
                     placeholder="Search all columns..."
                 />
-                <div className="d">
-                    <p>Tahun Ajaran</p>
-                    <Select
-                        defaultValue={taSelected}
-                        onValueChange={setTASelected}
-                    >
-                        <SelectTrigger className="w-[200px]">
-                            <SelectValue placeholder="Tahun Ajaran" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {dataTA.map((item, i) => {
-                                return (
-                                    <SelectItem value={item.kode_ta} key={i}>
-                                        {item.kode_ta}
-                                    </SelectItem>
-                                );
-                            })}
-                        </SelectContent>
-                    </Select>
+                <div className="flex gap-2 items-end">
+                    <div className="">
+                        <p>Tahun Ajaran</p>
+                        <Select
+                            defaultValue={taSelected}
+                            onValueChange={setTASelected}
+                        >
+                            <SelectTrigger className="w-[200px]">
+                                <SelectValue placeholder="Tahun Ajaran" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {dataTA.map((item, i) => {
+                                    return (
+                                        <SelectItem
+                                            value={item.kode_ta}
+                                            key={i}
+                                        >
+                                            {item.kode_ta}
+                                        </SelectItem>
+                                    );
+                                })}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button
+                                variant="ghost"
+                                className="h-10 w-10 p-0"
+                                data-e2e="btn-dropdown"
+                            >
+                                <span className="sr-only">Open menu</span>
+                                <MoreVertical className="h-5 w-5" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Exports</DropdownMenuLabel>
+                            <DropdownMenuItem
+                                className="cursor-pointer"
+                                onClick={() =>
+                                    generatePDFKelas(
+                                        data,
+                                        dataKelas,
+                                        taSelected
+                                    )
+                                }
+                            >
+                                PDF
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
             </div>
             <div className="rounded-md border">

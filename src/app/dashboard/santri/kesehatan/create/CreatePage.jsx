@@ -8,10 +8,13 @@ import { HREF_URL } from "@/navigation-data";
 import KesehatanForm from "../KesehatanForm";
 import { addDataKesehatan } from "../../_actions/kesehatan";
 import ActionBarCreate from "@/components/ActionBarCreate";
+import { formatDate } from "@/lib/utils";
+import { useState } from "react";
+import AlertAddAnotherData from "@/components/AlertAddAnotherData";
 
 function CreatePage({ namaSantri }) {
     const router = useRouter();
-
+    const [openDialog, setOpenDialog] = useState(false);
     const form = useForm({
         resolver: yupResolver(kesehatanSchema),
         defaultValues: {
@@ -30,10 +33,8 @@ function CreatePage({ namaSantri }) {
             nama_penyakit: data.nama_penyakit,
             penanganan: data.penanganan,
             kategori: data.kategori,
-            tgl_masuk: new Date(data.tgl_masuk).toISOString(),
-            tgl_keluar: data.tgl_keluar
-                ? new Date(data.tgl_keluar).toISOString()
-                : null,
+            tgl_masuk: formatDate(data.tgl_masuk),
+            tgl_keluar: data.tgl_keluar ? formatDate(data.tgl_keluar) : null,
             status: data.status,
         };
 
@@ -43,7 +44,7 @@ function CreatePage({ namaSantri }) {
                 pending: "Menyimpan data",
                 success: {
                     render({ data }) {
-                        router.push(HREF_URL.KESEHATAN_HOME);
+                        setOpenDialog(true);
                         return "Data berhasil disimpan";
                     },
                 },
@@ -60,14 +61,34 @@ function CreatePage({ namaSantri }) {
         );
     };
 
+    const afterSuccessAction = {
+        onYes: () => {
+            form.reset();
+        },
+        onNo: () => {
+            router.push(HREF_URL.KESEHATAN_HOME);
+        },
+    };
+
     return (
-        <div className="md:p-5 p-2 grid md:grid-cols-2 grid-cols-1 gap-5">
-            <ActionBarCreate
-                backLink={HREF_URL.KESEHATAN_HOME}
-                handleSimpan={() => form.handleSubmit(onSimpanHandler)()}
+        <>
+            <AlertAddAnotherData
+                open={openDialog}
+                openChange={setOpenDialog}
+                successAction={afterSuccessAction}
             />
-            <KesehatanForm form={form} namaSantri={namaSantri} mode="CREATE" />
-        </div>
+            <div className="md:p-5 p-2 grid md:grid-cols-2 grid-cols-1 gap-5">
+                <ActionBarCreate
+                    backLink={HREF_URL.KESEHATAN_HOME}
+                    handleSimpan={() => form.handleSubmit(onSimpanHandler)()}
+                />
+                <KesehatanForm
+                    form={form}
+                    namaSantri={namaSantri}
+                    mode="CREATE"
+                />
+            </div>
+        </>
     );
 }
 

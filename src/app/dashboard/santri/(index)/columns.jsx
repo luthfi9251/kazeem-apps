@@ -15,6 +15,8 @@ import MenuItemDeleteAction from "@/components/MenuItemDeleteAction";
 import Link from "next/link";
 import { toast } from "react-toastify";
 import { deleteSantri } from "./edit/[...slug]/_actions/editSantri";
+import "dayjs/locale/id";
+import dayjs from "dayjs";
 
 /*
 model Santri {
@@ -51,8 +53,10 @@ export const columns = [
         header: "Alamat",
     },
     {
-        accessorKey: "hp",
-        header: "No. HP",
+        accessorKey: "tgl_lhr",
+        header: "Tanggal Lahir",
+        cell: ({ row }) =>
+            dayjs(row.original.tgl_lhr).locale("id").format("DD MMMM YYYY"),
     },
     {
         accessorKey: "nama_wali",
@@ -71,6 +75,9 @@ export const columns = [
                         pending: "Menghapus data",
                         success: {
                             render({ data }) {
+                                if (data.isError) {
+                                    throw data.error;
+                                }
                                 return "Data berhasil dihapus";
                             },
                         },
@@ -116,7 +123,7 @@ export const columns = [
                             </DropdownMenuItem>
                             <DropdownMenuItem>
                                 <p
-                                    className="text-red-500 cursor-pointer"
+                                    className="text-red-500 cursor-pointer w-full"
                                     onClick={() => setOpen(true)}
                                 >
                                     Hapus

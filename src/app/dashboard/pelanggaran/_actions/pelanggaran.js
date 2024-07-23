@@ -4,89 +4,96 @@ import { auth } from "@/auth";
 import { HREF_URL } from "@/navigation-data";
 import { revalidatePath } from "next/cache";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { serverResponse } from "@/lib/utils";
+
 export async function addPelanggaran({
     isCreateNewKategori,
     kelasSantriId,
     pelanggaranId,
     dataPelanggaran,
 }) {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let session = await auth();
-            let connectUserID = {
-                connect: {
-                    id: session.user.id,
-                },
-            };
-            if (isCreateNewKategori) {
-                let {
-                    nama_pelanggaran,
-                    kategori,
-                    jenis,
-                    poin,
+    try {
+        let session = await auth();
+        let connectUserID = {
+            connect: {
+                id: session.user.id,
+            },
+        };
+        if (isCreateNewKategori) {
+            let {
+                nama_pelanggaran,
+                kategori,
+                jenis,
+                poin,
+                keterangan,
+                konsekuensi,
+            } = dataPelanggaran;
+            let createAll = await prisma.Pelanggaran.create({
+                data: {
+                    KelasSantri: {
+                        connect: {
+                            id: parseInt(kelasSantriId),
+                        },
+                    },
+                    Kategori: {
+                        create: {
+                            nama_pelanggaran,
+                            kategori,
+                            jenis,
+                            poin,
+                            created_by: connectUserID,
+                            last_update_by: connectUserID,
+                        },
+                    },
                     keterangan,
                     konsekuensi,
-                } = dataPelanggaran;
-                let createAll = await prisma.Pelanggaran.create({
-                    data: {
-                        KelasSantri: {
-                            connect: {
-                                id: parseInt(kelasSantriId),
-                            },
+                    created_by: connectUserID,
+                    last_update_by: connectUserID,
+                },
+            });
+            revalidatePath(HREF_URL.PELANGGARAN_HOME);
+            return serverResponse(createAll);
+        } else {
+            let createPelanggaranOnly = await prisma.Pelanggaran.create({
+                data: {
+                    KelasSantri: {
+                        connect: {
+                            id: parseInt(kelasSantriId),
                         },
-                        Kategori: {
-                            create: {
-                                nama_pelanggaran,
-                                kategori,
-                                jenis,
-                                poin,
-                                created_by: connectUserID,
-                                last_update_by: connectUserID,
-                            },
-                        },
-                        keterangan,
-                        konsekuensi,
-                        created_by: connectUserID,
-                        last_update_by: connectUserID,
                     },
-                });
-                revalidatePath(HREF_URL.PELANGGARAN_HOME);
-                resolve(createAll);
-            } else {
-                let createPelanggaranOnly = await prisma.Pelanggaran.create({
-                    data: {
-                        KelasSantri: {
-                            connect: {
-                                id: parseInt(kelasSantriId),
-                            },
+                    Kategori: {
+                        connect: {
+                            id: parseInt(pelanggaranId),
                         },
-                        Kategori: {
-                            connect: {
-                                id: parseInt(pelanggaranId),
-                            },
-                        },
-                        konsekuensi: dataPelanggaran.konsekuensi,
-                        keterangan: dataPelanggaran.keterangan,
-                        created_by: connectUserID,
-                        last_update_by: connectUserID,
                     },
-                });
-                revalidatePath(HREF_URL.PELANGGARAN_HOME);
-                resolve(createPelanggaranOnly);
-            }
-        } catch (err) {
-            console.log(err);
-            if (err instanceof PrismaClientKnownRequestError) {
-                if (
-                    err.meta.target ===
-                    "KategoriPelanggaran_nama_pelanggaran_key"
-                ) {
-                    reject(new Error("Nama Pelanggaran harus unik!"));
-                }
-            }
-            reject(err);
+                    konsekuensi: dataPelanggaran.konsekuensi,
+                    keterangan: dataPelanggaran.keterangan,
+                    created_by: connectUserID,
+                    last_update_by: connectUserID,
+                },
+            });
+            revalidatePath(HREF_URL.PELANGGARAN_HOME);
+            return serverResponse(createPelanggaranOnly);
         }
-    });
+    } catch (err) {
+        console.log(err);
+        if (err instanceof PrismaClientKnownRequestError) {
+            if (
+                err.meta.target === "KategoriPelanggaran_nama_pelanggaran_key"
+            ) {
+                return serverResponse(
+                    null,
+                    true,
+                    "Nama Pelanggaran harus unik!"
+                );
+            }
+        }
+        return serverResponse(
+            null,
+            true,
+            "Terjadi kesalahan saat menambahkan pelanggaran!"
+        );
+    }
 }
 
 export async function getPelanggaranByKelasAndTA({ nama_kelas, kode_ta }) {

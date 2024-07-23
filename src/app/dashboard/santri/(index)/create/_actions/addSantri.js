@@ -6,6 +6,7 @@ import crypto from "crypto";
 import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { serverResponse } from "@/lib/utils";
 
 async function saveFotoToLocal(file) {
     //handle image
@@ -92,6 +93,8 @@ export async function addSantri(santriFormData, waliSantriFormData) {
             last_update_by: userActionId,
             WaliSantri: {
                 create: waliSantri.map((item) => {
+                    console.log(new Date(item["tgl_lhr"]).toISOString());
+
                     return {
                         peran: item.peran,
                         created_by: userActionId,
@@ -124,20 +127,21 @@ export async function addSantri(santriFormData, waliSantriFormData) {
         },
     };
 
-    return new Promise(async (resolve, reject) => {
-        try {
-            let santriSave = await prisma.Santri.create(query);
-            revalidatePath("/dashboard/santri");
-            resolve(santriSave);
-        } catch (err) {
-            if (
-                err instanceof PrismaClientKnownRequestError &&
-                err.meta.target === "Santri_nis_key"
-            ) {
-                reject(new Error("NIS sudah ada!"));
-                throw err;
-            }
-            reject(new Error(err.message));
+    try {
+        let santriSave = await prisma.Santri.create(query);
+        revalidatePath("/dashboard/santri");
+        return serverResponse("Success add santri");
+    } catch (err) {
+        if (
+            err instanceof PrismaClientKnownRequestError &&
+            err.meta.target === "Santri_nis_key"
+        ) {
+            return serverResponse(null, true, "NIS sudah dipakai!");
         }
-    });
+        return serverResponse(
+            null,
+            true,
+            "Terjadi kesalahan saat menambahkan santri!"
+        );
+    }
 }

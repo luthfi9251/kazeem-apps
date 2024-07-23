@@ -18,6 +18,13 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -53,6 +60,41 @@ export default function KelasForm({ data, onSubmit, form, disabled = false }) {
                                             {...field}
                                         />
                                     </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="separator_kelas"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Separator</FormLabel>
+                                    <Select
+                                        onValueChange={field.onChange}
+                                        defaultValue={field.value}
+                                    >
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Pilih separator nama kelas" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            <SelectItem value="STRIP">
+                                                -
+                                            </SelectItem>
+                                            <SelectItem value="SPASI">
+                                                (Spasi)
+                                            </SelectItem>
+                                            <SelectItem value="NONE">
+                                                Tidak Ada
+                                            </SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <FormDescription>
+                                        Tanda hubung yang akan menghubungkan
+                                        nama dan tingkatan kelas pada Nama Kelas
+                                    </FormDescription>
                                     <FormMessage />
                                 </FormItem>
                             )}

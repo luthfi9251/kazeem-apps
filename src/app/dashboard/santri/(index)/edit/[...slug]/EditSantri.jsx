@@ -61,7 +61,10 @@ export default function EditSantriPage(props) {
             {
                 pending: "Menyimpan data",
                 success: {
-                    render({ _data }) {
+                    render(res) {
+                        if (res.data.isError) {
+                            throw res.data.error;
+                        }
                         router.push(`/dashboard/santri/detail/${data.id}`);
                         return "Data berhasil disimpan";
                     },
@@ -104,6 +107,9 @@ export default function EditSantriPage(props) {
                 pending: "Menghapus data",
                 success: {
                     render({ data }) {
+                        if (data.isError) {
+                            throw data.error;
+                        }
                         router.push("/dashboard/santri");
                         return "Data berhasil dihapus";
                     },
