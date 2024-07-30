@@ -1,5 +1,5 @@
 "use client";
-import { LoaderCircle } from "lucide-react";
+import { LoaderCircle, MoreVertical } from "lucide-react";
 import { useState } from "react";
 import DebouncedInput from "@/components/DebouncedInput";
 import {
@@ -35,6 +35,16 @@ import { useQuery } from "@tanstack/react-query";
 import { getDataKesehatanByKelasAndTA } from "../_actions/kesehatan";
 import Link from "next/link";
 import { HREF_URL } from "@/navigation-data";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { generatePDFKesehatan } from "@/lib/generate-pdf";
+import { generateExcel } from "@/lib/generate-excel";
 
 export function DataTable({ columns, selectData }) {
     const [namaKelas, setNamaKelas] = useState();
@@ -75,6 +85,10 @@ export function DataTable({ columns, selectData }) {
             ],
         },
     });
+
+    const handleGenerateExcel = () => {
+        generateExcel({ filename: "Data kesehatan santri", type: "KESEHATAN" });
+    };
 
     return (
         <div>
@@ -142,15 +156,50 @@ export function DataTable({ columns, selectData }) {
                             </SelectGroup>
                         </SelectContent>
                     </Select>
-                    <Link href={HREF_URL.KESEHATAN_CREATE}>
-                        <Button
-                            className="w-full bg-kazeem-secondary "
-                            id="tambah-kelas"
-                            data-e2e="btn-tambah"
-                        >
-                            Tambah
-                        </Button>
-                    </Link>
+                    <div className="flex w-full gap-1">
+                        <Link href={HREF_URL.KESEHATAN_CREATE} className="grow">
+                            <Button
+                                className="w-full bg-kazeem-secondary "
+                                id="tambah-kelas"
+                                data-e2e="btn-tambah"
+                            >
+                                Tambah
+                            </Button>
+                        </Link>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button
+                                    variant="ghost"
+                                    className="h-10 w-10 p-0"
+                                    data-e2e="btn-dropdown"
+                                >
+                                    <span className="sr-only">Open menu</span>
+                                    <MoreVertical className="h-5 w-5" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuLabel>Exports</DropdownMenuLabel>
+                                <DropdownMenuItem
+                                    className="cursor-pointer"
+                                    onClick={() =>
+                                        generatePDFKesehatan(
+                                            data,
+                                            namaKelas || "Semua",
+                                            kodeTA || "Semua"
+                                        )
+                                    }
+                                >
+                                    PDF
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    className="cursor-pointer"
+                                    onClick={handleGenerateExcel}
+                                >
+                                    Excel
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
                 </div>
             </div>
             <div className="rounded-md border">

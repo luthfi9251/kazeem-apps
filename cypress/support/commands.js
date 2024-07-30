@@ -73,6 +73,7 @@ Cypress.Commands.add("addSantri", (dataSantri) => {
         cy.get("table").should("contain", item1.nama_wali);
         cy.contains("button", "Simpan").click();
         cy.contains("button", "Simpan").click();
+        cy.get('[data-cy="btn-cancel"]').click();
         cy.location().should((loc) => {
             expect(loc.pathname).to.eq("/dashboard/santri");
         });

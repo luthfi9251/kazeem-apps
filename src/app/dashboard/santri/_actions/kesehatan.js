@@ -121,7 +121,7 @@ export async function getDataKesehatanByKelasAndTA({ nama_kelas, kode_ta }) {
             },
         },
         orderBy: {
-            created_at: "desc",
+            tgl_masuk: "desc",
         },
         select: {
             id: true,

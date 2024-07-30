@@ -5,6 +5,9 @@ let HREF = {
 };
 
 describe("Tahun Ajar Page CRUD", () => {
+    before(() => {
+        cy.exec("npx prisma migrate reset --force");
+    });
     beforeEach(() => {
         //login dulu dengan role admin
         cy.login("admin@admin.com", "passwordadmin");

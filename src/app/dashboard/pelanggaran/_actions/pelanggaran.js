@@ -135,6 +135,8 @@ export async function getPelanggaranByKelasAndTA({ nama_kelas, kode_ta }) {
             Kategori: {
                 select: {
                     nama_pelanggaran: true,
+                    jenis: true,
+                    poin: true,
                 },
             },
             created_at: true,
@@ -152,6 +154,8 @@ export async function getPelanggaranByKelasAndTA({ nama_kelas, kode_ta }) {
             kelas: item.KelasSantri.Kelas.nama_kelas,
             kode_ta: item.KelasSantri.TahunAjar.kode_ta,
             nama_pelanggaran: item.Kategori.nama_pelanggaran,
+            jenis_pelanggaran: item.Kategori.jenis,
+            poin: item.Kategori.poin,
             tanggal: new Date(item.created_at).toLocaleDateString(),
         };
     });

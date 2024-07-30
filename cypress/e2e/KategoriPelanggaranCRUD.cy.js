@@ -1,4 +1,8 @@
 describe("Kategori Pelanggaran Page CRUD", () => {
+    before(() => {
+        cy.exec("npx prisma migrate reset --force");
+    });
+
     beforeEach(() => {
         //login dulu dengan role admin
         cy.login("admin@admin.com", "passwordadmin");
@@ -42,6 +46,7 @@ describe("Kategori Pelanggaran Page CRUD", () => {
         cy.get('input[name="poin"]').type(dataKategoriPelanggaran.poin);
 
         cy.get('button[data-e2e="btn-simpan"]').click();
+        cy.get('[data-cy="btn-cancel"]').click();
         cy.location().should((loc) => {
             expect(loc.pathname).to.eq("/dashboard/pelanggaran/kategori");
         });
@@ -65,6 +70,7 @@ describe("Kategori Pelanggaran Page CRUD", () => {
         cy.get('input[name="poin"]').type(dataKategoriPelanggaran2.poin);
 
         cy.get('button[data-e2e="btn-simpan"]').click();
+        cy.get('[data-cy="btn-cancel"]').click();
         cy.location().should((loc) => {
             expect(loc.pathname).to.eq("/dashboard/pelanggaran/kategori");
         });

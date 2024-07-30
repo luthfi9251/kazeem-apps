@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-
+import { MoreVertical } from "lucide-react";
 import {
     ColumnDef,
     flexRender,
@@ -14,7 +14,14 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
     Table,
     TableBody,
@@ -24,6 +31,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
+import { generateExcel } from "@/lib/generate-excel";
 
 export function DataTable({ columns, data }) {
     const [columnFilters, setColumnFilters] = useState();
@@ -52,6 +60,13 @@ export function DataTable({ columns, data }) {
         },
     });
 
+    const handleGenerateExcel = () => {
+        generateExcel({
+            filename: "Data Semua Kelas Santri",
+            type: "KELAS_ALL",
+        });
+    };
+
     return (
         <div>
             <div className="grid grid-cols-2 py-4">
@@ -67,18 +82,38 @@ export function DataTable({ columns, data }) {
                     }
                     className="max-w-sm"
                 />
-                <Link
-                    href="/dashboard/kemadrasahan/kelas/create"
-                    className="w-1/4 justify-self-end flex justify-end"
-                >
-                    <Button
-                        className="self-end bg-kazeem-secondary "
-                        id="tambah-kelas"
-                        data-e2e="btn-tambah"
-                    >
-                        Tambah Kelas
-                    </Button>
-                </Link>
+                <div className="flex w-full gap-2 justify-end">
+                    <Link href="/dashboard/kemadrasahan/kelas/create">
+                        <Button
+                            className="self-end bg-kazeem-secondary "
+                            id="tambah-kelas"
+                            data-e2e="btn-tambah"
+                        >
+                            Tambah Kelas
+                        </Button>
+                    </Link>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button
+                                variant="ghost"
+                                className="h-10 w-10 p-0"
+                                data-e2e="btn-dropdown"
+                            >
+                                <span className="sr-only">Open menu</span>
+                                <MoreVertical className="h-5 w-5" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Exports</DropdownMenuLabel>
+                            <DropdownMenuItem
+                                className="cursor-pointer"
+                                onClick={handleGenerateExcel}
+                            >
+                                Excel
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
             </div>
             <div className="rounded-md border">
                 <Table>

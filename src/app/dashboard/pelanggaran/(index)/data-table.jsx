@@ -1,7 +1,7 @@
 "use client";
 import DebouncedInput from "@/components/DebouncedInput";
 import { useState } from "react";
-import { LoaderCircle } from "lucide-react";
+import { LoaderCircle, MoreVertical } from "lucide-react";
 import {
     ColumnDef,
     flexRender,
@@ -31,10 +31,20 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useQuery } from "@tanstack/react-query";
 import { getPelanggaranByKelasAndTA } from "../_actions/pelanggaran";
 import Link from "next/link";
 import { HREF_URL } from "@/navigation-data";
+import { generatePDFPelanggaran } from "@/lib/generate-pdf";
+import { generateExcel } from "@/lib/generate-excel";
 
 export function DataTable({ columns, selectData }) {
     const [namaKelas, setNamaKelas] = useState();
@@ -73,6 +83,13 @@ export function DataTable({ columns, selectData }) {
             ],
         },
     });
+
+    const handleGenerateExcel = () => {
+        generateExcel({
+            filename: "Data Pelanggaran santri",
+            type: "PELANGGARAN",
+        });
+    };
 
     return (
         <div>
@@ -140,15 +157,53 @@ export function DataTable({ columns, selectData }) {
                             </SelectGroup>
                         </SelectContent>
                     </Select>
-                    <Link href={HREF_URL.PELANGGARAN_CREATE}>
-                        <Button
-                            className="w-full bg-kazeem-secondary "
-                            id="tambah-kelas"
-                            data-e2e="btn-tambah"
+                    <div className="flex w-full gap-1">
+                        <Link
+                            href={HREF_URL.PELANGGARAN_CREATE}
+                            className="grow"
                         >
-                            Tambah
-                        </Button>
-                    </Link>
+                            <Button
+                                className="w-full bg-kazeem-secondary "
+                                id="tambah-kelas"
+                                data-e2e="btn-tambah"
+                            >
+                                Tambah
+                            </Button>
+                        </Link>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button
+                                    variant="ghost"
+                                    className="h-10 w-10 p-0"
+                                    data-e2e="btn-dropdown"
+                                >
+                                    <span className="sr-only">Open menu</span>
+                                    <MoreVertical className="h-5 w-5" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuLabel>Exports</DropdownMenuLabel>
+                                <DropdownMenuItem
+                                    className="cursor-pointer"
+                                    onClick={() =>
+                                        generatePDFPelanggaran(
+                                            data,
+                                            namaKelas || "Semua",
+                                            kodeTA || "Semua"
+                                        )
+                                    }
+                                >
+                                    PDF
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    className="cursor-pointer"
+                                    onClick={handleGenerateExcel}
+                                >
+                                    Excel
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
                 </div>
             </div>
             <div className="rounded-md border">

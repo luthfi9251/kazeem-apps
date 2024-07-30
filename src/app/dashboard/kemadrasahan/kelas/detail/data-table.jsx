@@ -42,6 +42,7 @@ import {
 import Link from "next/link";
 import { getSiswaByKelasAndTA } from "../../_actions/kelas";
 import DebouncedInput from "@/components/DebouncedInput";
+import { generateExcel } from "@/lib/generate-excel";
 
 export function DataTable({ columns, dataTA, idKelas, dataKelas }) {
     const [taSelected, setTASelected] = useState(
@@ -82,6 +83,15 @@ export function DataTable({ columns, dataTA, idKelas, dataKelas }) {
             ],
         },
     });
+
+    const handleGenerateExcel = () => {
+        generateExcel({
+            filename: `Data kelas ${dataKelas.nama_kelas} - ${taSelected}`,
+            type: "KELAS_SPECIFIED",
+            idKelas: idKelas,
+            kodeTa: taSelected,
+        });
+    };
 
     return (
         <div>
@@ -140,6 +150,12 @@ export function DataTable({ columns, dataTA, idKelas, dataKelas }) {
                                 }
                             >
                                 PDF
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                className="cursor-pointer"
+                                onClick={handleGenerateExcel}
+                            >
+                                Excel
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>

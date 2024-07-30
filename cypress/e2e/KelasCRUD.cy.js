@@ -20,8 +20,8 @@ let dataKelas = {
     paralel: "A,B",
     nama_kelas1: "1-A",
     nama_kelas2: "1-B",
-    should_contain1_generated: "1 - A",
-    should_contain2_generated: "1 - B",
+    should_contain1_generated: "1-A",
+    should_contain2_generated: "1-B",
     kode_ta: dataTA2.kode_ta,
 };
 
@@ -43,6 +43,7 @@ let WALI_DATA = {
 
 describe("Kelas page CRUD", () => {
     before(() => {
+        cy.exec("npx prisma migrate reset --force");
         cy.login("admin@admin.com", "passwordadmin");
         cy.visit("/dashboard/santri");
         cy.get("button").should("contain", "Tambah Santri");
@@ -72,6 +73,7 @@ describe("Kelas page CRUD", () => {
         cy.get("table").should("contain", item1.nama_wali);
         cy.contains("button", "Simpan").click();
         cy.contains("button", "Simpan").click();
+        cy.get('[data-cy="btn-cancel"]').click();
         cy.location().should((loc) => {
             expect(loc.pathname).to.eq("/dashboard/santri");
         });

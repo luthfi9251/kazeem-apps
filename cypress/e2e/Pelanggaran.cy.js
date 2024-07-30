@@ -73,8 +73,8 @@ let dataKelas = {
     paralel: "A,B",
     nama_kelas1: "1-A",
     nama_kelas2: "1-B",
-    should_contain1_generated: "1 - A",
-    should_contain2_generated: "1 - B",
+    should_contain1_generated: "1-A",
+    should_contain2_generated: "1-B",
 };
 
 describe("Pelanggaran Page CRUD", () => {
@@ -83,6 +83,7 @@ describe("Pelanggaran Page CRUD", () => {
         cy.login("admin@admin.com", "passwordadmin");
     });
     before(() => {
+        cy.exec("npx prisma migrate reset --force");
         cy.login("admin@admin.com", "passwordadmin");
         cy.addSantri([dataSantri1, dataSantri2]);
         cy.createKelas(dataKelas);
@@ -140,6 +141,7 @@ describe("Pelanggaran Page CRUD", () => {
         cy.get('input[name="poin"]').type(dataPelanggaran.poin);
 
         cy.get('button[data-e2e="btn-simpan"]').click();
+        cy.get('[data-cy="btn-cancel"]').click();
         cy.location().should((loc) => {
             expect(loc.pathname).to.eq("/dashboard/pelanggaran/kategori");
         });
@@ -164,6 +166,7 @@ describe("Pelanggaran Page CRUD", () => {
         cy.get('textarea[name="keterangan"]').type(dataPelanggaran.keterangan);
         cy.get('input[name="konsekuensi"]').type(dataPelanggaran.keterangan);
         cy.get('button[data-e2e="btn-simpan"]').click();
+        cy.get('[data-cy="btn-cancel"]').click();
 
         cy.url().should("contain", HREF.PELANGGARAN_HOME);
         cy.get("tr").should("contain", dataPelanggaran.nama_santri);
@@ -191,7 +194,7 @@ describe("Pelanggaran Page CRUD", () => {
         cy.get('input[name="poin"]').type(dataPelanggaran2.poin);
 
         cy.get('button[data-e2e="btn-simpan"]').click();
-
+        cy.get('[data-cy="btn-cancel"]').click();
         cy.url().should("contain", HREF.PELANGGARAN_HOME);
         cy.get("tr").should("contain", dataPelanggaran2.nama_santri);
         cy.visit(HREF.KATEGORI_HOME);

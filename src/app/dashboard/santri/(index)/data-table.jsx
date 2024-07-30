@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-
+import { MoreVertical } from "lucide-react";
 import {
     ColumnDef,
     flexRender,
@@ -14,7 +14,14 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
     Table,
     TableBody,
@@ -24,6 +31,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
+import { generateExcel } from "@/lib/generate-excel";
 
 function DebouncedInput({
     value: initialValue,
@@ -82,6 +90,12 @@ export function DataTable({ columns, data }) {
             ],
         },
     });
+    const handleGenerateExcel = () => {
+        generateExcel({
+            filename: "Data Santri",
+            type: "SANTRI_ALL",
+        });
+    };
 
     return (
         <div>
@@ -92,17 +106,40 @@ export function DataTable({ columns, data }) {
                     className=" max-w-sm"
                     placeholder="Search all columns..."
                 />
-                <Link
-                    href="/dashboard/santri/create"
-                    className="w-1/4 justify-self-end flex justify-end"
-                >
-                    <Button
-                        className="self-end bg-kazeem-secondary "
-                        id="tambah-santri"
+                <div className="flex w-full gap-2 justify-end">
+                    <Link
+                        href="/dashboard/santri/create"
+                        className="w-1/4 justify-self-end flex justify-end"
                     >
-                        Tambah Santri
-                    </Button>
-                </Link>
+                        <Button
+                            className="self-end bg-kazeem-secondary "
+                            id="tambah-santri"
+                        >
+                            Tambah Santri
+                        </Button>
+                    </Link>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button
+                                variant="ghost"
+                                className="h-10 w-10 p-0"
+                                data-e2e="btn-dropdown"
+                            >
+                                <span className="sr-only">Open menu</span>
+                                <MoreVertical className="h-5 w-5" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Exports</DropdownMenuLabel>
+                            <DropdownMenuItem
+                                className="cursor-pointer"
+                                onClick={handleGenerateExcel}
+                            >
+                                Excel
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
             </div>
             <div className="rounded-md border">
                 <Table>

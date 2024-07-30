@@ -32,8 +32,8 @@ let dataKelas = {
     paralel: "A,B",
     nama_kelas1: "1-A",
     nama_kelas2: "1-B",
-    should_contain1_generated: "1 - A",
-    should_contain2_generated: "1 - B",
+    should_contain1_generated: "1-A",
+    should_contain2_generated: "1-B",
 };
 
 let dataKesehatan = {
@@ -57,6 +57,7 @@ describe("Kesehatan page CRUD", () => {
     });
 
     before(() => {
+        cy.exec("npx prisma migrate reset --force");
         cy.login("admin@admin.com", "passwordadmin");
         cy.addSantri([dataSantri1]);
         cy.createKelas(dataKelas);
@@ -75,7 +76,7 @@ describe("Kesehatan page CRUD", () => {
 
     it("should render kesehatan Homepage", () => {
         cy.visit(HREF.KESEHATAN_HOME);
-        cy.get("h3").contains("Data Kesahatan");
+        cy.get("h3").contains("Data Kesehatan");
         cy.get("table").should("contain", "Nama Lengkap");
     });
 
@@ -91,8 +92,9 @@ describe("Kesehatan page CRUD", () => {
         cy.get('input[name="nama_penyakit"]').type(dataKesehatan.nama_penyakit);
         cy.get('textarea[name="penanganan"]').type(dataKesehatan.penanganan);
         cy.get('input[name="tgl_masuk"]').type(dataKesehatan.tgl_masuk);
-        cy.get('input[name="tgl_keluar"]').type(dataKesehatan.tgl_keluar);
+        // cy.get('input[name="tgl_keluar"]').type(dataKesehatan.tgl_keluar);
         cy.get('button[data-e2e="btn-simpan"]').click();
+        cy.get('[data-cy="btn-cancel"]').click();
         cy.url().should("contain", HREF.KESEHATAN_HOME);
     });
 

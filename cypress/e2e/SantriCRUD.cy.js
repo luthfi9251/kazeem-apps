@@ -1,4 +1,7 @@
 describe("Santri Page CRUD", () => {
+    before(() => {
+        cy.exec("npx prisma migrate reset --force");
+    });
     beforeEach(() => {
         //login dulu dengan role admin
         cy.login("admin@admin.com", "passwordadmin");
@@ -93,6 +96,7 @@ describe("Santri Page CRUD", () => {
         //simpan
         cy.contains("button", "Simpan").click();
         cy.contains("button", "Simpan").click();
+        cy.get('[data-cy="btn-cancel"]').click();
         cy.location().should((loc) => {
             expect(loc.pathname).to.eq("/dashboard/santri");
         });

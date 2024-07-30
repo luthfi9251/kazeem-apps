@@ -30,10 +30,16 @@ export default function AlertAddAnotherData({
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel onClick={successAction.onNo}>
+                    <AlertDialogCancel
+                        onClick={successAction.onNo}
+                        data-cy="btn-cancel"
+                    >
                         Tidak
                     </AlertDialogCancel>
-                    <AlertDialogAction onClick={successAction.onYes}>
+                    <AlertDialogAction
+                        onClick={successAction.onYes}
+                        data-cy="btn-confirm"
+                    >
                         Ya
                     </AlertDialogAction>
                 </AlertDialogFooter>

@@ -132,7 +132,7 @@ export async function editSantri(santriFormData, waliSantriFormData, prevFoto) {
         ]);
         revalidatePath("/dashboard/santri/edit/" + santri.get("id"));
         revalidatePath("/dashboard/santri/detail/" + santri.get("id"));
-        resolve(updateTransaction);
+        return serverResponse("Berhasil update santri", false, null);
     } catch (err) {
         if (
             err instanceof PrismaClientKnownRequestError &&
@@ -140,6 +140,7 @@ export async function editSantri(santriFormData, waliSantriFormData, prevFoto) {
         ) {
             return serverResponse(null, true, "NIS sudah ada!");
         }
+        console.log(err);
         return serverResponse(
             null,
             true,
