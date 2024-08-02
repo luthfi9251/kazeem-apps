@@ -107,7 +107,6 @@ async function getData(idSantri) {
             kode_ta: item.TahunAjar.kode_ta,
             jumlah_pelanggaran: item._count.Pelangaran,
             total_poin: getAllPelanggaran.reduce((prev, curr) => {
-                console.log(`Running on reduce ${item.Kelas.nama_kelas}`);
                 if (
                     curr.KelasSantri.TahunAjar.kode_ta ===
                     item.TahunAjar.kode_ta
@@ -124,6 +123,7 @@ async function getData(idSantri) {
         };
     });
     let dataPelanggaran = getAllPelanggaran.map((item) => {
+        console.log(item);
         return {
             id: item.id,
             nama_pelanggaran: item.Kategori.nama_pelanggaran,
@@ -132,6 +132,7 @@ async function getData(idSantri) {
             poin: item.Kategori.poin,
             keterangan: item.keterangan,
             konsekuensi: item.konsekuensi,
+            berkas_penunjang: item.berkas_penunjang,
             created_at: new Date(item.created_at).toLocaleDateString(),
             nama_kelas: item.KelasSantri.Kelas.nama_kelas,
             kode_ta: item.KelasSantri.TahunAjar.kode_ta,

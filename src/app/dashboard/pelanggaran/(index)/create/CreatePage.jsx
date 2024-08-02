@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { HREF_URL } from "@/navigation-data";
 import AlertAddAnotherData from "@/components/AlertAddAnotherData";
 import { useState } from "react";
+import { checkFormatAllowedByFileName } from "@/lib/utils";
 
 export default function CreatePage({ data }) {
     let router = useRouter();
@@ -31,6 +32,17 @@ export default function CreatePage({ data }) {
     });
 
     let handleSubmit = (data) => {
+        const ALLOWED_FILE = [
+            "jpeg",
+            "jpg",
+            "png",
+            "pdf",
+            "doc",
+            "docx",
+            "zip",
+        ];
+        let useFile = false;
+        let fileFormData = new FormData();
         let dataPelanggaran = {
             nama_pelanggaran: data.nama_pelanggaran,
             kategori: data.kategori,
@@ -40,14 +52,37 @@ export default function CreatePage({ data }) {
             konsekuensi: data.konsekuensi,
         };
 
+        if (data.file_penunjang) {
+            if (
+                checkFormatAllowedByFileName(
+                    data.file_penunjang.name,
+                    ALLOWED_FILE
+                )
+            ) {
+                useFile = true;
+                fileFormData.set("file", data.file_penunjang);
+            } else {
+                toast.error(
+                    "Format file berkas penunjang tidak diperbolehkan!",
+                    {
+                        position: "bottom-right",
+                    }
+                );
+                return;
+            }
+        }
+
         toast.promise(
             () =>
-                addPelanggaran({
-                    dataPelanggaran,
-                    isCreateNewKategori: data.allow_add,
-                    kelasSantriId: data.id_santri,
-                    pelanggaranId: data.nama_pelanggaran_option,
-                }),
+                addPelanggaran(
+                    {
+                        dataPelanggaran,
+                        isCreateNewKategori: data.allow_add,
+                        kelasSantriId: data.id_santri,
+                        pelanggaranId: data.nama_pelanggaran_option,
+                    },
+                    useFile ? fileFormData : null
+                ),
             {
                 pending: "Menyimpan data",
                 success: {

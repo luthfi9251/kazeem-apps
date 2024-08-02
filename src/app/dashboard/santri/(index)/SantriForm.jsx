@@ -157,7 +157,7 @@ export default function SantriForm({ form, disabled, foto = null }) {
                                 name="hp"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>No. Hp</FormLabel>
+                                        <FormLabel required>No. Hp</FormLabel>
                                         <FormControl>
                                             <Input
                                                 {...field}
@@ -199,12 +199,6 @@ export default function SantriForm({ form, disabled, foto = null }) {
                                             Tanggal Lahir
                                         </FormLabel>
                                         <FormControl>
-                                            {/* <Datepicker
-                                                {...field}
-                                                disabled={
-                                                    disabled ? true : false
-                                                }
-                                            /> */}
                                             <input
                                                 className=" border-slate-100 border-2 text-sm w-1/3 p-2 rounded-sm outline-slate-200"
                                                 type="date"

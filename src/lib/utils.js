@@ -23,3 +23,9 @@ export function generateNamaKelas(tingkatan, separator, paralel) {
 export function serverResponse(data = null, isError = false, error = null) {
     return { data, isError, error };
 }
+
+export function checkFormatAllowedByFileName(fileName, allowedExtension) {
+    let fileNameList = fileName.split(".");
+    let extension = fileNameList[fileNameList.length - 1].toLowerCase();
+    return allowedExtension.includes(extension);
+}

@@ -113,9 +113,24 @@ export const columns = [
                                     Rekap
                                 </Link>
                             </DropdownMenuItem>
+
+                            <DropdownMenuItem
+                                className="cursor-pointer"
+                                disabled={!user.berkas_penunjang}
+                            >
+                                <Link
+                                    href={`/api/${user.berkas_penunjang}`}
+                                    className="w-full"
+                                    data-e2e="btn-download"
+                                    prefetch={false}
+                                >
+                                    Unduh Berkas Penunjang
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
                             <DropdownMenuItem>
                                 <p
-                                    className="text-red-500 cursor-pointer"
+                                    className="text-red-500 cursor-pointer w-full"
                                     onClick={() => setOpen(true)}
                                 >
                                     Hapus

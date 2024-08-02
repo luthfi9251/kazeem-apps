@@ -161,13 +161,14 @@ enum PeranWali {
 }
 
 model Pelanggaran {
-  id             Int                 @id @default(autoincrement())
-  kategori_id    Int
-  Kategori       KategoriPelanggaran @relation(fields: [kategori_id], references: [id])
-  kelassantri_id Int
-  KelasSantri    KelasSantri         @relation(fields: [kelassantri_id], references: [id])
-  keterangan     String              @db.Text
-  konsekuensi    String
+  id               Int                 @id @default(autoincrement())
+  kategori_id      Int
+  Kategori         KategoriPelanggaran @relation(fields: [kategori_id], references: [id])
+  kelassantri_id   Int
+  KelasSantri      KelasSantri         @relation(fields: [kelassantri_id], references: [id])
+  keterangan       String              @db.Text
+  konsekuensi      String
+  berkas_penunjang String?
 
   last_update_by_id String?
   last_update_by    User?   @relation("pelanggaran_updated_by", fields: [last_update_by_id], references: [id])

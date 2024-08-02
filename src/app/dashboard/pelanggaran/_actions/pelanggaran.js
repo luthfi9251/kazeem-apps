@@ -5,13 +5,40 @@ import { HREF_URL } from "@/navigation-data";
 import { revalidatePath } from "next/cache";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { serverResponse } from "@/lib/utils";
+import path from "path";
+import fs from "fs";
 
-export async function addPelanggaran({
-    isCreateNewKategori,
-    kelasSantriId,
-    pelanggaranId,
-    dataPelanggaran,
-}) {
+async function saveBerkasToLocal(file) {
+    //handle image
+    let arrayBuffer = await file.arrayBuffer();
+    let buffer = new Uint8Array(arrayBuffer);
+
+    // handle save
+    let timestamp = Date.now();
+    let fileExt = file.name.split(".").slice(-1).pop();
+    let fileName =
+        timestamp + "-" + file.name.replace(/[^a-z0-9]/gi, "_").toLowerCase();
+    let pathToSave = path.join(
+        process.cwd(),
+        "public",
+        "file",
+        `${fileName}.${fileExt}`
+    );
+    fs.writeFileSync(pathToSave, buffer, "base64");
+
+    // return path.join("foto", `${fileName}.${fileExt}`);
+    return `/file/${fileName}.${fileExt}`;
+}
+
+function deleteBerkasLocal(pathFile) {
+    let pathToSave = path.join(process.cwd(), "public", pathFile);
+    fs.unlinkSync(pathToSave);
+}
+
+export async function addPelanggaran(
+    { isCreateNewKategori, kelasSantriId, pelanggaranId, dataPelanggaran },
+    formDataFile
+) {
     try {
         let session = await auth();
         let connectUserID = {
@@ -19,6 +46,14 @@ export async function addPelanggaran({
                 id: session.user.id,
             },
         };
+
+        let pathToFile = null;
+
+        if (formDataFile) {
+            let file = formDataFile.get("file");
+            pathToFile = await saveBerkasToLocal(file);
+        }
+
         if (isCreateNewKategori) {
             let {
                 nama_pelanggaran,
@@ -47,6 +82,7 @@ export async function addPelanggaran({
                     },
                     keterangan,
                     konsekuensi,
+                    berkas_penunjang: pathToFile,
                     created_by: connectUserID,
                     last_update_by: connectUserID,
                 },
@@ -68,6 +104,7 @@ export async function addPelanggaran({
                     },
                     konsekuensi: dataPelanggaran.konsekuensi,
                     keterangan: dataPelanggaran.keterangan,
+                    berkas_penunjang: pathToFile,
                     created_by: connectUserID,
                     last_update_by: connectUserID,
                 },
@@ -111,6 +148,7 @@ export async function getPelanggaranByKelasAndTA({ nama_kelas, kode_ta }) {
         },
         select: {
             id: true,
+            berkas_penunjang: true,
             KelasSantri: {
                 select: {
                     Kelas: {
@@ -156,6 +194,7 @@ export async function getPelanggaranByKelasAndTA({ nama_kelas, kode_ta }) {
             nama_pelanggaran: item.Kategori.nama_pelanggaran,
             jenis_pelanggaran: item.Kategori.jenis,
             poin: item.Kategori.poin,
+            berkas_penunjang: item.berkas_penunjang,
             tanggal: new Date(item.created_at).toLocaleDateString(),
         };
     });
@@ -238,11 +277,14 @@ export async function updatePelanggaran(idPelanggaran, data) {
 export async function deletePelanggaran(idPelanggaran) {
     return new Promise(async (resolve, reject) => {
         try {
-            await prisma.Pelanggaran.delete({
+            let del = await prisma.Pelanggaran.delete({
                 where: {
                     id: idPelanggaran,
                 },
             });
+            if (del.berkas_penunjang) {
+                deleteBerkasLocal(del.berkas_penunjang);
+            }
             revalidatePath(HREF_URL.PELANGGARAN_HOME);
             resolve("Berhasil Hapus");
         } catch (err) {

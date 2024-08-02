@@ -143,7 +143,7 @@ function DialogFormWali({ open, openChange, context }) {
                             name="hp"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>No. Hp Wali</FormLabel>
+                                    <FormLabel required>No. Hp Wali</FormLabel>
                                     <FormControl>
                                         <Input {...field} />
                                     </FormControl>

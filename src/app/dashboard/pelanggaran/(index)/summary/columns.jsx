@@ -63,6 +63,7 @@ export const columns = [
         header: "Actions",
         cell: (data) => {
             const user = data.row.original;
+            console.log(user);
             const idSantri = data.table.getState().idSantri;
             return (
                 <DropdownMenu>
@@ -88,6 +89,19 @@ export const columns = [
                                 data-e2e="btn-edit"
                             >
                                 Edit
+                            </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            className="cursor-pointer"
+                            disabled={!user.berkas_penunjang}
+                        >
+                            <Link
+                                href={`/api/${user.berkas_penunjang}`}
+                                className="w-full"
+                                data-e2e="btn-download"
+                                prefetch={false}
+                            >
+                                Unduh Berkas Penunjang
                             </Link>
                         </DropdownMenuItem>
                     </DropdownMenuContent>

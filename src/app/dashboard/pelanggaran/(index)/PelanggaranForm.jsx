@@ -57,6 +57,7 @@ export default function PelanggaranForm({
     const [valKategori, setValKategori] = useState(null);
     const [isEditedKategori, setIsEditedKategori] = useState(false);
     const [value, setValue] = useState("");
+    const fileRef = form.register("file");
     return (
         <Card className="col-span-2">
             <CardHeader>
@@ -284,39 +285,6 @@ export default function PelanggaranForm({
                             />
                             <FormField
                                 control={form.control}
-                                name="keterangan"
-                                render={({ field }) => (
-                                    <FormItem className="flex flex-col">
-                                        <FormLabel>Keterangan</FormLabel>
-                                        <FormControl>
-                                            <Textarea
-                                                className="resize-none"
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            <FormField
-                                control={form.control}
-                                name="konsekuensi"
-                                render={({ field }) => (
-                                    <FormItem className="flex flex-col">
-                                        <FormLabel required>
-                                            Konsekuensi
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Input {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            <FormField
-                                control={form.control}
                                 name="allow_add"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
@@ -360,6 +328,67 @@ export default function PelanggaranForm({
                                             </div>
                                         </FormControl>
                                         <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="keterangan"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-col">
+                                        <FormLabel>Keterangan</FormLabel>
+                                        <FormControl>
+                                            <Textarea
+                                                className="resize-none"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="konsekuensi"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-col">
+                                        <FormLabel required>
+                                            Konsekuensi
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="file_penunjang"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-col">
+                                        <FormLabel>Berkas Penunjang</FormLabel>
+                                        <FormControl>
+                                            <div className="grid w-full max-w-sm items-center gap-1.5">
+                                                <Input
+                                                    type="file"
+                                                    {...fileRef}
+                                                    onChange={(event) => {
+                                                        field.onChange(
+                                                            event.target
+                                                                ?.files?.[0] ??
+                                                                undefined
+                                                        );
+                                                    }}
+                                                />
+                                            </div>
+                                        </FormControl>
+                                        <FormMessage />
+                                        <FormDescription>
+                                            Format file : Gambar, PDF, Word, zip
+                                        </FormDescription>
                                     </FormItem>
                                 )}
                             />
