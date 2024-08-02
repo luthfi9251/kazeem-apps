@@ -74,7 +74,9 @@ export default function PelanggaranForm({
                                 name="id_santri"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
-                                        <FormLabel>Nama Santri</FormLabel>
+                                        <FormLabel required>
+                                            Nama Santri
+                                        </FormLabel>
                                         <Popover
                                             open={openSantri}
                                             onOpenChange={setOpenSantri}
@@ -169,7 +171,9 @@ export default function PelanggaranForm({
                                 name="nama_pelanggaran_option"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
-                                        <FormLabel>Pelanggaran</FormLabel>
+                                        <FormLabel required>
+                                            Pelanggaran
+                                        </FormLabel>
                                         <Popover
                                             open={openKategori}
                                             onOpenChange={setOpenKategori}
@@ -300,7 +304,9 @@ export default function PelanggaranForm({
                                 name="konsekuensi"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
-                                        <FormLabel>Konsekuensi</FormLabel>
+                                        <FormLabel required>
+                                            Konsekuensi
+                                        </FormLabel>
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>
@@ -367,7 +373,9 @@ export default function PelanggaranForm({
                                 name="nama_pelanggaran"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
-                                        <FormLabel>Nama Pelanggaran</FormLabel>
+                                        <FormLabel required>
+                                            Nama Pelanggaran
+                                        </FormLabel>
                                         <FormControl>
                                             <Input
                                                 {...field}
@@ -383,7 +391,7 @@ export default function PelanggaranForm({
                                 name="kategori"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
-                                        <FormLabel>Kategori</FormLabel>
+                                        <FormLabel required>Kategori</FormLabel>
                                         <FormControl>
                                             <Select
                                                 onValueChange={field.onChange}
@@ -418,7 +426,7 @@ export default function PelanggaranForm({
                                 name="jenis"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
-                                        <FormLabel>Jenis</FormLabel>
+                                        <FormLabel required>Jenis</FormLabel>
                                         <FormControl>
                                             <Input
                                                 {...field}
@@ -434,7 +442,7 @@ export default function PelanggaranForm({
                                 name="poin"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
-                                        <FormLabel>Poin</FormLabel>
+                                        <FormLabel required>Poin</FormLabel>
                                         <FormControl>
                                             <Input
                                                 {...field}

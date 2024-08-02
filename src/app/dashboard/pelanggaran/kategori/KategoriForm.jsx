@@ -41,7 +41,9 @@ export default function KategoriForm({ data, form, disabled = false }) {
                             name="nama_pelanggaran"
                             render={({ field }) => (
                                 <FormItem className="flex flex-col">
-                                    <FormLabel>Nama Pelanggaran</FormLabel>
+                                    <FormLabel required>
+                                        Nama Pelanggaran
+                                    </FormLabel>
                                     <FormControl>
                                         <Input {...field} disabled={disabled} />
                                     </FormControl>
@@ -54,7 +56,7 @@ export default function KategoriForm({ data, form, disabled = false }) {
                             name="kategori"
                             render={({ field }) => (
                                 <FormItem className="flex flex-col">
-                                    <FormLabel>Kategori</FormLabel>
+                                    <FormLabel required>Kategori</FormLabel>
                                     <FormControl>
                                         <Select
                                             onValueChange={field.onChange}
@@ -86,7 +88,7 @@ export default function KategoriForm({ data, form, disabled = false }) {
                             name="jenis"
                             render={({ field }) => (
                                 <FormItem className="flex flex-col">
-                                    <FormLabel>Jenis</FormLabel>
+                                    <FormLabel required>Jenis</FormLabel>
                                     <FormControl>
                                         <Input {...field} disabled={disabled} />
                                     </FormControl>
@@ -99,7 +101,7 @@ export default function KategoriForm({ data, form, disabled = false }) {
                             name="poin"
                             render={({ field }) => (
                                 <FormItem className="flex flex-col">
-                                    <FormLabel>Poin</FormLabel>
+                                    <FormLabel required>Poin</FormLabel>
                                     <FormControl>
                                         <Input
                                             {...field}

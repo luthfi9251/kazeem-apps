@@ -114,7 +114,9 @@ export default function KesehatanForm({
                                 name="id_santri"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
-                                        <FormLabel>Nama Santri</FormLabel>
+                                        <FormLabel required>
+                                            Nama Santri
+                                        </FormLabel>
                                         <Popover
                                             open={openSantri}
                                             onOpenChange={setOpenSantri}
@@ -212,7 +214,7 @@ export default function KesehatanForm({
                                 disabled={formState.nama_penyakit}
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
-                                        <FormLabel>Sakit</FormLabel>
+                                        <FormLabel required>Sakit</FormLabel>
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>
@@ -226,7 +228,9 @@ export default function KesehatanForm({
                                 disabled={formState.penanganan}
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
-                                        <FormLabel>Penanganan</FormLabel>
+                                        <FormLabel required>
+                                            Penanganan
+                                        </FormLabel>
                                         <FormControl>
                                             <Textarea
                                                 className="resize-none"
@@ -242,7 +246,7 @@ export default function KesehatanForm({
                                 name="kategori"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
-                                        <FormLabel>Kategori</FormLabel>
+                                        <FormLabel required>Kategori</FormLabel>
                                         <FormControl>
                                             <Select
                                                 onValueChange={field.onChange}
@@ -279,7 +283,9 @@ export default function KesehatanForm({
                                 disabled={formState.tgl_masuk}
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
-                                        <FormLabel>Tanggal Masuk</FormLabel>
+                                        <FormLabel required>
+                                            Tanggal Masuk
+                                        </FormLabel>
                                         <FormControl>
                                             <input
                                                 className=" border-slate-100 border-2 text-sm w-1/3 p-2 rounded-sm outline-slate-200"
@@ -337,7 +343,7 @@ export default function KesehatanForm({
                                 name="status"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
-                                        <FormLabel>Status</FormLabel>
+                                        <FormLabel required>Status</FormLabel>
                                         <FormControl>
                                             <Select
                                                 onValueChange={field.onChange}

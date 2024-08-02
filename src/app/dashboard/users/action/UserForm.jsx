@@ -89,9 +89,10 @@ export default function UserForm({ reference, user }) {
                             <FormField
                                 control={form.control}
                                 name="username"
+                                required
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Username</FormLabel>
+                                        <FormLabel required>Username</FormLabel>
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>
@@ -104,7 +105,11 @@ export default function UserForm({ reference, user }) {
                                 name="password"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Password</FormLabel>
+                                        <FormLabel
+                                            required={user ? false : true}
+                                        >
+                                            Password
+                                        </FormLabel>
                                         <FormControl>
                                             <Input
                                                 {...field}
@@ -120,7 +125,7 @@ export default function UserForm({ reference, user }) {
                                 name="email"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Email</FormLabel>
+                                        <FormLabel required>Email</FormLabel>
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>
@@ -133,7 +138,9 @@ export default function UserForm({ reference, user }) {
                                 name="nama_lengkap"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Nama Lengkap</FormLabel>
+                                        <FormLabel required>
+                                            Nama Lengkap
+                                        </FormLabel>
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>

@@ -91,7 +91,7 @@ export default function GroupForm({
                         name="nama_group"
                         render={({ field }) => (
                             <FormItem className="flex flex-col">
-                                <FormLabel>Nama Group</FormLabel>
+                                <FormLabel required>Nama Group</FormLabel>
                                 <FormControl>
                                     <Input {...field} />
                                 </FormControl>
@@ -104,7 +104,7 @@ export default function GroupForm({
                         name="deskripsi"
                         render={({ field }) => (
                             <FormItem className="flex flex-col">
-                                <FormLabel>Deskripsi</FormLabel>
+                                <FormLabel required>Deskripsi</FormLabel>
                                 <FormControl>
                                     <Textarea {...field} />
                                 </FormControl>

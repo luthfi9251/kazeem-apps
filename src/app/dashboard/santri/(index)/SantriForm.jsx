@@ -52,7 +52,9 @@ export default function SantriForm({ form, disabled, foto = null }) {
                                 name="nama_lengkap"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Nama Lengkap</FormLabel>
+                                        <FormLabel required>
+                                            Nama Lengkap
+                                        </FormLabel>
                                         <FormControl>
                                             <Input
                                                 {...field}
@@ -70,7 +72,7 @@ export default function SantriForm({ form, disabled, foto = null }) {
                                 name="nis"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>NIS</FormLabel>
+                                        <FormLabel required>NIS</FormLabel>
                                         <FormControl>
                                             <Input
                                                 {...field}
@@ -88,7 +90,7 @@ export default function SantriForm({ form, disabled, foto = null }) {
                                 name="email"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Email</FormLabel>
+                                        <FormLabel required>Email</FormLabel>
                                         <FormControl>
                                             <Input
                                                 {...field}
@@ -106,7 +108,7 @@ export default function SantriForm({ form, disabled, foto = null }) {
                                 name="alamat"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Alamat</FormLabel>
+                                        <FormLabel required>Alamat</FormLabel>
                                         <FormControl>
                                             <Textarea
                                                 {...field}
@@ -124,7 +126,9 @@ export default function SantriForm({ form, disabled, foto = null }) {
                                 name="jenis_kel"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Jenis Kelamin</FormLabel>
+                                        <FormLabel required>
+                                            Jenis Kelamin
+                                        </FormLabel>
                                         <Select
                                             onValueChange={field.onChange}
                                             defaultValue={field.value}
@@ -171,7 +175,9 @@ export default function SantriForm({ form, disabled, foto = null }) {
                                 name="tempat_lahir"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Tempat Lahir</FormLabel>
+                                        <FormLabel required>
+                                            Tempat Lahir
+                                        </FormLabel>
                                         <FormControl>
                                             <Input
                                                 {...field}
@@ -189,7 +195,9 @@ export default function SantriForm({ form, disabled, foto = null }) {
                                 name="tgl_lhr"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
-                                        <FormLabel>Tanggal Lahir</FormLabel>
+                                        <FormLabel required>
+                                            Tanggal Lahir
+                                        </FormLabel>
                                         <FormControl>
                                             {/* <Datepicker
                                                 {...field}

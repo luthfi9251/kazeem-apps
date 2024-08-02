@@ -117,7 +117,7 @@ function DialogFormWali({ open, openChange, context }) {
                             name="nama_wali"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Nama Wali</FormLabel>
+                                    <FormLabel required>Nama Wali</FormLabel>
                                     <FormControl>
                                         <Input {...field} />
                                     </FormControl>
@@ -156,7 +156,9 @@ function DialogFormWali({ open, openChange, context }) {
                             name="tgl_lhr"
                             render={({ field }) => (
                                 <FormItem className="flex flex-col">
-                                    <FormLabel>Tanggal Lahir Wali</FormLabel>
+                                    <FormLabel required>
+                                        Tanggal Lahir Wali
+                                    </FormLabel>
                                     <input
                                         className=" border-slate-100 border-2 text-sm w-1/3 p-2 rounded-sm outline-slate-200"
                                         type="date"
@@ -173,7 +175,7 @@ function DialogFormWali({ open, openChange, context }) {
                             name="peran"
                             render={({ field }) => (
                                 <FormItem className="flex flex-col">
-                                    <FormLabel>Peran Wali</FormLabel>
+                                    <FormLabel required>Peran Wali</FormLabel>
                                     <Select
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}

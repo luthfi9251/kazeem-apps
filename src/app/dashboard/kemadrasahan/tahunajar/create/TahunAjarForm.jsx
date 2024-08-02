@@ -50,7 +50,9 @@ export default function TahunAjarForm({
                             name="tgl_mulai"
                             render={({ field }) => (
                                 <FormItem className="flex flex-col">
-                                    <FormLabel>Tanggal Mulai</FormLabel>
+                                    <FormLabel required>
+                                        Tanggal Mulai
+                                    </FormLabel>
                                     <FormControl>
                                         <input
                                             type="date"
@@ -67,7 +69,9 @@ export default function TahunAjarForm({
                             name="tgl_selesai"
                             render={({ field }) => (
                                 <FormItem className="flex flex-col">
-                                    <FormLabel>Tanggal Selesai</FormLabel>
+                                    <FormLabel required>
+                                        Tanggal Selesai
+                                    </FormLabel>
                                     <FormControl>
                                         <input
                                             type="date"
@@ -84,7 +88,7 @@ export default function TahunAjarForm({
                             name="kode_ta"
                             render={({ field }) => (
                                 <FormItem className="flex flex-col">
-                                    <FormLabel>Kode TA</FormLabel>
+                                    <FormLabel required>Kode TA</FormLabel>
                                     <FormControl>
                                         <Input {...field} />
                                     </FormControl>

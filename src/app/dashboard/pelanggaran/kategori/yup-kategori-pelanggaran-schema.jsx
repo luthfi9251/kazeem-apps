@@ -6,7 +6,7 @@ let kategoriPelanggaranSchema = yup.object({
         .required("Nama Pelanggaran Wajib Diisi!"),
     kategori: yup.string().required(),
     jenis: yup.string().required(),
-    poin: yup.number().optional(),
+    poin: yup.number().required(),
 });
 
 export default kategoriPelanggaranSchema;
