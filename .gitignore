@@ -38,3 +38,4 @@ next-env.d.ts
 .env
 /cypress/screenshots/*
 /public/foto/*
+/public/file/*
