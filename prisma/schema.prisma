@@ -167,7 +167,7 @@ model Pelanggaran {
   kelassantri_id   Int
   KelasSantri      KelasSantri         @relation(fields: [kelassantri_id], references: [id])
   keterangan       String              @db.Text
-  konsekuensi      String
+  konsekuensi      String              @db.Text
   berkas_penunjang String?
 
   last_update_by_id String?
