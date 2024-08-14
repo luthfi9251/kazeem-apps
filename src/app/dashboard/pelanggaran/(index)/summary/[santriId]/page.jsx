@@ -123,7 +123,6 @@ async function getData(idSantri) {
         };
     });
     let dataPelanggaran = getAllPelanggaran.map((item) => {
-        console.log(item);
         return {
             id: item.id,
             nama_pelanggaran: item.Kategori.nama_pelanggaran,

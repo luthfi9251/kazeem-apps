@@ -12,7 +12,20 @@ const dayjs = require("dayjs");
 const prisma = new PrismaClient();
 const { PAGE_NAME } = require("../src/variables/page-name");
 const { hashPassword } = require("../src/lib/bcrypt");
-const { faker, fakerID_ID } = require("@faker-js/faker");
+/**
+ *
+ *
+ *
+ *
+ */
+let faker = null;
+let fakerID_ID = null;
+
+if (process.env.USE_DUMMY_DATA == "true") {
+    const fakerAll = require("@faker-js/faker");
+    faker = fakerAll.faker;
+    fakerID_ID = fakerAll.fakerID_ID;
+}
 
 // Ini merupakan script untuk melakukan seeding pada prisma
 // Untuk mendukung fitur minimum, maka yang wajib ada pada database adalah
@@ -371,7 +384,7 @@ const templateSeedDevelopment = async (seedAdmin) => {
     );
     let kategoriPelanggaranList = await seedTenKategoriPelanggaran();
     await seedPelanggaranSantri(kelasSantriAktifList, kategoriPelanggaranList);
-    await seedKesehatanSantri(kelasSantriAktifList, 50);
+    await seedKesehatanSantri(kelasSantriAktifList, 15);
 };
 
 async function main() {
@@ -379,7 +392,7 @@ async function main() {
     let seedPage = await seedPageName();
     let seedGroupAcces = await seedSuperAdminGroup(seedPage);
 
-    if (false) {
+    if (process.env.USE_DUMMY_DATA == "true") {
         await templateSeedDevelopment(seedAdmin);
     }
 

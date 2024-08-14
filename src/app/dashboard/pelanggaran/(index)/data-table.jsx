@@ -1,7 +1,7 @@
 "use client";
 import DebouncedInput from "@/components/DebouncedInput";
 import { useState } from "react";
-import { LoaderCircle, MoreVertical } from "lucide-react";
+import { LoaderCircle, MoreVertical, Filter } from "lucide-react";
 import {
     ColumnDef,
     flexRender,
@@ -45,24 +45,19 @@ import Link from "next/link";
 import { HREF_URL } from "@/navigation-data";
 import { generatePDFPelanggaran } from "@/lib/generate-pdf";
 import { generateExcel } from "@/lib/generate-excel";
+import FilterSheetPelanggaran from "./FilterSheetPelanggaran";
 
-export function DataTable({ columns, selectData }) {
+export function DataTable({ columns, data, selectData }) {
     const [namaKelas, setNamaKelas] = useState();
+    const filterSheetState = useState(false);
     const [kodeTA, setKodeTA] = useState();
     const [globalFilter, setGlobalFilter] = useState();
+    const [columnFilters, setColumnFilters] = useState([]);
     const [pagination, setPagination] = useState({
         pageIndex: 0, //initial page index
         pageSize: 10, //default page size
     });
-    let { data, isFetching, refetch } = useQuery({
-        queryKey: ["pelanggaran", namaKelas, kodeTA],
-        queryFn: () =>
-            getPelanggaranByKelasAndTA({
-                nama_kelas: namaKelas,
-                kode_ta: kodeTA,
-            }),
-        initialData: [],
-    });
+
     const table = useReactTable({
         data,
         columns,
@@ -72,8 +67,9 @@ export function DataTable({ columns, selectData }) {
         getSortedRowModel: getSortedRowModel(),
         state: {
             globalFilter,
-            refetch,
+            columnFilters,
         },
+        onColumnFiltersChange: setColumnFilters,
         initialState: {
             sorting: [
                 {
@@ -85,91 +81,55 @@ export function DataTable({ columns, selectData }) {
     });
 
     const handleGenerateExcel = () => {
+        let dataRow = table
+            .getFilteredRowModel()
+            .rows.map((item) => item.original);
         generateExcel({
             filename: "Data Pelanggaran santri",
-            type: "PELANGGARAN",
+            type: "EXPORT_TO_EXCEL_ONLY",
+            dataRow,
         });
     };
 
+    const handleGeneratePF = () => {
+        let dataRow = table
+            .getFilteredRowModel()
+            .rows.map((item) => item.original);
+        generatePDFPelanggaran(dataRow, "Filtered", "Filtered");
+    };
+
     return (
-        <div>
-            <div className="grid grid-cols-1 gap-2 md:gap-0 md:grid-cols-2 py-4">
-                <DebouncedInput
-                    value={globalFilter ?? ""}
-                    onChange={(value) => setGlobalFilter(String(value))}
-                    className=" max-w-sm"
-                    placeholder="Search all columns..."
-                />
-                <div className=" grid grid-cols-3 gap-2">
-                    <Select
-                        value={namaKelas}
-                        onValueChange={setNamaKelas}
-                        defaultValue="undefined"
-                    >
-                        <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Pilih Kelas" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectGroup>
-                                <SelectLabel>Nama Kelas</SelectLabel>
-                                {selectData.kelas.map((item, key) => {
-                                    return (
-                                        <SelectItem key={key} value={item}>
-                                            {item}
-                                        </SelectItem>
-                                    );
-                                })}
-                                <SelectItem
-                                    key="ALL"
-                                    value="undefined"
-                                    onClick={() => setNamaKelas(null)}
-                                >
-                                    Semua Kelas
-                                </SelectItem>
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
-                    <Select
-                        defaultValue="undefined"
-                        value={kodeTA}
-                        onValueChange={setKodeTA}
-                    >
-                        <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Pilih Tahun Ajaran" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectGroup>
-                                <SelectLabel>Kode TA</SelectLabel>
-                                {selectData.kode_ta.map((item, key) => {
-                                    return (
-                                        <SelectItem key={key} value={item}>
-                                            {item}
-                                        </SelectItem>
-                                    );
-                                })}
-                                <SelectItem
-                                    key="ALL"
-                                    value="undefined"
-                                    onClick={() => setKodeTA(null)}
-                                >
-                                    Semua TA
-                                </SelectItem>
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
-                    <div className="flex w-full gap-1">
+        <>
+            <div>
+                <div className="grid grid-cols-1 gap-2 md:gap-0 md:grid-cols-2 py-4">
+                    <DebouncedInput
+                        value={globalFilter ?? ""}
+                        onChange={(value) => setGlobalFilter(String(value))}
+                        className=" max-w-sm"
+                        placeholder="Search all columns..."
+                    />
+                    <div className="flex w-full justify-end gap-1">
                         <Link
                             href={HREF_URL.PELANGGARAN_CREATE}
-                            className="grow"
+                            className="grow max-w-[150px]"
                         >
                             <Button
-                                className="w-full bg-kazeem-secondary "
+                                className="w-full  bg-kazeem-secondary "
                                 id="tambah-kelas"
                                 data-e2e="btn-tambah"
                             >
                                 Tambah
                             </Button>
                         </Link>
+                        <Button
+                            variant="ghost"
+                            className="h-10 w-10 p-0"
+                            data-e2e="btn-filter"
+                            onClick={() => filterSheetState[1](true)}
+                        >
+                            <span className="sr-only">Open filter</span>
+                            <Filter className="h-5 w-5" />
+                        </Button>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button
@@ -185,13 +145,7 @@ export function DataTable({ columns, selectData }) {
                                 <DropdownMenuLabel>Exports</DropdownMenuLabel>
                                 <DropdownMenuItem
                                     className="cursor-pointer"
-                                    onClick={() =>
-                                        generatePDFPelanggaran(
-                                            data,
-                                            namaKelas || "Semua",
-                                            kodeTA || "Semua"
-                                        )
-                                    }
+                                    onClick={handleGeneratePF}
                                 >
                                     PDF
                                 </DropdownMenuItem>
@@ -205,97 +159,94 @@ export function DataTable({ columns, selectData }) {
                         </DropdownMenu>
                     </div>
                 </div>
-            </div>
-            <div className="rounded-md border">
-                <Table>
-                    <TableHeader className="bg-kazeem-primary ">
-                        {table.getHeaderGroups().map((headerGroup) => (
-                            <TableRow
-                                key={headerGroup.id}
-                                className="hover:bg-kazeem-peimary"
-                            >
-                                {headerGroup.headers.map((header) => {
-                                    return (
-                                        <TableHead
-                                            key={header.id}
-                                            className="text-white"
-                                        >
-                                            {header.isPlaceholder
-                                                ? null
-                                                : flexRender(
-                                                      header.column.columnDef
-                                                          .header,
-                                                      header.getContext()
-                                                  )}
-                                        </TableHead>
-                                    );
-                                })}
-                            </TableRow>
-                        ))}
-                    </TableHeader>
-                    <TableBody>
-                        {isFetching ? (
-                            <TableRow>
-                                <TableCell
-                                    colSpan={columns.length}
-                                    className="h-24 text-center relative"
-                                >
-                                    <LoaderCircle className="h-5 w-5 animate-spin m-auto" />
-                                </TableCell>
-                            </TableRow>
-                        ) : table.getRowModel().rows?.length ? (
-                            table.getRowModel().rows.map((row) => (
+                <div className="rounded-md border">
+                    <Table>
+                        <TableHeader className="bg-kazeem-primary ">
+                            {table.getHeaderGroups().map((headerGroup) => (
                                 <TableRow
-                                    key={row.id}
-                                    data-state={
-                                        row.getIsSelected() && "selected"
-                                    }
+                                    key={headerGroup.id}
+                                    className="hover:bg-kazeem-peimary"
                                 >
-                                    {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
-                                            )}
-                                        </TableCell>
-                                    ))}
+                                    {headerGroup.headers.map((header) => {
+                                        return (
+                                            <TableHead
+                                                key={header.id}
+                                                className="text-white"
+                                            >
+                                                {header.isPlaceholder
+                                                    ? null
+                                                    : flexRender(
+                                                          header.column
+                                                              .columnDef.header,
+                                                          header.getContext()
+                                                      )}
+                                            </TableHead>
+                                        );
+                                    })}
                                 </TableRow>
-                            ))
-                        ) : (
-                            <TableRow>
-                                <TableCell
-                                    colSpan={columns.length}
-                                    className="h-24 text-center"
-                                >
-                                    No results.
-                                </TableCell>
-                            </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
+                            ))}
+                        </TableHeader>
+                        <TableBody>
+                            {table.getRowModel().rows?.length ? (
+                                table.getRowModel().rows.map((row) => (
+                                    <TableRow
+                                        key={row.id}
+                                        data-state={
+                                            row.getIsSelected() && "selected"
+                                        }
+                                    >
+                                        {row.getVisibleCells().map((cell) => (
+                                            <TableCell key={cell.id}>
+                                                {flexRender(
+                                                    cell.column.columnDef.cell,
+                                                    cell.getContext()
+                                                )}
+                                            </TableCell>
+                                        ))}
+                                    </TableRow>
+                                ))
+                            ) : (
+                                <TableRow>
+                                    <TableCell
+                                        colSpan={columns.length}
+                                        className="h-24 text-center"
+                                    >
+                                        No results.
+                                    </TableCell>
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                </div>
+                <div className="flex items-center justify-end space-x-2 py-4">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => table.previousPage()}
+                        disabled={!table.getCanPreviousPage()}
+                    >
+                        Previous
+                    </Button>
+                    <p className="text-sm text-slate-500">
+                        {table.getState().pagination.pageIndex + 1} dari{" "}
+                        {table.getPageCount()}
+                    </p>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => table.nextPage()}
+                        disabled={!table.getCanNextPage()}
+                    >
+                        Next
+                    </Button>
+                </div>
             </div>
-            <div className="flex items-center justify-end space-x-2 py-4">
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => table.previousPage()}
-                    disabled={!table.getCanPreviousPage()}
-                >
-                    Previous
-                </Button>
-                <p className="text-sm text-slate-500">
-                    {table.getState().pagination.pageIndex + 1} dari{" "}
-                    {table.getPageCount()}
-                </p>
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => table.nextPage()}
-                    disabled={!table.getCanNextPage()}
-                >
-                    Next
-                </Button>
-            </div>
-        </div>
+            <FilterSheetPelanggaran
+                state={filterSheetState}
+                namaKelas={selectData.kelas}
+                kodeTA={selectData.kode_ta}
+                getColumnFilter={setColumnFilters}
+            />
+        </>
     );
 }

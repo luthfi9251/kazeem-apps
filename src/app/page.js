@@ -26,6 +26,18 @@ export default function Home() {
                     <p className=" font-normal text-lg text-center">
                         Kazeem, aplikasi pondok pesantren online
                     </p>
+                    {process.env.NEXT_PULIC_DEMO_APP === "true" && (
+                        <p className=" font-normal text-xs text-center flex flex-col bg-yellow-300 py-2 rounded">
+                            <span className="flex gap-2 justify-center">
+                                <Info className="w-3 h-3" />
+                                Ini merupakan aplikasi Demo, seluruh data yang
+                                ditambahkan akan terhapus secara otomatis.
+                                Silahkan Masuk dengan akun berikut.
+                            </span>
+                            <span>Email: demo@kazeem.cloud</span>
+                            <span>Password: kazeemdemo</span>
+                        </p>
+                    )}
 
                     <Link href="/login" className=" self-center">
                         <Button className=" bg-kazeem-secondary">Masuk</Button>

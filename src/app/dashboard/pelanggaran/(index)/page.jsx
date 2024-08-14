@@ -15,6 +15,7 @@ import { columns } from "./columns";
 import prisma from "@/lib/prisma";
 import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
 import { PAGE_NAME } from "@/variables/page-name";
+import { getPelanggaranByKelasAndTA } from "../_actions/pelanggaran";
 
 async function getData() {
     let data = await prisma.KelasSantri.findMany({
@@ -47,7 +48,13 @@ async function getData() {
 }
 
 async function Page() {
-    let data = await getData();
+    let data = getData();
+    let dataPelanggaran = getPelanggaranByKelasAndTA({
+        nama_kelas: undefined,
+        kode_ta: undefined,
+    });
+
+    let result = await Promise.all([data, dataPelanggaran]);
     return (
         <div className="md:p-5 p-2">
             <Card>
@@ -56,7 +63,11 @@ async function Page() {
                     <CardDescription>Card Description</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <DataTable columns={columns} data={[]} selectData={data} />
+                    <DataTable
+                        columns={columns}
+                        data={result[1]}
+                        selectData={result[0]}
+                    />
                 </CardContent>
             </Card>
         </div>

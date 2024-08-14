@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import signOut from "./_action.js/signOut";
-import { Settings, Menu, LogOut } from "lucide-react";
+import { Settings, Menu, LogOut, LayoutDashboard } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -206,6 +206,15 @@ export default function Sidebar(props) {
                                 collapsible
                                 defaultValue={getOpenedAcordion() + 1}
                             >
+                                <Link
+                                    href="/dashboard"
+                                    className="border-b-white border-b-[1px] flex items-center gap-3 py-3 text-white transition-all hover:bg-kazeem-darker"
+                                >
+                                    <span className="text-white flex items-center gap-3">
+                                        <LayoutDashboard className="h-5 w-5" />{" "}
+                                        Dashboard
+                                    </span>
+                                </Link>
                                 {dataLink.map((item, key) => {
                                     return (
                                         <AccordionItem
@@ -317,6 +326,15 @@ export default function Sidebar(props) {
                                 className="grow overflow-y-auto"
                                 defaultValue={getOpenedAcordion() + 1}
                             >
+                                <Link
+                                    href="/dashboard"
+                                    className="border-b-white border-b-[1px] flex items-center gap-3 py-3 text-white transition-all hover:bg-kazeem-darker"
+                                >
+                                    <span className="text-white flex items-center gap-3">
+                                        <LayoutDashboard className="h-5 w-5" />{" "}
+                                        Dashboard
+                                    </span>
+                                </Link>
                                 {dataLink.map((item, key) => {
                                     return (
                                         <AccordionItem

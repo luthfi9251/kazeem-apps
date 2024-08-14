@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 export const generateExcel = ({
     filename,
     type,
+    dataRow = [],
     idKelas = null,
     kodeTa = null,
 }) => {
@@ -12,6 +13,7 @@ export const generateExcel = ({
         formData.append("data", type);
         formData.append("idKelas", idKelas);
         formData.append("kodeTa", kodeTa);
+        formData.append("dataRow", JSON.stringify(dataRow));
         fetch("/api/excel", {
             method: "POST",
             body: formData,

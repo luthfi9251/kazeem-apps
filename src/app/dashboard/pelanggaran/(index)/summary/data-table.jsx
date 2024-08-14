@@ -1,15 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-import { clsx } from "clsx";
+import { useMemo, useState } from "react";
 import {
     ColumnDef,
     flexRender,
@@ -31,22 +22,45 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import DebouncedInput from "@/components/DebouncedInput";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Filter, MoreVertical } from "lucide-react";
+import FilterSheetSummary from "./FilterSheetSummary";
 
-export function DataTable({ columns, dataPelanggaran, idSantri }) {
-    const [columnFilters, setColumnFilters] = useState();
+export function DataTable({
+    columns,
+    dataPelanggaran,
+    idSantri,
+    handleGenerateExcel,
+    handleGeneratePF,
+}) {
+    const [globalFilter, setGlobalFilter] = useState();
+    const filterSheetState = useState(false);
+    const [columnFilters, setColumnFilters] = useState([]);
+    const namaKelasUnique = useMemo(
+        () => [...new Set(dataPelanggaran.map((item) => item.nama_kelas))],
+        []
+    );
 
     const table = useReactTable({
         data: dataPelanggaran,
         columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
-        onColumnFiltersChange: setColumnFilters,
         getFilteredRowModel: getFilteredRowModel(),
         getSortedRowModel: getSortedRowModel(),
         state: {
-            columnFilters,
+            globalFilter,
             idSantri,
+            columnFilters,
         },
+        onColumnFiltersChange: setColumnFilters,
         initialState: {
             sorting: [
                 {
@@ -60,19 +74,62 @@ export function DataTable({ columns, dataPelanggaran, idSantri }) {
     return (
         <div>
             <div className="flex justify-between items-end pb-4 flex-wrap">
-                <Input
-                    placeholder="Cari Pelanggaran"
-                    value={
-                        table.getColumn("nama_pelanggaran")?.getFilterValue() ??
-                        ""
-                    }
-                    onChange={(event) =>
-                        table
-                            .getColumn("nama_pelanggaran")
-                            ?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-sm"
+                <DebouncedInput
+                    value={globalFilter ?? ""}
+                    onChange={(value) => setGlobalFilter(String(value))}
+                    className=" max-w-sm"
+                    placeholder="Search all columns..."
                 />
+                <div className="flex w-full justify-end gap-1">
+                    <Button
+                        variant="ghost"
+                        className="h-10 w-10 p-0"
+                        data-e2e="btn-filter"
+                        onClick={() => filterSheetState[1](true)}
+                    >
+                        <span className="sr-only">Open filter</span>
+                        <Filter className="h-5 w-5" />
+                    </Button>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button
+                                variant="ghost"
+                                className="h-10 w-10 p-0"
+                                data-e2e="btn-dropdown"
+                            >
+                                <span className="sr-only">Open menu</span>
+                                <MoreVertical className="h-5 w-5" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Exports</DropdownMenuLabel>
+                            <DropdownMenuItem
+                                className="cursor-pointer"
+                                onClick={() =>
+                                    handleGeneratePF(
+                                        table
+                                            .getFilteredRowModel()
+                                            .rows.map((item) => item.original)
+                                    )
+                                }
+                            >
+                                PDF
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                className="cursor-pointer"
+                                onClick={() =>
+                                    handleGenerateExcel(
+                                        table
+                                            .getFilteredRowModel()
+                                            .rows.map((item) => item.original)
+                                    )
+                                }
+                            >
+                                Excel
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
             </div>
             <div className="rounded-md border">
                 <Table>
@@ -159,6 +216,12 @@ export function DataTable({ columns, dataPelanggaran, idSantri }) {
                     Next
                 </Button>
             </div>
+            <FilterSheetSummary
+                state={filterSheetState}
+                namaKelas={namaKelasUnique}
+                kodeTA={[]}
+                getColumnFilter={setColumnFilters}
+            />
         </div>
     );
 }

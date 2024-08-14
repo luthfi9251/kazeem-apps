@@ -13,6 +13,14 @@ import {
 import { HREF_URL } from "@/navigation-data";
 
 import Link from "next/link";
+import dayjs from "dayjs";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
+dayjs.extend(customParseFormat);
 
 export const columns = [
     {
@@ -25,10 +33,12 @@ export const columns = [
     {
         accessorKey: "nama_pelanggaran",
         header: "Nama Pelanggaran",
+        filterFn: "equalsString",
     },
     {
         accessorKey: "nama_kelas",
         header: "Kelas",
+        filterFn: "equals",
     },
     {
         accessorKey: "kode_ta",
@@ -37,10 +47,12 @@ export const columns = [
     {
         accessorKey: "kategori",
         header: "Kategori",
+        filterFn: "equalsString",
     },
     {
         accessorKey: "jenis",
-        header: "Jenis",
+        header: "Departemen",
+        filterFn: "equalsString",
     },
     {
         accessorKey: "poin",
@@ -57,6 +69,42 @@ export const columns = [
     {
         accessorKey: "created_at",
         header: "Dibuat tgl",
+        filterFn: (row, columnId, filterValue) => {
+            let constraintDate = {
+                start: dayjs(filterValue.tgl_start),
+                end: dayjs(filterValue.tgl_end),
+            };
+            let rowDate = dayjs(row.original.created_at, "DD-MM-YYYY");
+
+            if (filterValue.tgl_start && filterValue.tgl_end) {
+                if (
+                    rowDate.isSameOrBefore(constraintDate.end) &&
+                    rowDate.isSameOrAfter(constraintDate.start)
+                ) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+            if (filterValue.tgl_start) {
+                if (rowDate.isSameOrAfter(constraintDate.start)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+            if (filterValue.tgl_end) {
+                if (rowDate.isSameOrBefore(constraintDate.end)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+            return true;
+        },
     },
     {
         id: "actions",

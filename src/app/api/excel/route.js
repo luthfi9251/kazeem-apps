@@ -39,6 +39,10 @@ export async function POST(req, props) {
             case "SANTRI_ALL":
                 data = await getDataSantriForExcelExport();
                 break;
+            case "EXPORT_TO_EXCEL_ONLY":
+                data = JSON.parse(formData.get("dataRow"));
+                console.log(data);
+                break;
             default:
                 throw "Field data must be filled!";
         }

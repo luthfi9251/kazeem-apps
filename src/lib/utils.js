@@ -31,7 +31,6 @@ export function checkFormatAllowedByFileName(fileName, allowedExtension) {
 }
 
 export function generateChartDataAndConfigTop5(serverResponse) {
-    // console.log(serverResponse);
     const chartData = [
         {
             label: "nomor1",

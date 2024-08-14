@@ -7,6 +7,7 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { serverResponse } from "@/lib/utils";
 import path from "path";
 import fs from "fs";
+import dayjs from "dayjs";
 
 async function saveBerkasToLocal(file) {
     //handle image
@@ -195,7 +196,7 @@ export async function getPelanggaranByKelasAndTA({ nama_kelas, kode_ta }) {
             jenis_pelanggaran: item.Kategori.jenis,
             poin: item.Kategori.poin,
             berkas_penunjang: item.berkas_penunjang,
-            tanggal: new Date(item.created_at).toLocaleDateString(),
+            tanggal: dayjs(item.created_at).format("DD-MM-YYYY"),
         };
     });
 }

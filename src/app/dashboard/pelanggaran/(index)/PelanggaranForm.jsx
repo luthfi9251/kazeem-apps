@@ -455,7 +455,9 @@ export default function PelanggaranForm({
                                 name="jenis"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
-                                        <FormLabel required>Jenis</FormLabel>
+                                        <FormLabel required>
+                                            Departemen
+                                        </FormLabel>
                                         <FormControl>
                                             <Input
                                                 {...field}

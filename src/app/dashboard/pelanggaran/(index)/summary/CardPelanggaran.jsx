@@ -9,7 +9,12 @@ import {
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
 
-export default function CardDetailSiswa({ dataPelanggaran, idSantri }) {
+export default function CardDetailSiswa({
+    dataPelanggaran,
+    idSantri,
+    handleGenerateExcel,
+    handleGeneratePF,
+}) {
     return (
         <Card className="col-span-1 md:col-span-2">
             <CardHeader>
@@ -22,6 +27,8 @@ export default function CardDetailSiswa({ dataPelanggaran, idSantri }) {
                     columns={columns}
                     dataPelanggaran={dataPelanggaran}
                     idSantri={idSantri}
+                    handleGenerateExcel={handleGenerateExcel}
+                    handleGeneratePF={handleGeneratePF}
                 />
             </CardContent>
         </Card>
