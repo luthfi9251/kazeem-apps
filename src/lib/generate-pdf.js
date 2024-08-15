@@ -144,7 +144,7 @@ export async function generatePDFPelanggaran(data, namaKelas, ta) {
             { dataKey: "kelas", header: "Kelas" },
             { dataKey: "kode_ta", header: "TA" },
             { dataKey: "nama_pelanggaran", header: "Pelanggaran" },
-            { dataKey: "jenis_pelanggaran", header: "Jenis" },
+            { dataKey: "jenis_pelanggaran", header: "Departemen" },
             { dataKey: "poin", header: "Poin" },
         ],
         body: data,

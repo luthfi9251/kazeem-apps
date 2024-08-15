@@ -60,6 +60,11 @@ export const columns = [
         filterFn: "equalsString",
     },
     {
+        accessorKey: "jenis_pelanggaran",
+        header: "Departemen",
+        filterFn: "equalsString",
+    },
+    {
         accessorKey: "tanggal",
         header: "Tanggal",
         filterFn: (row, columnId, filterValue) => {

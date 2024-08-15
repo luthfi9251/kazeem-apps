@@ -34,6 +34,7 @@ export default function FilterSheetPelanggaran({
             nis: "",
             nama_santri: "",
             nama_pelanggaran: "",
+            jenis_pelanggaran: "",
             tgl_start: "",
             tgl_end: "",
             kelas: "ALL",
@@ -110,6 +111,19 @@ export default function FilterSheetPelanggaran({
                         render={({ field }) => (
                             <FormItem className="flex flex-col">
                                 <FormLabel>Nama Pelanggaran</FormLabel>
+                                <FormControl>
+                                    <Input {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={formFilter.control}
+                        name="jenis_pelanggaran"
+                        render={({ field }) => (
+                            <FormItem className="flex flex-col">
+                                <FormLabel>Departemen</FormLabel>
                                 <FormControl>
                                     <Input {...field} />
                                 </FormControl>
