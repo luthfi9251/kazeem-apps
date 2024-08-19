@@ -48,15 +48,9 @@ import { generateExcel } from "@/lib/generate-excel";
 import FilterSheetPelanggaran from "./FilterSheetPelanggaran";
 
 export function DataTable({ columns, data, selectData }) {
-    const [namaKelas, setNamaKelas] = useState();
     const filterSheetState = useState(false);
-    const [kodeTA, setKodeTA] = useState();
     const [globalFilter, setGlobalFilter] = useState();
     const [columnFilters, setColumnFilters] = useState([]);
-    const [pagination, setPagination] = useState({
-        pageIndex: 0, //initial page index
-        pageSize: 10, //default page size
-    });
 
     const table = useReactTable({
         data,

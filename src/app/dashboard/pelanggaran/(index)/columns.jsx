@@ -19,6 +19,7 @@ import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import { DataTableColumnHeader } from "./data-table-header";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -34,39 +35,65 @@ export const columns = [
     },
     {
         accessorKey: "nis",
-        header: "NIS",
         filterFn: "equalsString",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="NIS" />
+        ),
     },
     {
         accessorKey: "nama_santri",
-        header: "Nama Santri",
         filterFn: "includesString",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Nama Santri" />
+        ),
     },
     {
         id: "kelas",
         accessorKey: "kelas",
-        header: "Kelas",
         filterFn: "equals",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Kelas" />
+        ),
     },
     {
         id: "kode_ta",
         accessorKey: "kode_ta",
-        header: "TA",
         filterFn: "equals",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="TA" />
+        ),
     },
     {
         accessorKey: "nama_pelanggaran",
-        header: "Pelanggaran",
         filterFn: "equalsString",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Pelanggaran" />
+        ),
     },
     {
         accessorKey: "jenis_pelanggaran",
-        header: "Departemen",
         filterFn: "equalsString",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Departemen" />
+        ),
     },
     {
         accessorKey: "tanggal",
-        header: "Tanggal",
+        sortingFn: (rowA, rowB, columnId) => {
+            let dateRowA = dayjs(rowA.original.tanggal, "DD-MM-YYYY");
+            let dateRowB = dayjs(rowB.original.tanggal, "DD-MM-YYYY");
+
+            if (dateRowA.isSame(dateRowB, "day")) {
+                return 0;
+            } else if (dateRowA.isBefore(dateRowB, "day")) {
+                return -1;
+            } else {
+                return 1;
+            }
+        },
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Tanggal" />
+        ),
         filterFn: (row, columnId, filterValue) => {
             let constraintDate = {
                 start: dayjs(filterValue.tgl_start),
@@ -104,6 +131,7 @@ export const columns = [
             return true;
         },
     },
+
     {
         id: "actions",
         header: "Actions",

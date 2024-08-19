@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
 import { HREF_URL } from "@/navigation-data";
+import dayjs from "dayjs";
 
 export async function addDataKesehatan(data) {
     return new Promise(async (resolve, reject) => {
@@ -157,9 +158,9 @@ export async function getDataKesehatanByKelasAndTA({ nama_kelas, kode_ta }) {
     return data.map((item) => {
         return {
             ...item,
-            tgl_masuk: new Date(item.tgl_masuk).toISOString().split("T")[0],
+            tgl_masuk: dayjs(item.tgl_masuk).format("DD-MM-YYYY"),
             tgl_keluar: item.tgl_keluar
-                ? new Date(item.tgl_keluar).toISOString().split("T")[0]
+                ? dayjs(item.tgl_keluar).format("DD-MM-YYYY")
                 : null,
             nis: item.KelasSantri.Santri.nis,
             nama_lengkap: item.KelasSantri.Santri.nama_lengkap,

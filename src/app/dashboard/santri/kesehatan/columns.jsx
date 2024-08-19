@@ -18,6 +18,14 @@ import { toast } from "react-toastify";
 import { deleteDataKesehatan } from "../_actions/kesehatan";
 import "dayjs/locale/id";
 import dayjs from "dayjs";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import { DataTableColumnHeader } from "./data-table-header";
+
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
+dayjs.extend(customParseFormat);
 
 export const columns = [
     {
@@ -29,43 +37,169 @@ export const columns = [
     },
     {
         accessorKey: "nis",
-        header: "NIS",
+        filterFn: "equalsString",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="NIS" />
+        ),
     },
     {
         accessorKey: "nama_lengkap",
         header: "Nama Lengkap",
+        filterFn: "includesString",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Nama Lengkap" />
+        ),
     },
     {
         accessorKey: "nama_penyakit",
-        header: "Sakit",
+        filterFn: "includesString",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Sakit" />
+        ),
     },
     {
         accessorKey: "tgl_masuk",
-        header: "Tanggal Masuk",
-        cell: ({ row }) =>
-            dayjs(row.original.tgl_masuk).locale("id").format("DD MMMM YYYY"),
+        sortingFn: (rowA, rowB, columnId) => {
+            let dateRowA = dayjs(rowA.original.tgl_masuk, "DD-MM-YYYY");
+            let dateRowB = dayjs(rowB.original.tgl_masuk, "DD-MM-YYYY");
+
+            if (dateRowA.isSame(dateRowB, "day")) {
+                return 0;
+            } else if (dateRowA.isBefore(dateRowB, "day")) {
+                return -1;
+            } else {
+                return 1;
+            }
+        },
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Tanggal Masuk" />
+        ),
+        filterFn: (row, columnId, filterValue) => {
+            let constraintDate = {
+                start: dayjs(filterValue.tgl_start),
+                end: dayjs(filterValue.tgl_end),
+            };
+            let rowDate = dayjs(row.original.tgl_masuk, "DD-MM-YYYY");
+
+            if (filterValue.tgl_start && filterValue.tgl_end) {
+                if (
+                    rowDate.isSameOrBefore(constraintDate.end) &&
+                    rowDate.isSameOrAfter(constraintDate.start)
+                ) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+            if (filterValue.tgl_start) {
+                if (rowDate.isSameOrAfter(constraintDate.start)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+            if (filterValue.tgl_end) {
+                if (rowDate.isSameOrBefore(constraintDate.end)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+            return true;
+        },
     },
     {
         accessorKey: "tgl_keluar",
-        header: "Tanggal Keluar",
-        cell: ({ row }) =>
-            row.original.tgl_keluar
-                ? dayjs(row.original.tgl_keluar)
-                      .locale("id")
-                      .format("DD MMMM YYYY")
-                : "-",
+        sortingFn: (rowA, rowB, columnId) => {
+            let dateRowA = dayjs(rowA.original.tgl_keluar, "DD-MM-YYYY");
+            let dateRowB = dayjs(rowB.original.tgl_keluar, "DD-MM-YYYY");
+
+            if (dateRowA.isSame(dateRowB, "day")) {
+                return 0;
+            } else if (dateRowA.isBefore(dateRowB, "day")) {
+                return -1;
+            } else {
+                return 1;
+            }
+        },
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Tanggal Keluar" />
+        ),
+        cell: ({ row }) => row.original.tgl_keluar || "-",
+        filterFn: (row, columnId, filterValue) => {
+            let constraintDate = {
+                start: dayjs(filterValue.tgl_start),
+                end: dayjs(filterValue.tgl_end),
+            };
+            let rowDate = dayjs(row.original.tgl_keluar, "DD-MM-YYYY");
+
+            if (filterValue.tgl_start && filterValue.tgl_end) {
+                if (
+                    rowDate.isSameOrBefore(constraintDate.end) &&
+                    rowDate.isSameOrAfter(constraintDate.start)
+                ) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+            if (filterValue.tgl_start) {
+                if (rowDate.isSameOrAfter(constraintDate.start)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+            if (filterValue.tgl_end) {
+                if (rowDate.isSameOrBefore(constraintDate.end)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+            return true;
+        },
     },
     {
         accessorKey: "kelas",
-        header: "Kelas",
+        filterFn: "equals",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Kelas" />
+        ),
     },
     {
         accessorKey: "kode_ta",
-        header: "TA",
+        filterFn: "equals",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="TA" />
+        ),
     },
     {
         accessorKey: "status",
-        header: "Status",
+        filterFn: "equals",
+        sortingFn: (rowA, rowB, columnId) => {
+            let dataRowA = rowA.original.status;
+            let dataRowB = rowB.original.status;
+
+            if (dataRowA === dataRowB) {
+                return 0;
+            } else {
+                if (dataRowA === "PERAWATAN") {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            }
+        },
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Status" />
+        ),
         cell: ({ row }) => {
             const data = row.original;
 

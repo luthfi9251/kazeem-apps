@@ -76,7 +76,7 @@ export default function FilterSheetPelanggaran({
         <SheetBase state={state} title="Filter Data Pelanggaran">
             <Form {...formFilter}>
                 <form
-                    className="flex flex-col gap-2"
+                    className="flex flex-col gap-2 px-2 py-5 h-full overflow-y-auto"
                     onSubmit={formFilter.handleSubmit(submitHandler)}
                 >
                     <FormField
