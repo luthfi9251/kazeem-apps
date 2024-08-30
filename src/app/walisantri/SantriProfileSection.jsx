@@ -11,8 +11,8 @@ import {
 function DisplayText({ title, value }) {
     return (
         <div className="w-full flex flex-col items-center gap-1">
-            <h2 className="font-bold text-md md:text-lg">{title}</h2>
-            <p>{value}</p>
+            <h2 className="font-bold text-md">{title}</h2>
+            <p className="font-sm">{value}</p>
         </div>
     );
 }
@@ -21,11 +21,11 @@ export default function SantriProfileSection() {
     return (
         <Card className=" col-span-1 flex flex-col items-center p-2 md:p-5 gap-5 rounded">
             <Image
-                width={600}
-                height={600}
+                width={200}
+                height={200}
                 src="/foto/0f695fe654e40d770b4864fc693b47eabf07371c.png"
                 alt="Foto Santri"
-                className="aspect-square object-cover object-center rounded-full max-w-[200px] md:max-w-[300px] border-2"
+                className="aspect-square object-cover object-center rounded-full max-w-[200px] border-2"
             />
             <div className="text-center">
                 <h1 className=" font-bold text-xl md:text-3xl">John Doe</h1>

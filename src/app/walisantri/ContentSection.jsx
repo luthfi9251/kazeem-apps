@@ -8,8 +8,11 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { useSearchParams } from "next/navigation";
+import ContentUmum from "./_tab_content/Umum/Umum";
+import Pelanggaran from "./_tab_content/Pelanggaran/Pelanggaran";
+import Kesehatan from "./_tab_content/Kesehatan/Kesehatan";
 
-function ContentWrapper({ title }) {
+function ContentWrapper({ title, children }) {
     return (
         <Card>
             <CardHeader>
@@ -19,9 +22,7 @@ function ContentWrapper({ title }) {
                     ketidaksesuaian data
                 </CardDescription>
             </CardHeader>
-            <CardContent>
-                <p>Card Content</p>
-            </CardContent>
+            <CardContent>{children}</CardContent>
         </Card>
     );
 }
@@ -31,10 +32,22 @@ export default function ContentSection() {
     const tabActive = searchParams.get("tab");
 
     if (tabActive === "pelanggaran") {
-        return <ContentWrapper title="Data Pelanggaran" />;
+        return (
+            <ContentWrapper title="Data Pelanggaran">
+                <Pelanggaran />
+            </ContentWrapper>
+        );
     } else if (tabActive === "kesehatan") {
-        return <ContentWrapper title="Data Kesehatan" />;
+        return (
+            <ContentWrapper title="Data Kesehatan">
+                <Kesehatan />
+            </ContentWrapper>
+        );
     } else {
-        return <ContentWrapper title="Dashboard" />;
+        return (
+            <ContentWrapper title="Dashboard">
+                <ContentUmum />
+            </ContentWrapper>
+        );
     }
 }
