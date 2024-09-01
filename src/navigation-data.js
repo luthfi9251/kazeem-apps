@@ -12,6 +12,7 @@ export const HREF_URL = {
     USER_HOME: "/dashboard/users",
     USER_GROUP_HOME: "/dashboard/users/groups",
     USER_GROUP_EDIT: (id) => `/dashboard/users/groups/edit/${id}`,
+    SANTRI_WALISANTRI_HOME: "/dashboard/santri/wali",
     SANTRI_HOME: `/dashboard/santri`,
     SANTRI_EDIT: (id) => `/dashboard/santri/edit/${id}`,
     SANTRI_DETAIL: (id, back = null) =>

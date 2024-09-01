@@ -102,7 +102,7 @@ export async function editTahunAjar({
                     id: true,
                 },
             });
-            let isCurrentTa = checkTAAktif.id === idTa;
+            let isCurrentTa = checkTAAktif?.id === idTa;
             if (checkTAAktif && !isCurrentTa) {
                 let deactivateTahunAjar = prisma.TahunAjar.update({
                     where: {

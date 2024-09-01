@@ -22,12 +22,13 @@ import { PerwalianContext } from "../PerwalianDataProvider";
 import { useContext } from "react";
 import { saveEditWaliSantri } from "../_actions/walisantri";
 import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { HREF_URL } from "@/navigation-data";
 
 export default function DetailPage(props) {
     let wali = props.data;
     let id = props.id;
-
+    let searchParams = useSearchParams();
     let router = useRouter();
     let DISABLED = true;
     let [dataPerwalian, setDataPerwalian] = useContext(PerwalianContext);
@@ -48,7 +49,12 @@ export default function DetailPage(props) {
     return (
         <div className="md:p-5 p-2 grid md:grid-cols-2 grid-cols-1 gap-5">
             <div className="flex gap-2 md:col-span-2 col-span-1">
-                <Link href="/dashboard/santri/wali">
+                <Link
+                    href={
+                        searchParams.get("back") ||
+                        HREF_URL.SANTRI_WALISANTRI_HOME
+                    }
+                >
                     <Button variant="outline" className="mr-3">
                         <ArrowLeft />
                     </Button>

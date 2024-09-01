@@ -22,8 +22,10 @@ import { Trash2 } from "lucide-react";
 import { WaliContext } from "./WaliDataProvider";
 import { useContext } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function WaliSantriView(props) {
+    let pathname = usePathname();
     let { disabled, allowDetail = true } = props;
     let [dataWali, setWaliGroup] = useContext(WaliContext);
     let handleDelete = (data) => {
@@ -84,7 +86,7 @@ export default function WaliSantriView(props) {
                                         >
                                             <Link
                                                 className="flex gap-3 cursor-pointer w-full"
-                                                href={`/dashboard/santri/wali/detail/${item.id}`}
+                                                href={`/dashboard/santri/wali/detail/${item.id}?back=${pathname}`}
                                             >
                                                 <PenLine className="h-5 w-5" />
                                                 Detail
