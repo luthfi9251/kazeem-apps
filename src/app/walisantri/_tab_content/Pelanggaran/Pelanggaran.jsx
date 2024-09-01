@@ -1,9 +1,9 @@
 import { DataTable } from "./data-table";
 
-export default function Pelanggaran() {
+export default function Pelanggaran({ dataPelanggaran }) {
     return (
         <div>
-            <DataTable data={[]} />
+            <DataTable data={dataPelanggaran} />
         </div>
     );
 }

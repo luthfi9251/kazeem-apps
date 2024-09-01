@@ -5,6 +5,15 @@ import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { DataTableColumnHeader } from "@/components/DataTableHeader";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
+import { Info } from "lucide-react";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -28,8 +37,8 @@ export const columns = [
     {
         accessorKey: "tgl_masuk",
         sortingFn: (rowA, rowB, columnId) => {
-            let dateRowA = dayjs(rowA.original.tgl_masuk, "DD-MM-YYYY");
-            let dateRowB = dayjs(rowB.original.tgl_masuk, "DD-MM-YYYY");
+            let dateRowA = dayjs(rowA.original.tgl_masuk);
+            let dateRowB = dayjs(rowB.original.tgl_masuk);
 
             if (dateRowA.isSame(dateRowB, "day")) {
                 return 0;
@@ -42,48 +51,14 @@ export const columns = [
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Tanggal Masuk" />
         ),
-        filterFn: (row, columnId, filterValue) => {
-            let constraintDate = {
-                start: dayjs(filterValue.tgl_start),
-                end: dayjs(filterValue.tgl_end),
-            };
-            let rowDate = dayjs(row.original.tgl_masuk, "DD-MM-YYYY");
-
-            if (filterValue.tgl_start && filterValue.tgl_end) {
-                if (
-                    rowDate.isSameOrBefore(constraintDate.end) &&
-                    rowDate.isSameOrAfter(constraintDate.start)
-                ) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-
-            if (filterValue.tgl_start) {
-                if (rowDate.isSameOrAfter(constraintDate.start)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-
-            if (filterValue.tgl_end) {
-                if (rowDate.isSameOrBefore(constraintDate.end)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-
-            return true;
-        },
+        cell: ({ row }) =>
+            dayjs(row.original.tgl_masuk).locale("id").format("DD MMMM YYYY"),
     },
     {
         accessorKey: "tgl_keluar",
         sortingFn: (rowA, rowB, columnId) => {
-            let dateRowA = dayjs(rowA.original.tgl_keluar, "DD-MM-YYYY");
-            let dateRowB = dayjs(rowB.original.tgl_keluar, "DD-MM-YYYY");
+            let dateRowA = dayjs(rowA.original.tgl_keluar);
+            let dateRowB = dayjs(rowB.original.tgl_keluar);
 
             if (dateRowA.isSame(dateRowB, "day")) {
                 return 0;
@@ -96,46 +71,15 @@ export const columns = [
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Tanggal Keluar" />
         ),
-        cell: ({ row }) => row.original.tgl_keluar || "-",
-        filterFn: (row, columnId, filterValue) => {
-            let constraintDate = {
-                start: dayjs(filterValue.tgl_start),
-                end: dayjs(filterValue.tgl_end),
-            };
-            let rowDate = dayjs(row.original.tgl_keluar, "DD-MM-YYYY");
-
-            if (filterValue.tgl_start && filterValue.tgl_end) {
-                if (
-                    rowDate.isSameOrBefore(constraintDate.end) &&
-                    rowDate.isSameOrAfter(constraintDate.start)
-                ) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-
-            if (filterValue.tgl_start) {
-                if (rowDate.isSameOrAfter(constraintDate.start)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-
-            if (filterValue.tgl_end) {
-                if (rowDate.isSameOrBefore(constraintDate.end)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-
-            return true;
-        },
+        cell: ({ row }) =>
+            row.original.tgl_keluar
+                ? dayjs(row.original.tgl_keluar)
+                      .locale("id")
+                      .format("DD MMMM YYYY")
+                : "-",
     },
     {
-        accessorKey: "kelas",
+        accessorKey: "nama_kelas",
         filterFn: "equals",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Kelas" />
@@ -184,6 +128,39 @@ export const columns = [
                     </span>
                 );
             }
+        },
+    },
+    {
+        id: "actions",
+        cell: ({ row }) => {
+            return (
+                <>
+                    <Dialog>
+                        <DialogTrigger>
+                            <Info className="h-4 w-4" />
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Detail Pelanggaran</DialogTitle>
+                            </DialogHeader>
+                            <div className="flex flex-col gap-5 text-sm">
+                                <div className="space-y-2">
+                                    <h4 className="font-semibold text-black">
+                                        Kategori
+                                    </h4>
+                                    <p>{row.original.kategori}</p>
+                                </div>
+                                <div className="space-y-2">
+                                    <h4 className="font-semibold text-black">
+                                        Penanganan
+                                    </h4>
+                                    <p>{row.original.penanganan}</p>
+                                </div>
+                            </div>
+                        </DialogContent>
+                    </Dialog>
+                </>
+            );
         },
     },
 ];

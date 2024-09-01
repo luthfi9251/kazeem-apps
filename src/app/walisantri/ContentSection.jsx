@@ -11,6 +11,9 @@ import { useSearchParams } from "next/navigation";
 import ContentUmum from "./_tab_content/Umum/Umum";
 import Pelanggaran from "./_tab_content/Pelanggaran/Pelanggaran";
 import Kesehatan from "./_tab_content/Kesehatan/Kesehatan";
+import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getDashboardData } from "@/actions/wallisantriview";
 
 function ContentWrapper({ title, children }) {
     return (
@@ -27,26 +30,25 @@ function ContentWrapper({ title, children }) {
     );
 }
 
-export default function ContentSection() {
+export default function ContentSection({ nis, data }) {
     const searchParams = useSearchParams();
     const tabActive = searchParams.get("tab");
-
     if (tabActive === "pelanggaran") {
         return (
             <ContentWrapper title="Data Pelanggaran">
-                <Pelanggaran />
+                <Pelanggaran dataPelanggaran={data.pelanggaran} />
             </ContentWrapper>
         );
     } else if (tabActive === "kesehatan") {
         return (
             <ContentWrapper title="Data Kesehatan">
-                <Kesehatan />
+                <Kesehatan dataKesehatan={data.kesehatan} />
             </ContentWrapper>
         );
     } else {
         return (
             <ContentWrapper title="Dashboard">
-                <ContentUmum />
+                <ContentUmum dataUmum={data.umum} />
             </ContentWrapper>
         );
     }

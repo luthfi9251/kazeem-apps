@@ -2,7 +2,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 
 const TAB_LIST = [
     {
@@ -23,7 +23,10 @@ export default function TabSection() {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
-    const defaultValueTab = searchParams.get("tab") || TAB_LIST[0].value;
+    const defaultValueTab = useMemo(
+        () => searchParams.get("tab") || TAB_LIST[0].value,
+        [searchParams.get("tab")]
+    );
     const createQueryString = useCallback(
         (name, value) => {
             const params = new URLSearchParams(searchParams.toString());
@@ -38,10 +41,7 @@ export default function TabSection() {
 
     return (
         <div className="">
-            <Tabs
-                onValueChange={handleChangeTab}
-                defaultValue={defaultValueTab}
-            >
+            <Tabs onValueChange={handleChangeTab} value={defaultValueTab}>
                 <TabsList className="bg-gray-200 ">
                     {TAB_LIST.map((item, key) => {
                         return (

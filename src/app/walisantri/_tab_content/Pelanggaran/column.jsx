@@ -4,6 +4,17 @@ import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { DataTableColumnHeader } from "@/components/DataTableHeader";
+import { Button } from "@/components/ui/button";
+import { ChevronRight, Info, MoreVertical } from "lucide-react";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
+import Link from "next/link";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -18,8 +29,35 @@ export const columns = [
         },
     },
     {
+        accessorKey: "created_at",
+        cell: ({ row }) =>
+            dayjs(row.original.created_at).locale("id").format("DD MMMM YYYY"),
+        sortingFn: (rowA, rowB, columnId) => {
+            let dateRowA = dayjs(rowA.original.tanggal);
+            let dateRowB = dayjs(rowB.original.tanggal);
+
+            if (dateRowA.isSame(dateRowB, "day")) {
+                return 0;
+            } else if (dateRowA.isBefore(dateRowB, "day")) {
+                return -1;
+            } else {
+                return 1;
+            }
+        },
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Tanggal" />
+        ),
+    },
+    {
+        accessorKey: "Kategori.nama_pelanggaran",
+        filterFn: "equalsString",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Pelanggaran" />
+        ),
+    },
+    {
         id: "kelas",
-        accessorKey: "kelas",
+        accessorKey: "nama_kelas",
         filterFn: "equals",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Kelas" />
@@ -33,72 +71,74 @@ export const columns = [
             <DataTableColumnHeader column={column} title="TA" />
         ),
     },
+
     {
-        accessorKey: "nama_pelanggaran",
+        accessorKey: "Kategori.jenis",
         filterFn: "equalsString",
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Pelanggaran" />
+            <DataTableColumnHeader column={column} title="Jenis" />
         ),
     },
     {
-        accessorKey: "jenis_pelanggaran",
-        filterFn: "equalsString",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Departemen" />
-        ),
+        accessorKey: "Kategori.poin",
+        header: "Poin",
     },
     {
-        accessorKey: "tanggal",
-        sortingFn: (rowA, rowB, columnId) => {
-            let dateRowA = dayjs(rowA.original.tanggal, "DD-MM-YYYY");
-            let dateRowB = dayjs(rowB.original.tanggal, "DD-MM-YYYY");
-
-            if (dateRowA.isSame(dateRowB, "day")) {
-                return 0;
-            } else if (dateRowA.isBefore(dateRowB, "day")) {
-                return -1;
-            } else {
-                return 1;
-            }
-        },
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Tanggal" />
-        ),
-        filterFn: (row, columnId, filterValue) => {
-            let constraintDate = {
-                start: dayjs(filterValue.tgl_start),
-                end: dayjs(filterValue.tgl_end),
-            };
-            let rowDate = dayjs(row.original.tanggal, "DD-MM-YYYY");
-
-            if (filterValue.tgl_start && filterValue.tgl_end) {
-                if (
-                    rowDate.isSameOrBefore(constraintDate.end) &&
-                    rowDate.isSameOrAfter(constraintDate.start)
-                ) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-
-            if (filterValue.tgl_start) {
-                if (rowDate.isSameOrAfter(constraintDate.start)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-
-            if (filterValue.tgl_end) {
-                if (rowDate.isSameOrBefore(constraintDate.end)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-
-            return true;
+        id: "actions",
+        cell: ({ row }) => {
+            return (
+                <>
+                    <Dialog>
+                        <DialogTrigger>
+                            <Info className="h-4 w-4" />
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Detail Pelanggaran</DialogTitle>
+                            </DialogHeader>
+                            <div className="flex flex-col gap-5">
+                                <div className="space-y-2">
+                                    <h4 className="font-semibold text-black">
+                                        Kategori
+                                    </h4>
+                                    <p>{row.original.Kategori.kategori}</p>
+                                </div>
+                                <div className="space-y-2">
+                                    <h4 className="font-semibold text-black">
+                                        Keterangan
+                                    </h4>
+                                    <p>{row.original.konsekuensi}</p>
+                                </div>
+                                <div className="space-y-2">
+                                    <h4 className="font-semibold text-black">
+                                        Konsekuensi
+                                    </h4>
+                                    <p>{row.original.konsekuensi}</p>
+                                </div>
+                                <div className="space-y-2">
+                                    <h4 className="font-semibold text-black">
+                                        Berkas Penunjang
+                                    </h4>
+                                    <p>
+                                        {row.original.berkas_penunjang ? (
+                                            <Link
+                                                href={`/api/${row.original.berkas_penunjang}`}
+                                                className="w-full"
+                                                data-e2e="btn-download"
+                                                prefetch={false}
+                                            >
+                                                Unduh Berkas Penunjang
+                                            </Link>
+                                        ) : (
+                                            "-"
+                                        )}
+                                    </p>
+                                </div>
+                            </div>
+                        </DialogContent>
+                    </Dialog>
+                </>
+            );
         },
     },
 ];

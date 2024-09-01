@@ -93,8 +93,6 @@ export async function addSantri(santriFormData, waliSantriFormData) {
             last_update_by: userActionId,
             WaliSantri: {
                 create: waliSantri.map((item) => {
-                    console.log(new Date(item["tgl_lhr"]).toISOString());
-
                     return {
                         peran: item.peran,
                         created_by: userActionId,

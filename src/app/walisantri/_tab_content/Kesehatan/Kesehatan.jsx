@@ -1,9 +1,9 @@
 import { DataTable } from "./data-table";
 
-export default function Kesehatan() {
+export default function Kesehatan({ dataKesehatan }) {
     return (
         <div>
-            <DataTable data={[]} />
+            <DataTable data={dataKesehatan} />
         </div>
     );
 }

@@ -1,3 +1,4 @@
+import { getDashboardData } from "@/actions/wallisantriview";
 import {
     Table,
     TableBody,
@@ -7,6 +8,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import dayjs from "dayjs";
 import Link from "next/link";
 
 function SummaryItem({ title, value }) {
@@ -18,42 +20,59 @@ function SummaryItem({ title, value }) {
     );
 }
 
-export default function ContentUmum() {
+export default function ContentUmum({ dataUmum }) {
     return (
         <div className="space-y-7">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                <SummaryItem title="Kelas" value="4B" />
-                <SummaryItem title="Pelanggaran" value="8" />
-                <SummaryItem title="Kesehatan" value="3" />
+                <SummaryItem title="Kelas" value={dataUmum?.nama_kelas} />
+                <SummaryItem
+                    title="Pelanggaran"
+                    value={dataUmum?.count.pelanggaran}
+                />
+                <SummaryItem
+                    title="Kesehatan"
+                    value={dataUmum?.count.kesehatan}
+                />
             </div>
             <div className="space-y-3">
                 <h2 className="font-semibold text-md">Pelanggaran Terbaru</h2>
                 <Table>
-                    <TableCaption>
-                        Daftar pelanggaran lengkap dapat dilihat{" "}
-                        <Link href="/" className="underline text-blue-600 p">
+                    <TableCaption className="text-xs">
+                        Daftar pelanggaran lengkap dapat dilihat
+                        <Link
+                            href="/walisantri?tab=pelanggaran"
+                            className="underline text-blue-600 p"
+                        >
                             disini
                         </Link>
                     </TableCaption>
                     <TableHeader>
                         <TableRow>
-                            <TableHead className="w-[100px]">Tanggal</TableHead>
+                            <TableHead className="w-[180px]">Tanggal</TableHead>
                             <TableHead>Nama Pelanggaran</TableHead>
-                            <TableHead>Kategori Pelanggaran</TableHead>
+                            <TableHead>Jenis Pelanggaran</TableHead>
                             <TableHead className="text-right">Poin</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        <TableRow>
-                            <TableCell className="font-medium">
-                                INV001
-                            </TableCell>
-                            <TableCell>Paid</TableCell>
-                            <TableCell>Credit Card</TableCell>
-                            <TableCell className="text-right">
-                                $250.00
-                            </TableCell>
-                        </TableRow>
+                        {dataUmum?.pelanggaran.map((item, index) => {
+                            return (
+                                <TableRow key={index}>
+                                    <TableCell className="font-medium">
+                                        {dayjs(item.created_at)
+                                            .locale("id")
+                                            .format("DD MMMM YYYY")}
+                                    </TableCell>
+                                    <TableCell>
+                                        {item.Kategori.nama_pelanggaran}
+                                    </TableCell>
+                                    <TableCell>{item.Kategori.jenis}</TableCell>
+                                    <TableCell className="text-right">
+                                        {item.Kategori.poin}
+                                    </TableCell>
+                                </TableRow>
+                            );
+                        })}
                     </TableBody>
                 </Table>
             </div>
@@ -62,31 +81,42 @@ export default function ContentUmum() {
                     Data Kesehatan Terbaru
                 </h2>
                 <Table>
-                    <TableCaption>
-                        Daftar kesehatan lengkap dapat dilihat{" "}
-                        <Link href="/" className="underline text-blue-600 p">
+                    <TableCaption className="text-xs">
+                        Daftar kesehatan lengkap dapat dilihat
+                        <Link
+                            href="/walisantri?tab=kesehatan"
+                            className="underline text-blue-600 p"
+                        >
                             disini
                         </Link>
                     </TableCaption>
                     <TableHeader>
                         <TableRow>
-                            <TableHead className="w-[100px]">Tanggal</TableHead>
+                            <TableHead className="w-[180px]">Tanggal</TableHead>
                             <TableHead>Sakit</TableHead>
                             <TableHead>Penanganan</TableHead>
                             <TableHead className="text-right">Status</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        <TableRow>
-                            <TableCell className="font-medium">
-                                INV001
-                            </TableCell>
-                            <TableCell>Paid</TableCell>
-                            <TableCell>Credit Card</TableCell>
-                            <TableCell className="text-right">
-                                $250.00
-                            </TableCell>
-                        </TableRow>
+                        {dataUmum?.kesehatan.map((item, index) => {
+                            return (
+                                <TableRow key={index}>
+                                    <TableCell className="font-medium">
+                                        {dayjs(item.tgl_masuk)
+                                            .locale("id")
+                                            .format("DD MMMM YYYY")}
+                                    </TableCell>
+                                    <TableCell>{item.nama_penyakit}</TableCell>
+                                    <TableCell className=" max-w-[350px]">
+                                        {item.penanganan}
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        {item.status}
+                                    </TableCell>
+                                </TableRow>
+                            );
+                        })}
                     </TableBody>
                 </Table>
             </div>

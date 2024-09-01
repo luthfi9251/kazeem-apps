@@ -126,15 +126,22 @@ const seedSantri = async (idAdmin) => {
     const JENIS_KELAMIN = ["LAKI_LAKI", "PEREMPUAN"];
     const WALI_PERAN = ["AYAH", "IBU", "WALI", "lainnya"];
 
+    const nisSantri = Date.now() + "";
     const namaWali = fakerID_ID.person.fullName();
     const tglLahirWali = faker.date
-        .birthdate({ min: 34, max: 700, mode: "age" })
+        .birthdate({ min: 34, max: 70, mode: "age" })
         .toISOString();
+    const filteredTglLahirWali = new Date(
+        tglLahirWali.split("T")[0]
+    ).toISOString();
+    console.log(
+        `Santri : ${nisSantri} - ${namaWali} - ${filteredTglLahirWali}`
+    );
 
     const createSantri = await prisma.Santri.create({
         data: {
             nama_lengkap: fakerID_ID.person.fullName(),
-            nis: Date.now() + "",
+            nis: nisSantri,
             jenis_kel: faker.helpers.arrayElement(JENIS_KELAMIN),
             alamat: faker.location.streetAddress({ useFullAddress: true }),
             email: faker.internet.email(),
@@ -156,12 +163,12 @@ const seedSantri = async (idAdmin) => {
                             where: {
                                 waliIdentifier: {
                                     nama_wali: namaWali,
-                                    tgl_lhr: tglLahirWali,
+                                    tgl_lhr: filteredTglLahirWali,
                                 },
                             },
                             create: {
                                 nama_wali: namaWali,
-                                tgl_lhr: tglLahirWali,
+                                tgl_lhr: filteredTglLahirWali,
                                 email: faker.internet.email(),
                                 hp: faker.phone.number(),
                                 created_by: userActionId,
