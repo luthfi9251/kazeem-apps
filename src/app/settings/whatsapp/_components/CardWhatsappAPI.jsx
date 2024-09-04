@@ -12,7 +12,33 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import prisma from "@/lib/prisma";
 
+async function getNotificationWhatsapp() {
+    let data = await prisma.PageVariable.findMany({
+        where: {
+            key: {
+                startsWith: "ENABLE_WHATSAPP_",
+            },
+        },
+    });
+
+    let returned = {
+        pelanggaran:
+            data.find((item) => item.key === "ENABLE_WHATSAPP_PELANGGARAN")
+                ?.value === "true"
+                ? true
+                : false,
+        kesehatan:
+            data.find((item) => item.key === "ENABLE_WHATSAPP_KESEHATAN")
+                ?.value === "true"
+                ? true
+                : false,
+    };
+    console.log(returned);
+    return returned;
+}
+
 export default async function CardWhatsappAPI() {
+    let defVal = await getNotificationWhatsapp();
     async function saveWhatsappSetting(formData) {
         "use server";
         let session = await auth();
@@ -86,6 +112,7 @@ export default async function CardWhatsappAPI() {
                         <div className="flex items-center space-x-2">
                             <Checkbox
                                 id="pelanggaran"
+                                defaultChecked={defVal.pelanggaran}
                                 name="enablePelanggaran"
                             />
                             <label
@@ -96,7 +123,11 @@ export default async function CardWhatsappAPI() {
                             </label>
                         </div>
                         <div className="flex items-center space-x-2">
-                            <Checkbox id="kesehatan" name="enableKesehatan" />
+                            <Checkbox
+                                id="kesehatan"
+                                name="enableKesehatan"
+                                defaultChecked={defVal.kesehatan}
+                            />
                             <label
                                 htmlFor="kesehatan"
                                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"

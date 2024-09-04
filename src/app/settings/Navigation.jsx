@@ -24,13 +24,19 @@ const NAV_LIST = [
     },
 ];
 
-export default function SettingNavigation({ session }) {
+export default function SettingNavigation({ session, enabledWAAPI }) {
     let pathname = usePathname();
     let allowedLink = useMemo(() => {
         let nav = [];
         NAV_LIST.forEach((item) => {
             session.user.accessPage.includes(item.page_name);
-            nav.push(item);
+            if (item.page_name === PAGE_NAME.SETTING_WHATSAPP_API) {
+                if (enabledWAAPI) {
+                    nav.push(item);
+                }
+            } else {
+                nav.push(item);
+            }
         });
         return nav;
     }, []);
@@ -41,7 +47,7 @@ export default function SettingNavigation({ session }) {
         >
             {allowedLink.map((item, i) => (
                 <Link
-                    key={item.PAGE_NAME}
+                    key={i}
                     href={item.href}
                     className={cn(
                         pathname === item.href
@@ -52,6 +58,17 @@ export default function SettingNavigation({ session }) {
                     {item.text}
                 </Link>
             ))}
+            <div className="h-3 border-b-2"></div>
+            <Link
+                href="/dashboard"
+                className={cn(
+                    pathname === "/dashboard"
+                        ? "font-semibold text-primary"
+                        : ""
+                )}
+            >
+                Kembali ke Dashboard
+            </Link>
         </nav>
     );
 }
