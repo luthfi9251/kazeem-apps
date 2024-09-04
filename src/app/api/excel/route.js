@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import * as xlsx from "xlsx";
-import path from "path";
 import { auth } from "@/auth";
 import { getDataKesehatanForExcelExport } from "@/actions/kesehatan";
 import { getDataPelanggaranForExcelExport } from "@/actions/pelanggaran";

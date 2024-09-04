@@ -37,6 +37,9 @@ export const HREF_URL = {
     KESEHATAN_EDIT: (id) => `/dashboard/santri/kesehatan/edit/${id}`,
     WALISANTRI_VIEW: "/walisantri",
     WALISANTRI_VIEW_LOGIN: "/walisantri/login",
+    SETTINGS_AKUN: "/settings",
+    SETTINGS_KEPONDOKAN: "/settings/kepondokan",
+    SETTINGS_WHATSAPP: "/settings/whatsapp",
 };
 
 export const URL_PATH = [

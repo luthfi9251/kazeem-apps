@@ -1,18 +1,57 @@
+"use client";
+import { cn } from "@/lib/utils";
+import { HREF_URL } from "@/navigation-data";
+import { PAGE_NAME } from "@/variables/page-name";
 import Link from "next/link";
-export default function SettingNavigation() {
+import { usePathname } from "next/navigation";
+import { useMemo } from "react";
+
+const NAV_LIST = [
+    {
+        text: "Akun",
+        href: HREF_URL.SETTINGS_AKUN,
+        page_name: PAGE_NAME.SETTING_AKUN_USER,
+    },
+    {
+        text: "Kepondokan",
+        href: HREF_URL.SETTINGS_KEPONDOKAN,
+        page_name: PAGE_NAME.SETTING_KEPONDOKAN,
+    },
+    {
+        text: "Whatsapp API",
+        href: HREF_URL.SETTINGS_WHATSAPP,
+        page_name: PAGE_NAME.SETTING_WHATSAPP_API,
+    },
+];
+
+export default function SettingNavigation({ session }) {
+    let pathname = usePathname();
+    let allowedLink = useMemo(() => {
+        let nav = [];
+        NAV_LIST.forEach((item) => {
+            session.user.accessPage.includes(item.page_name);
+            nav.push(item);
+        });
+        return nav;
+    }, []);
     return (
         <nav
             className="grid gap-4 text-sm text-muted-foreground"
             x-chunk="dashboard-04-chunk-0"
         >
-            <Link href="#" className="font-semibold text-primary">
-                General
-            </Link>
-            <Link href="#">Security</Link>
-            <Link href="#">Integrations</Link>
-            <Link href="#">Support</Link>
-            <Link href="#">Organizations</Link>
-            <Link href="#">Advanced</Link>
+            {allowedLink.map((item, i) => (
+                <Link
+                    key={item.PAGE_NAME}
+                    href={item.href}
+                    className={cn(
+                        pathname === item.href
+                            ? "font-semibold text-primary"
+                            : ""
+                    )}
+                >
+                    {item.text}
+                </Link>
+            ))}
         </nav>
     );
 }

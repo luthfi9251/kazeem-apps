@@ -1,10 +1,24 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model PageVariable {
+  id         Int      @id @default(autoincrement())
+  key        String   @unique
+  value      String   @db.Text
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  last_update_by_id String?
+  last_update_by    User?   @relation("pagevariable_updated_by", fields: [last_update_by_id], references: [id])
+  created_by_id     String?
+  created_by        User?   @relation("pagevariable_created_by", fields: [created_by_id], references: [id])
 }
 
 model User {
@@ -20,24 +34,26 @@ model User {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  WaliCreated        Wali[]                @relation("wali_created_by")
-  WaliUpdated        Wali[]                @relation("wali_updated_by")
-  WaliSantriCreated  WaliSantri[]          @relation("walisantri_created_by")
-  WaliSantriUpdated  WaliSantri[]          @relation("walisantri_updated_by")
-  SantriCreated      Santri[]              @relation("santri_created_by")
-  SantriUpdated      Santri[]              @relation("santri_updated_by")
-  KategoriPelCreated KategoriPelanggaran[] @relation("kategoriPel_created_by")
-  KategoriPelUpdated KategoriPelanggaran[] @relation("kategoriPel_updated_by")
-  KelasSantriCreated KelasSantri[]         @relation("kelasSantri_created_by")
-  KelasSantriUpdated KelasSantri[]         @relation("kelasSantri_updated_by")
-  KelasCreated       Kelas[]               @relation("kelas_created_by")
-  KelasUpdated       Kelas[]               @relation("kelas_updated_by")
-  PelanggaranCreated Pelanggaran[]         @relation("pelanggaran_created_by")
-  PelanggaranUpdated Pelanggaran[]         @relation("pelanggaran_updated_by")
-  KesehatanCreated   Kesehatan[]           @relation("kesehatan_created_by")
-  KesehatanUpdated   Kesehatan[]           @relation("kesehatan_updated_by")
-  PageAccessCreated  PageAccess[]          @relation("pageaccess_updated_by")
-  PageAccessUpdated  PageAccess[]          @relation("pageaccess_created_by")
+  WaliCreated         Wali[]                @relation("wali_created_by")
+  WaliUpdated         Wali[]                @relation("wali_updated_by")
+  WaliSantriCreated   WaliSantri[]          @relation("walisantri_created_by")
+  WaliSantriUpdated   WaliSantri[]          @relation("walisantri_updated_by")
+  SantriCreated       Santri[]              @relation("santri_created_by")
+  SantriUpdated       Santri[]              @relation("santri_updated_by")
+  KategoriPelCreated  KategoriPelanggaran[] @relation("kategoriPel_created_by")
+  KategoriPelUpdated  KategoriPelanggaran[] @relation("kategoriPel_updated_by")
+  KelasSantriCreated  KelasSantri[]         @relation("kelasSantri_created_by")
+  KelasSantriUpdated  KelasSantri[]         @relation("kelasSantri_updated_by")
+  KelasCreated        Kelas[]               @relation("kelas_created_by")
+  KelasUpdated        Kelas[]               @relation("kelas_updated_by")
+  PelanggaranCreated  Pelanggaran[]         @relation("pelanggaran_created_by")
+  PelanggaranUpdated  Pelanggaran[]         @relation("pelanggaran_updated_by")
+  KesehatanCreated    Kesehatan[]           @relation("kesehatan_created_by")
+  KesehatanUpdated    Kesehatan[]           @relation("kesehatan_updated_by")
+  PageAccessCreated   PageAccess[]          @relation("pageaccess_updated_by")
+  PageAccessUpdated   PageAccess[]          @relation("pageaccess_created_by")
+  PageVariableCreated PageVariable[]        @relation("pagevariable_created_by")
+  PageVariableUpdated PageVariable[]        @relation("pagevariable_updated_by")
 }
 
 model Page {

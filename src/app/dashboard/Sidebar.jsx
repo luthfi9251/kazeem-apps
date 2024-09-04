@@ -251,6 +251,14 @@ export default function Sidebar(props) {
                                         </AccordionItem>
                                     );
                                 })}
+                                <Link
+                                    href="/settings"
+                                    className="border-b-white border-b-[1px] flex items-center gap-3 py-4 text-white transition-all hover:bg-kazeem-darker"
+                                >
+                                    <span className="text-white flex items-center gap-3">
+                                        <Settings className="h-5 w-5" /> Setting
+                                    </span>
+                                </Link>
                             </Accordion>
                         </nav>
                     </div>
