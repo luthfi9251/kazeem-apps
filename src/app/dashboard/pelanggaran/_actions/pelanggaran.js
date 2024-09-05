@@ -8,6 +8,12 @@ import { serverResponse } from "@/lib/utils";
 import path from "path";
 import fs from "fs";
 import dayjs from "dayjs";
+import {
+    generatePelanggaranMessage,
+    NOTIFICATION_URL,
+    sendNotification,
+} from "@/actions/notification";
+import { getEnableWhatsappNotification } from "@/actions/variable";
 
 async function saveBerkasToLocal(file) {
     //handle image
@@ -91,6 +97,7 @@ export async function addPelanggaran(
             revalidatePath(HREF_URL.PELANGGARAN_HOME);
             return serverResponse(createAll);
         } else {
+            // let createPelanggaranOnly = {};
             let createPelanggaranOnly = await prisma.Pelanggaran.create({
                 data: {
                     KelasSantri: {
@@ -110,6 +117,25 @@ export async function addPelanggaran(
                     last_update_by: connectUserID,
                 },
             });
+
+            if (await getEnableWhatsappNotification()) {
+                generatePelanggaranMessage({
+                    idKelasSantri: parseInt(kelasSantriId),
+                    namaPelanggaran: dataPelanggaran.nama_pelanggaran,
+                })
+                    .then((messageBody) =>
+                        sendNotification(
+                            NOTIFICATION_URL.WHATSAPP_PELANGGARAN,
+                            messageBody
+                        )
+                    )
+                    .then((res) => {
+                        if (!res.success) throw res.error;
+                        console.log("Success sending message!");
+                    })
+                    .catch((err) => console.log(err));
+            }
+
             revalidatePath(HREF_URL.PELANGGARAN_HOME);
             return serverResponse(createPelanggaranOnly);
         }

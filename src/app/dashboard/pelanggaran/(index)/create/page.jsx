@@ -2,6 +2,7 @@ import CreatePage from "./CreatePage";
 import prisma from "@/lib/prisma";
 import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
 import { PAGE_NAME } from "@/variables/page-name";
+import { getEnableWhatsappNotification } from "@/actions/variable";
 
 async function getNamaSantri() {
     let dataSantri = await prisma.KelasSantri.findMany({
@@ -42,14 +43,18 @@ async function getKategoriPelanggaran() {
 }
 
 async function Page() {
-    let [namaSantri, kategoriPelanggaran] = await Promise.all([
+    let [namaSantri, kategoriPelanggaran, enableWhatsapp] = await Promise.all([
         getNamaSantri(),
         getKategoriPelanggaran(),
+        getEnableWhatsappNotification(),
     ]);
 
     return (
         <>
-            <CreatePage data={{ namaSantri, kategoriPelanggaran }} />
+            <CreatePage
+                enableWhatsapp={enableWhatsapp}
+                data={{ namaSantri, kategoriPelanggaran }}
+            />
         </>
     );
 }

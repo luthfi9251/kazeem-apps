@@ -392,6 +392,33 @@ export default function PelanggaranForm({
                                     </FormItem>
                                 )}
                             />
+                            <FormField
+                                control={form.control}
+                                name="send_notification"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-col">
+                                        <FormControl>
+                                            <div className="flex items-center space-x-2">
+                                                <Checkbox
+                                                    id="terms"
+                                                    checked={field.value}
+                                                    onCheckedChange={(e) => {
+                                                        field.onChange(e);
+                                                    }}
+                                                />
+                                                <label
+                                                    htmlFor="terms"
+                                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                                >
+                                                    Kirim notifikasi ke Wali
+                                                    Santri
+                                                </label>
+                                            </div>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                         </div>
                         <fieldset className="grid gap-6 rounded-lg border p-4">
                             <legend className="-ml-1 px-1 text-sm font-medium">

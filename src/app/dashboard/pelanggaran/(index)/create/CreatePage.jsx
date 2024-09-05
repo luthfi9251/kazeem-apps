@@ -28,6 +28,7 @@ export default function CreatePage({ data }) {
             konsekuensi: "",
             poin: 0,
             allow_add: false,
+            send_notification: false,
         },
     });
 
