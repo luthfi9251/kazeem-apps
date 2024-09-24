@@ -392,7 +392,7 @@ export default function PelanggaranForm({
                                     </FormItem>
                                 )}
                             />
-                            <FormField
+                            {/* <FormField
                                 control={form.control}
                                 name="send_notification"
                                 render={({ field }) => (
@@ -418,7 +418,7 @@ export default function PelanggaranForm({
                                         <FormMessage />
                                     </FormItem>
                                 )}
-                            />
+                            /> */}
                         </div>
                         <fieldset className="grid gap-6 rounded-lg border p-4">
                             <legend className="-ml-1 px-1 text-sm font-medium">

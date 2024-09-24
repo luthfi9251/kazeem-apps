@@ -1,7 +1,7 @@
 services:
     web:
         container_name: kazeem-app
-        image: kazeem-app:latest
+        image: ghcr.io/luthfi9251/kazeem-app:latest
         build:
             dockerfile: Dockerfile
             context: .

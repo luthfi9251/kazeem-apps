@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import { serverResponse } from "@/lib/utils";
 import { HREF_URL } from "@/navigation-data";
 import dayjs from "dayjs";
+import "dayjs/locale/id";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -24,6 +25,11 @@ export const getWaliSantriSessionData = async () => {
         });
     }
     session.santri = santri;
+    if (santri) {
+        session.santri.foto = santri.foto
+            ? process.env.APP_URL + `/api/${santri.foto}`
+            : null;
+    }
     return session;
 };
 
@@ -62,7 +68,6 @@ export const waliSantriLogin = async (nis, tgl_lahir_walisantri) => {
                 },
             },
         });
-
         if (!santri)
             throw new Error(
                 "Santri tidak ditemukan, periksa kemali kombinasi NIS dan Tanggal lahir Wali!"
