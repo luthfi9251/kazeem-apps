@@ -1,3 +1,4 @@
+import NAV_DATA from "@/components/sidebar/NAV_DATA";
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -98,3 +99,45 @@ export function generateChartDataAndConfigTrenMonthly(serverResponse) {
     };
     return { chartConfig, chartData: serverResponse };
 }
+
+export const getAllowedNavLink = (userAllowedPage) => {
+    let nav = [];
+    NAV_DATA.forEach((itemParent) => {
+        let filteredNavlink = itemParent.child.map((itemChild) => {
+            let allowedChildren = itemChild.child.filter((navLink) =>
+                userAllowedPage.includes(navLink.page_name)
+            );
+
+            return {
+                ...itemChild,
+                child: allowedChildren,
+            };
+        });
+        let current = {
+            ...itemParent,
+            child: filteredNavlink.filter((item) => item.child.length > 0),
+        };
+        if (current.child.length > 0) {
+            nav.push(current);
+        }
+    });
+
+    return nav;
+};
+
+export const calculateActiveNavLink = (navItem, pathname) => {
+    if (pathname.includes(navItem.href)) {
+        let suffixPathname = pathname.split(navItem.href);
+        if (suffixPathname.length > 1) {
+            let part = suffixPathname[1].split("/");
+            let normalize = `/${part[1]}`;
+            if (navItem.suffix.includes(normalize)) {
+                return true;
+            } else if (suffixPathname[0] === suffixPathname[1]) {
+                return true;
+            }
+        }
+        return false;
+    }
+    return false;
+};

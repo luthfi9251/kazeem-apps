@@ -3,6 +3,24 @@
 @tailwind utilities;
 
 @layer base {
+    /* Hide the default scrollbar on Firefox */
+    * {
+        scrollbar-width: thin;
+        /* scrollbar-color: transparent transparent; */
+    }
+
+    /* Define the styles for the scrollbar track on Firefox */
+    *::-webkit-scrollbar {
+        width: 8px; /* Adjust the scrollbar width */
+        height: 8px;
+    }
+
+    /* Define the styles for the scrollbar thumb on Firefox */
+    *::-webkit-scrollbar-thumb {
+        background-color: #ddd; /* Adjust the thumb color */
+        border-radius: 8px; /* Adjust the thumb border radius */
+    }
+
     :root {
         --background: 0 0% 100%;
         --foreground: 0 0% 3.9%;
