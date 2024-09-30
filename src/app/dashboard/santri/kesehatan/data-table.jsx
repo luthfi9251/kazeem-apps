@@ -49,8 +49,6 @@ import FilterSheetKesehatan from "./FilterSheetKesehatan";
 
 export function DataTable({ columns, data, selectData }) {
     const filterSheetState = useState(false);
-    const [namaKelas, setNamaKelas] = useState();
-    const [kodeTA, setKodeTA] = useState();
     const [globalFilter, setGlobalFilter] = useState();
     const [columnFilters, setColumnFilters] = useState([]);
 

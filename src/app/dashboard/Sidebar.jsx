@@ -41,7 +41,6 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { URL_PATH } from "@/navigation-data";
-import { PAGE_ACCESS_CONFIG } from "@/security-config";
 
 function AlertDialogLogout() {
     return (
@@ -120,31 +119,6 @@ export default function Sidebar(props) {
         return index;
     };
 
-    let getAllowedNavLink = () => {
-        let nav = [];
-        URL_PATH.forEach((item) => {
-            let pageName = item.page_name;
-            let pageConfig = PAGE_ACCESS_CONFIG.find(
-                (item) => item.name === pageName
-            );
-
-            if (!pageConfig)
-                throw Error(
-                    "Kesalahan dalam konfigurasi navigation data dan security config!"
-                );
-            let allowed = false;
-            if (session) {
-                allowed = pageConfig.allowedGroup.some((role) =>
-                    session.user.groups.includes(role)
-                );
-            }
-
-            if (allowed) {
-                nav.push(item);
-            }
-        });
-        return nav;
-    };
     let getAllowedNavLink2 = () => {
         let nav = [];
         URL_PATH.forEach((item) => {
