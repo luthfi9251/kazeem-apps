@@ -1,3 +1,9 @@
+/**
+ *  aturan penamaan
+ *  KESANTRIAN_KELOLA_SANTRI
+ *  [SCOPE]_[PAGE_NAME]*
+ *  */
+
 const PAGE_NAME = {
     USER_HOME: "USER_HOME",
     USER_GROUP_HOME: "USER_GROUP_HOME",
