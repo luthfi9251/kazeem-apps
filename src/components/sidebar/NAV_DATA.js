@@ -51,6 +51,12 @@ const NAV_DATA = [
                         href: "/dashboard/santri/wali",
                         suffix: ["/edit", "/create", "/detail"],
                     },
+                    {
+                        name: "Kamar Santri",
+                        page_name: PAGE_NAME.KESANTRIAN_WALI_SANTRI,
+                        href: HREF_URL.KAMAR_SANTRI_HOME,
+                        suffix: ["/edit", "/create", "/detail"],
+                    },
                 ],
             },
             {
