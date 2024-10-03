@@ -54,6 +54,8 @@ model User {
   PageAccessUpdated   PageAccess[]          @relation("pageaccess_created_by")
   PageVariableCreated PageVariable[]        @relation("pagevariable_created_by")
   PageVariableUpdated PageVariable[]        @relation("pagevariable_updated_by")
+  KamarCreated        Kamar[]               @relation("kamar_created_by")
+  KamarUpdated        Kamar[]               @relation("kamar_updated_by")
 }
 
 model Page {
@@ -309,4 +311,18 @@ model Kesehatan {
 enum StatusKesehatan {
   PERAWATAN
   SEMBUH
+}
+
+model Kamar {
+  id         Int    @id @default(autoincrement())
+  nama_kamar String @unique
+  kapasitas  Int    @default(0)
+  deskripsi  String @db.Text
+
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+  created_by        User?    @relation("kamar_created_by", fields: [created_by_id], references: [id])
+  created_by_id     String?
+  last_update_by    User?    @relation("kamar_updated_by", fields: [last_update_by_id], references: [id])
+  last_update_by_id String?
 }

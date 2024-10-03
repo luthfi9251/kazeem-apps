@@ -40,6 +40,9 @@ export const HREF_URL = {
     SETTINGS_AKUN: "/settings",
     SETTINGS_KEPONDOKAN: "/settings/kepondokan",
     SETTINGS_WHATSAPP: "/settings/whatsapp",
+    KAMAR_SANTRI_HOME: "/dashboard/kamar",
+    KAMAR_SANTRI_CREATE: "/dashboard/kamar/create",
+    KAMAR_SANTRI_DETAIL: (id) => `/dashboard/kamar/detail/${id}`,
 };
 
 export const URL_PATH = [

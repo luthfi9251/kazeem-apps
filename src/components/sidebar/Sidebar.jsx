@@ -26,6 +26,8 @@ import { calculateActiveNavLink, cn, getAllowedNavLink } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import signOutFunc from "../../app/dashboard/_action.js/signOut";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AlertDialogLogout = ({ open, onOpenChange }) => {
     return (
@@ -272,6 +274,7 @@ export default function Sidebar({ session }) {
                     </SheetContent>
                 </Sheet>
             </div>
+            <ToastContainer />
         </>
     );
 }
