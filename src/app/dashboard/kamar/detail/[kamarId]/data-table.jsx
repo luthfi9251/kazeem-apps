@@ -52,6 +52,9 @@ import { generateExcel } from "@/lib/generate-excel";
 import { DataTableColumnHeader } from "@/components/DataTableHeader";
 import ModalDaftarSantri from "./ModalDaftarSantri";
 import MenuItemDeleteAction from "@/components/MenuItemDeleteAction";
+import { toast } from "react-toastify";
+import { deleteSantriFromKamar } from "@/actions/kamar";
+import ModalPindahKamar from "./ModalPindahKamar";
 
 const columns = [
     {
@@ -81,8 +84,33 @@ const columns = [
         cell: ({ row, table }) => {
             const [open, setOpen] = useState(false);
             const user = row.original;
-            const tableState = table.getState();
-            const handleDelete = () => {};
+            const showPindahKamarDialog =
+                table.getState().setisModalPindahKamarOpen;
+            const handleDelete = () => {
+                toast.promise(
+                    () => deleteSantriFromKamar(user.id),
+                    {
+                        pending: "Menghapus data",
+                        success: {
+                            render({ data }) {
+                                if (data.isError) {
+                                    throw data.error;
+                                }
+                                return "Data berhasil dihapus";
+                            },
+                        },
+                        error: {
+                            render({ data }) {
+                                return `${data}`;
+                            },
+                        },
+                    },
+                    {
+                        position: "bottom-right",
+                    }
+                );
+            };
+
             return (
                 <>
                     <DropdownMenu>
@@ -100,12 +128,20 @@ const columns = [
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuItem>
                                 <Link
-                                    href={HREF_URL.KAMAR_SANTRI_DETAIL(user.id)}
+                                    href={HREF_URL.SANTRI_DETAIL(user.id)}
                                     className="w-full"
                                     data-e2e="btn-detail"
                                 >
                                     Detail
                                 </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="cursor-pointer">
+                                <p
+                                    className="w-full"
+                                    onClick={() => showPindahKamarDialog(true)}
+                                >
+                                    Pindah Kamar
+                                </p>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem>
@@ -134,6 +170,7 @@ export function DataTable({ data, kamarId }) {
     const [globalFilter, setGlobalFilter] = useState();
     const [columnFilters, setColumnFilters] = useState([]);
     const [isModalSantriOpen, setIsModalSantriOpen] = useState(false);
+    const [isModalPindahKamarOpen, setisModalPindahKamarOpen] = useState(false);
 
     const table = useReactTable({
         data,
@@ -145,6 +182,7 @@ export function DataTable({ data, kamarId }) {
         state: {
             globalFilter,
             columnFilters,
+            setisModalPindahKamarOpen,
         },
         onColumnFiltersChange: setColumnFilters,
         initialState: {
@@ -291,6 +329,10 @@ export function DataTable({ data, kamarId }) {
                 open={isModalSantriOpen}
                 onOpenChange={setIsModalSantriOpen}
                 kamarId={kamarId}
+            />
+            <ModalPindahKamar
+                open={isModalPindahKamarOpen}
+                onOpenChange={setisModalPindahKamarOpen}
             />
         </>
     );

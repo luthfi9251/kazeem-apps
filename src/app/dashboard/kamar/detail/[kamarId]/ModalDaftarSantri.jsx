@@ -29,11 +29,12 @@ import { useMemo, useState } from "react";
 import DebouncedInput from "@/components/DebouncedInput";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash } from "lucide-react";
-import { addSantriToKelas, getAllSantriNotInKamar } from "@/actions/kamar";
+import { addSantriToKamar, getAllSantriNotInKamar } from "@/actions/kamar";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import LoadingWrapper from "@/components/LoadingWrapper";
 
-function DataTableSantri({ data, handleOnSave }) {
+function DataTableSantri({ data, handleOnSave, isLoading }) {
     const [globalFilter, setGlobalFilter] = useState();
     const [columnFilters, setColumnFilters] = useState([]);
     const columns = useMemo(
@@ -116,7 +117,7 @@ function DataTableSantri({ data, handleOnSave }) {
     });
 
     return (
-        <>
+        <LoadingWrapper isLoading={isLoading}>
             <div className="flex flex-col">
                 <div className="grid grid-cols-1 gap-2 md:gap-0 md:grid-cols-2 py-4">
                     <DebouncedInput
@@ -211,7 +212,7 @@ function DataTableSantri({ data, handleOnSave }) {
                     </Button>
                 </div>
                 <Button
-                    className=" self-center"
+                    className=" bg-kazeem-secondary self-start"
                     onClick={() =>
                         handleOnSave(
                             table
@@ -223,12 +224,12 @@ function DataTableSantri({ data, handleOnSave }) {
                     Simpan
                 </Button>
             </div>
-        </>
+        </LoadingWrapper>
     );
 }
 
 export default function ModalDaftarSantri({ open, onOpenChange, kamarId }) {
-    let { data } = useQuery({
+    let { data, isLoading } = useQuery({
         queryKey: ["santri_not_in", "kamar"],
         queryFn: async () => await getAllSantriNotInKamar(),
     });
@@ -237,7 +238,7 @@ export default function ModalDaftarSantri({ open, onOpenChange, kamarId }) {
         // console.log(dataSantri);
         toast
             .promise(
-                () => addSantriToKelas(dataSantri, kamarId),
+                () => addSantriToKamar(dataSantri, kamarId),
                 {
                     pending: "Menyimpan data",
                     success: {
@@ -267,7 +268,11 @@ export default function ModalDaftarSantri({ open, onOpenChange, kamarId }) {
                 <DialogHeader>
                     <DialogTitle>Masukkan Santri</DialogTitle>
                 </DialogHeader>
-                <DataTableSantri data={data} handleOnSave={handleOnAddSantri} />
+                <DataTableSantri
+                    data={data}
+                    handleOnSave={handleOnAddSantri}
+                    isLoading={isLoading}
+                />
             </DialogContent>
         </Dialog>
     );
