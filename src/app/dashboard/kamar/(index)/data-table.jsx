@@ -112,15 +112,6 @@ export function DataTable({ data, selectData }) {
                         >
                             Tambah
                         </Button>
-                        <Button
-                            variant="ghost"
-                            className="h-10 w-10 p-0"
-                            data-e2e="btn-filter"
-                            onClick={() => filterSheetState[1](true)}
-                        >
-                            <span className="sr-only">Open filter</span>
-                            <Filter className="h-5 w-5" />
-                        </Button>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button

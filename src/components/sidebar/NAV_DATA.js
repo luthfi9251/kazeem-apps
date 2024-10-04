@@ -52,7 +52,7 @@ const NAV_DATA = [
                         suffix: ["/edit", "/create", "/detail"],
                     },
                     {
-                        name: "Kamar Santri",
+                        name: "Kamar",
                         page_name: PAGE_NAME.KESANTRIAN_WALI_SANTRI,
                         href: HREF_URL.KAMAR_SANTRI_HOME,
                         suffix: ["/edit", "/create", "/detail"],
