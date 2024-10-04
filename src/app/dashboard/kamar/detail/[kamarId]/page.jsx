@@ -19,6 +19,10 @@ import {
 import { DataTable } from "./data-table";
 import DaftarSantriSection from "./DaftarSantriSection";
 import { getSantriInKamar } from "@/actions/kamar";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
+import { HREF_URL } from "@/navigation-data";
 
 export default async function Page(props) {
     const kamarId = props.params.kamarId;
@@ -59,6 +63,12 @@ export default async function Page(props) {
                             </TableRow>
                         </TableBody>
                     </Table>
+                    <Separator />
+                    <Link href={HREF_URL.KAMAR_SANTRI_EDIT(kamarId)}>
+                        <Button className="mt-2 w-[100px] bg-kazeem-primary hover:bg-kazeem-darker">
+                            Edit
+                        </Button>
+                    </Link>
                 </CardContent>
             </Card>
             <DaftarSantriSection

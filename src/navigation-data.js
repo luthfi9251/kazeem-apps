@@ -43,6 +43,7 @@ export const HREF_URL = {
     KAMAR_SANTRI_HOME: "/dashboard/kamar",
     KAMAR_SANTRI_CREATE: "/dashboard/kamar/create",
     KAMAR_SANTRI_DETAIL: (id) => `/dashboard/kamar/detail/${id}`,
+    KAMAR_SANTRI_EDIT: (id) => `/dashboard/kamar/edit/${id}`,
 };
 
 export const URL_PATH = [

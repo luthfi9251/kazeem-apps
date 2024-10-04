@@ -53,7 +53,7 @@ import { DataTableColumnHeader } from "@/components/DataTableHeader";
 import ModalDaftarSantri from "./ModalDaftarSantri";
 import MenuItemDeleteAction from "@/components/MenuItemDeleteAction";
 import { toast } from "react-toastify";
-import { deleteSantriFromKamar } from "@/actions/kamar";
+import { deleteSantriFromKamar, pindahKamar } from "@/actions/kamar";
 import ModalPindahKamar from "./ModalPindahKamar";
 
 const columns = [
@@ -84,8 +84,9 @@ const columns = [
         cell: ({ row, table }) => {
             const [open, setOpen] = useState(false);
             const user = row.original;
-            const showPindahKamarDialog =
-                table.getState().setisModalPindahKamarOpen;
+            const tableState = table.getState();
+            const showPindahKamarDialog = tableState.setisModalPindahKamarOpen;
+            const setSelectedSantri = tableState.setSelectedSantriPindaKamar;
             const handleDelete = () => {
                 toast.promise(
                     () => deleteSantriFromKamar(user.id),
@@ -138,7 +139,10 @@ const columns = [
                             <DropdownMenuItem className="cursor-pointer">
                                 <p
                                     className="w-full"
-                                    onClick={() => showPindahKamarDialog(true)}
+                                    onClick={() => {
+                                        showPindahKamarDialog(true);
+                                        setSelectedSantri(user.id);
+                                    }}
                                 >
                                     Pindah Kamar
                                 </p>
@@ -171,6 +175,8 @@ export function DataTable({ data, kamarId }) {
     const [columnFilters, setColumnFilters] = useState([]);
     const [isModalSantriOpen, setIsModalSantriOpen] = useState(false);
     const [isModalPindahKamarOpen, setisModalPindahKamarOpen] = useState(false);
+    const [selectedSantriPindaKamar, setSelectedSantriPindaKamar] =
+        useState(null);
 
     const table = useReactTable({
         data,
@@ -183,6 +189,7 @@ export function DataTable({ data, kamarId }) {
             globalFilter,
             columnFilters,
             setisModalPindahKamarOpen,
+            setSelectedSantriPindaKamar,
         },
         onColumnFiltersChange: setColumnFilters,
         initialState: {
@@ -194,6 +201,42 @@ export function DataTable({ data, kamarId }) {
             ],
         },
     });
+
+    const handlePindahKamarOneSantri = (idKamar) => {
+        toast
+            .promise(
+                () => pindahKamar(idKamar, selectedSantriPindaKamar),
+                {
+                    pending: "Menyimpan data",
+                    success: {
+                        render({ data }) {
+                            if (data.isError) {
+                                throw data.error;
+                            }
+                            return "Data berhasil disimpan";
+                        },
+                    },
+                    error: {
+                        render({ data }) {
+                            return `${data}`;
+                        },
+                    },
+                },
+                {
+                    position: "bottom-right",
+                }
+            )
+            .then(() => setisModalPindahKamarOpen(false));
+    };
+
+    // const handleGenerateExcel = () => {
+    //     generateExcel({
+    //         filename: `Data kelas ${dataKelas.nama_kelas} - ${taSelected}`,
+    //         type: "KELAS_SPECIFIED",
+    //         idKelas: idKelas,
+    //         kodeTa: taSelected,
+    //     });
+    // };
 
     return (
         <>
@@ -333,6 +376,8 @@ export function DataTable({ data, kamarId }) {
             <ModalPindahKamar
                 open={isModalPindahKamarOpen}
                 onOpenChange={setisModalPindahKamarOpen}
+                currentKamarId={kamarId}
+                handleOnSimpan={handlePindahKamarOneSantri}
             />
         </>
     );

@@ -44,6 +44,26 @@ export const getAllKamarSantri = async () => {
     }
 };
 
+export const getKamarById = async (idKamar) => {
+    try {
+        let data = await prisma.Kamar.findUnique({
+            where: {
+                id: parseInt(idKamar),
+            },
+            select: {
+                nama_kamar: true,
+                id: true,
+                kapasitas: true,
+                deskripsi: true,
+            },
+        });
+
+        return serverResponse(data, false, null);
+    } catch (err) {
+        return serverResponse(null, true, "Gagal mendapatkan data");
+    }
+};
+
 export const getAllSantriNotInKamar = async () => {
     try {
         let data = await prisma.Santri.findMany({
@@ -123,4 +143,61 @@ export const deleteSantriFromKamar = async (idSantri) => {
     }
 };
 
-export const pindahKamar = async (idKamar, idSantri) => {};
+export const pindahKamar = async (idKamar, idSantri) => {
+    try {
+        if (!idSantri) throw "id santri tidak boleh kosong!";
+        let updateSantri = await prisma.Santri.update({
+            where: {
+                id: parseInt(idSantri),
+            },
+            data: {
+                kamar_santri: {
+                    connect: {
+                        id: parseInt(idKamar),
+                    },
+                },
+            },
+        });
+        revalidatePath(HREF_URL.KAMAR_SANTRI_DETAIL(idKamar));
+        return serverResponse(updateSantri, false, null);
+    } catch (err) {
+        console.log(err);
+        return serverResponse(null, true, "Gagal mengupdate data");
+    }
+};
+
+export const updateKamarSantri = async (idKamar, data) => {
+    try {
+        let updateKamar = await prisma.Kamar.update({
+            where: {
+                id: parseInt(idKamar),
+            },
+            data: {
+                nama_kamar: data.nama_kamar,
+                kapasitas: data.kapasitas,
+                deskripsi: data.deskripsi,
+            },
+        });
+        revalidatePath(HREF_URL.KAMAR_SANTRI_DETAIL(idKamar));
+        revalidatePath(HREF_URL.KAMAR_SANTRI_HOME);
+        return serverResponse(updateKamar, false, null);
+    } catch (err) {
+        console.log(err);
+        return serverResponse(null, true, "Gagal mengupdate data");
+    }
+};
+
+export const deleteKamarSantri = async (idKamar) => {
+    try {
+        let deleteKamar = await prisma.Kamar.delete({
+            where: {
+                id: parseInt(idKamar),
+            },
+        });
+        revalidatePath(HREF_URL.KAMAR_SANTRI_HOME);
+        return serverResponse(deleteKamar, false, null);
+    } catch (err) {
+        console.log(err);
+        return serverResponse(null, true, "Gagal mengupdate data");
+    }
+};

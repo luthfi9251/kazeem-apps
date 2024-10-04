@@ -49,9 +49,6 @@ export default function CreateModal({ open, onOpenChange }) {
     });
 
     const onSubmitHandler = (formData) => {
-        // createKamarSantri(formData)
-        //     .then((res) => console.log(res))
-        //     .catch((err) => console.log(err));
         toast.promise(
             () => createKamarSantri(formData),
             {

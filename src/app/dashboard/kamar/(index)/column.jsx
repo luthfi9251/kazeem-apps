@@ -12,13 +12,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { HREF_URL } from "@/navigation-data";
 import Link from "next/link";
-import MenuItemDeleteAction from "@/components/MenuItemDeleteAction";
+import MenuItemDeleteAction, {
+    MenuItemDeleteActionWithConfirmation,
+} from "@/components/MenuItemDeleteAction";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { DataTableColumnHeader } from "@/components/DataTableHeader";
+import { deleteKamarSantri } from "@/actions/kamar";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -51,16 +54,14 @@ export const columns = [
         header: "Actions",
         cell: ({ row, table }) => {
             const [open, setOpen] = useState(false);
-            const user = row.original;
-            const tableState = table.getState();
+            const data = row.original;
             const handleDelete = () => {
                 toast.promise(
-                    () => deletePelanggaran(user.id),
+                    () => deleteKamarSantri(data.id),
                     {
                         pending: "Menghapus data",
                         success: {
                             render({ data }) {
-                                tableState.refetch();
                                 return "Data berhasil dihapus";
                             },
                         },
@@ -93,11 +94,20 @@ export const columns = [
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuItem>
                                 <Link
-                                    href={HREF_URL.KAMAR_SANTRI_DETAIL(user.id)}
+                                    href={HREF_URL.KAMAR_SANTRI_DETAIL(data.id)}
                                     className="w-full"
                                     data-e2e="btn-detail"
                                 >
                                     Detail
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                                <Link
+                                    href={HREF_URL.KAMAR_SANTRI_EDIT(data.id)}
+                                    className="w-full"
+                                    data-e2e="btn-edit"
+                                >
+                                    Edit
                                 </Link>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
@@ -111,10 +121,11 @@ export const columns = [
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <MenuItemDeleteAction
+                    <MenuItemDeleteActionWithConfirmation
                         open={open}
                         onOpenChange={setOpen}
                         onDeletehandle={handleDelete}
+                        challengeText={data.nama_kamar}
                     />
                 </>
             );
