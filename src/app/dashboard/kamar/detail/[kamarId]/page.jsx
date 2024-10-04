@@ -37,25 +37,24 @@ export default async function Page(props) {
                                 <TableCell className=" w-[150px] font-medium">
                                     Nama Kamar
                                 </TableCell>
-                                <TableCell>Kamar Mayar</TableCell>
+                                <TableCell>
+                                    {dataKamar.data?.nama_kamar}
+                                </TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell className=" font-medium">
                                     Kapasitas
                                 </TableCell>
-                                <TableCell>100</TableCell>
+                                <TableCell>
+                                    {dataKamar.data?.kapasitas}
+                                </TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell className=" font-medium">
                                     Deskripsi
                                 </TableCell>
                                 <TableCell>
-                                    Lorem ipsum dolor sit amet consectetur,
-                                    adipisicing elit. Excepturi quisquam magni,
-                                    illum, temporibus ut veritatis expedita
-                                    quidem nisi nobis fuga explicabo officiis
-                                    dignissimos incidunt! Consequuntur commodi
-                                    quia pariatur quas fugiat!
+                                    {dataKamar.data?.deskripsi ?? "-"}
                                 </TableCell>
                             </TableRow>
                         </TableBody>

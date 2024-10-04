@@ -84,7 +84,7 @@ export const getSantriInKamar = async (idKamar) => {
     }
 };
 
-export const addSantriToKelas = async (santriIdList, idKamar) => {
+export const addSantriToKamar = async (santriIdList, idKamar) => {
     try {
         let updateSantri = await prisma.Kamar.update({
             where: {
@@ -102,3 +102,25 @@ export const addSantriToKelas = async (santriIdList, idKamar) => {
         return serverResponse(null, true, "Gagal mengupdate data");
     }
 };
+
+export const deleteSantriFromKamar = async (idSantri) => {
+    try {
+        let updateSantri = await prisma.Santri.update({
+            where: {
+                id: parseInt(idSantri),
+            },
+            data: {
+                kamar_santri: {
+                    disconnect: {},
+                },
+            },
+        });
+        revalidatePath(HREF_URL.KAMAR_SANTRI_DETAIL(idSantri));
+        return serverResponse(updateSantri, false, null);
+    } catch (err) {
+        console.log(err);
+        return serverResponse(null, true, "Gagal mengupdate data");
+    }
+};
+
+export const pindahKamar = async (idKamar, idSantri) => {};
