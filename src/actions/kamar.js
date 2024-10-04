@@ -43,3 +43,62 @@ export const getAllKamarSantri = async () => {
         return serverResponse(null, true, "Gagal mendapatkan data");
     }
 };
+
+export const getAllSantriNotInKamar = async () => {
+    try {
+        let data = await prisma.Santri.findMany({
+            where: {
+                kamar_santri: null,
+            },
+            select: {
+                id: true,
+                nis: true,
+                nama_lengkap: true,
+            },
+        });
+        return data;
+    } catch (err) {
+        throw err;
+    }
+};
+
+export const getSantriInKamar = async (idKamar) => {
+    try {
+        let data = await prisma.Kamar.findUnique({
+            where: {
+                id: parseInt(idKamar),
+            },
+            include: {
+                Santri: {
+                    select: {
+                        id: true,
+                        nis: true,
+                        nama_lengkap: true,
+                    },
+                },
+            },
+        });
+        return serverResponse(data, false, null);
+    } catch (err) {
+        return serverResponse(null, true, err.message);
+    }
+};
+
+export const addSantriToKelas = async (santriIdList, idKamar) => {
+    try {
+        let updateSantri = await prisma.Kamar.update({
+            where: {
+                id: parseInt(idKamar),
+            },
+            data: {
+                Santri: {
+                    connect: santriIdList.map((item) => ({ id: item })),
+                },
+            },
+        });
+        revalidatePath(HREF_URL.KAMAR_SANTRI_DETAIL(idKamar));
+        return serverResponse(updateSantri, false, null);
+    } catch (err) {
+        return serverResponse(null, true, "Gagal mengupdate data");
+    }
+};

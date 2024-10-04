@@ -1,7 +1,12 @@
 "use client";
 import DebouncedInput from "@/components/DebouncedInput";
 import { useState } from "react";
-import { LoaderCircle, MoreVertical, Filter } from "lucide-react";
+import {
+    LoaderCircle,
+    MoreVertical,
+    Filter,
+    MoreHorizontal,
+} from "lucide-react";
 import {
     ColumnDef,
     flexRender,
@@ -45,6 +50,8 @@ import { HREF_URL } from "@/navigation-data";
 import { generatePDFPelanggaran } from "@/lib/generate-pdf";
 import { generateExcel } from "@/lib/generate-excel";
 import { DataTableColumnHeader } from "@/components/DataTableHeader";
+import ModalDaftarSantri from "./ModalDaftarSantri";
+import MenuItemDeleteAction from "@/components/MenuItemDeleteAction";
 
 const columns = [
     {
@@ -62,7 +69,7 @@ const columns = [
         ),
     },
     {
-        accessorKey: "nama_santri",
+        accessorKey: "nama_lengkap",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Nama Santri" />
         ),
@@ -122,11 +129,11 @@ const columns = [
     },
 ];
 
-export function DataTable({ data, selectData }) {
+export function DataTable({ data, kamarId }) {
     const filterSheetState = useState(false);
     const [globalFilter, setGlobalFilter] = useState();
     const [columnFilters, setColumnFilters] = useState([]);
-    const [isModalCreateOpen, setIsModalCreateOpen] = useState(false);
+    const [isModalSantriOpen, setIsModalSantriOpen] = useState(false);
 
     const table = useReactTable({
         data,
@@ -150,24 +157,6 @@ export function DataTable({ data, selectData }) {
         },
     });
 
-    // const handleGenerateExcel = () => {
-    //     let dataRow = table
-    //         .getFilteredRowModel()
-    //         .rows.map((item) => item.original);
-    //     generateExcel({
-    //         filename: "Data Pelanggaran santri",
-    //         type: "EXPORT_TO_EXCEL_ONLY",
-    //         dataRow,
-    //     });
-    // };
-
-    // const handleGeneratePF = () => {
-    //     let dataRow = table
-    //         .getFilteredRowModel()
-    //         .rows.map((item) => item.original);
-    //     generatePDFPelanggaran(dataRow, "Filtered", "Filtered");
-    // };
-
     return (
         <>
             <div>
@@ -181,9 +170,9 @@ export function DataTable({ data, selectData }) {
                     <div className="flex w-full justify-end gap-1">
                         <Button
                             className="grow max-w-[150px] w-full  bg-kazeem-secondary "
-                            id="tambah-kelas"
+                            id="tambah-santri"
                             data-e2e="btn-tambah"
-                            onClick={() => setIsModalCreateOpen(true)}
+                            onClick={() => setIsModalSantriOpen(true)}
                         >
                             Tambah
                         </Button>
@@ -298,6 +287,11 @@ export function DataTable({ data, selectData }) {
                     </Button>
                 </div>
             </div>
+            <ModalDaftarSantri
+                open={isModalSantriOpen}
+                onOpenChange={setIsModalSantriOpen}
+                kamarId={kamarId}
+            />
         </>
     );
 }

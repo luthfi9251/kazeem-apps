@@ -17,9 +17,13 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { DataTable } from "./data-table";
+import DaftarSantriSection from "./DaftarSantriSection";
+import { getSantriInKamar } from "@/actions/kamar";
 
-export default function Page(props) {
-    // console.log(searchParams);
+export default async function Page(props) {
+    const kamarId = props.params.kamarId;
+    const dataKamar = await getSantriInKamar(props.params.kamarId);
+    if (dataKamar.isError) throw dataKamar.error;
     return (
         <div className="md:p-5 p-2 grid grid-cols-1 gap-3">
             <Card className="lg:col-span-1">
@@ -58,14 +62,10 @@ export default function Page(props) {
                     </Table>
                 </CardContent>
             </Card>
-            <Card className="lg:col-span-1">
-                <CardHeader>
-                    <CardTitle>Data Santri</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <DataTable data={[]} />
-                </CardContent>
-            </Card>
+            <DaftarSantriSection
+                data={dataKamar.isError ? [] : dataKamar.data.Santri}
+                kamarId={kamarId}
+            />
         </div>
     );
 }
