@@ -116,6 +116,8 @@ model Santri {
   tgl_lhr      DateTime      @db.Date
   foto         String?       @db.VarChar(100)
   jenis_kel    JenisKel      @default(LAKI_LAKI)
+  kamarId      Int?
+  kamar_santri Kamar?        @relation(fields: [kamarId], references: [id])
   WaliSantri   WaliSantri[]
   KelasSantri  KelasSantri[]
 
@@ -314,10 +316,11 @@ enum StatusKesehatan {
 }
 
 model Kamar {
-  id         Int    @id @default(autoincrement())
-  nama_kamar String @unique
-  kapasitas  Int    @default(0)
-  deskripsi  String @db.Text
+  id         Int      @id @default(autoincrement())
+  nama_kamar String   @unique
+  kapasitas  Int      @default(0)
+  deskripsi  String   @db.Text
+  Santri     Santri[]
 
   created_at        DateTime @default(now())
   updated_at        DateTime @updatedAt
