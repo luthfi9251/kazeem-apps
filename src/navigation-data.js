@@ -44,6 +44,8 @@ export const HREF_URL = {
     KAMAR_SANTRI_CREATE: "/dashboard/kamar/create",
     KAMAR_SANTRI_DETAIL: (id) => `/dashboard/kamar/detail/${id}`,
     KAMAR_SANTRI_EDIT: (id) => `/dashboard/kamar/edit/${id}`,
+    HAFALAN_SANTRI_HOME: "/dashboard/hafalan",
+    HAFALAN_SANTRI_EDIT: (id) => `/dashboard/hafalan/edit/${id}`,
 };
 
 export const URL_PATH = [

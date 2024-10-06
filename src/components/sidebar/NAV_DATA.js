@@ -56,6 +56,12 @@ const NAV_DATA = [
                         href: HREF_URL.KAMAR_SANTRI_HOME,
                         suffix: ["/edit", "/create", "/detail"],
                     },
+                    {
+                        name: "Hafalan",
+                        page_name: PAGE_NAME.KESANTRIAN_WALI_SANTRI,
+                        href: HREF_URL.HAFALAN_SANTRI_HOME,
+                        suffix: ["/edit"],
+                    },
                 ],
             },
             {
