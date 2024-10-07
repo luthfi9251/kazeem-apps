@@ -126,8 +126,9 @@ model Santri {
   created_by_id     String?
   created_by        User?   @relation("santri_created_by", fields: [created_by_id], references: [id])
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  Hafalan    Hafalan[]
 }
 
 enum JenisKel {
@@ -383,4 +384,27 @@ enum StatusPresensi {
   IJIN
   ALPHA
   LAINNYA
+}
+
+model JenisHafalan {
+  id            Int    @id @default(autoincrement())
+  jenis_hafalan String @unique
+
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  Hafalan    Hafalan[]
+}
+
+model Hafalan {
+  id           Int          @id @default(autoincrement())
+  JenisHafalan JenisHafalan @relation(fields: [jenisHafalanId], references: [id])
+  Santri       Santri       @relation(fields: [santriId], references: [id])
+  hafalan_baru String
+  tgl_hafalan  DateTime     @default(now())
+  keterangan   String?      @db.Text
+
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+  jenisHafalanId Int
+  santriId       Int
 }

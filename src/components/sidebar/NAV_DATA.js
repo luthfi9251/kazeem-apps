@@ -57,11 +57,22 @@ const NAV_DATA = [
                         href: HREF_URL.KAMAR_SANTRI_HOME,
                         suffix: ["/edit", "/create", "/detail"],
                     },
+                ],
+            },
+            {
+                group_name: "Hafalan",
+                child: [
                     {
-                        name: "Hafalan",
+                        name: "Data Hafalan",
                         page_name: PAGE_NAME.KESANTRIAN_WALI_SANTRI,
                         href: HREF_URL.HAFALAN_SANTRI_HOME,
                         suffix: ["/edit"],
+                    },
+                    {
+                        name: "Jenis Hafalan",
+                        href: HREF_URL.HAFALAN_JENIS_HAFALAN,
+                        page_name: PAGE_NAME.KESANTRIAN_PELANGGARAN,
+                        suffix: [],
                     },
                 ],
             },
