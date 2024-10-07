@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { serverResponse } from "@/lib/utils";
 
 export const getDataSantriForExcelExport = async () => {
     let santriData = await prisma.Santri.findMany({
@@ -50,4 +51,21 @@ export const getDataSantriForExcelExport = async () => {
     });
 
     return data;
+};
+
+export const getAllSantriNameAndNIS = async () => {
+    try {
+        let data = await prisma.Santri.findMany({
+            where: {},
+            select: {
+                id: true,
+                nama_lengkap: true,
+                nis: true,
+            },
+        });
+
+        return serverResponse(data, false, null);
+    } catch (err) {
+        return serverResponse(null, true, "Gagal mendapatkan data");
+    }
 };
