@@ -1,7 +1,12 @@
 "use client";
 import DebouncedInput from "@/components/DebouncedInput";
 import { useState } from "react";
-import { LoaderCircle, MoreVertical, Filter } from "lucide-react";
+import {
+    LoaderCircle,
+    MoreVertical,
+    Filter,
+    MoreHorizontal,
+} from "lucide-react";
 import {
     ColumnDef,
     flexRender,
@@ -13,16 +18,7 @@ import {
 } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
+
 import {
     Table,
     TableBody,
@@ -44,10 +40,132 @@ import Link from "next/link";
 import { HREF_URL } from "@/navigation-data";
 import { generatePDFPelanggaran } from "@/lib/generate-pdf";
 import { generateExcel } from "@/lib/generate-excel";
-import { columns } from "./column";
+import { DataTableColumnHeader } from "@/components/DataTableHeader";
+import MenuItemDeleteAction from "@/components/MenuItemDeleteAction";
+import { toast } from "react-toastify";
+import { deleteSantriFromKamar, pindahKamar } from "@/actions/kamar";
 import CreateModal from "./CreateModal";
 
-export function DataTable({ data, selectData }) {
+const columns = [
+    {
+        id: "no",
+        header: "No.",
+        cell: ({ row }) => {
+            return <span className="capitalize ">{row.index + 1}</span>;
+        },
+    },
+    {
+        accessorKey: "tgl_hafalan",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Tgl Hafalan" />
+        ),
+    },
+    {
+        accessorKey: "jenis_hafalan",
+        filterFn: "equalsString",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Jenis Hafalan" />
+        ),
+    },
+    {
+        accessorKey: "hafalan_baru",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Hafalan Baru" />
+        ),
+    },
+
+    {
+        id: "actions",
+        header: "Actions",
+        cell: ({ row, table }) => {
+            const [open, setOpen] = useState(false);
+            const user = row.original;
+            const tableState = table.getState();
+            const showPindahKamarDialog = tableState.setisModalPindahKamarOpen;
+            const setSelectedSantri = tableState.setSelectedSantriPindaKamar;
+            const handleDelete = () => {
+                toast.promise(
+                    () => deleteSantriFromKamar(user.id),
+                    {
+                        pending: "Menghapus data",
+                        success: {
+                            render({ data }) {
+                                if (data.isError) {
+                                    throw data.error;
+                                }
+                                return "Data berhasil dihapus";
+                            },
+                        },
+                        error: {
+                            render({ data }) {
+                                return `${data}`;
+                            },
+                        },
+                    },
+                    {
+                        position: "bottom-right",
+                    }
+                );
+            };
+
+            return (
+                <>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button
+                                variant="ghost"
+                                className="h-8 w-8 p-0"
+                                data-e2e="btn-dropdown"
+                            >
+                                <span className="sr-only">Open menu</span>
+                                <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuItem>
+                                <Link
+                                    href={HREF_URL.SANTRI_DETAIL(user.id)}
+                                    className="w-full"
+                                    data-e2e="btn-detail"
+                                >
+                                    Detail
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="cursor-pointer">
+                                <p
+                                    className="w-full"
+                                    onClick={() => {
+                                        showPindahKamarDialog(true);
+                                        setSelectedSantri(user.id);
+                                    }}
+                                >
+                                    Pindah Kamar
+                                </p>
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem>
+                                <p
+                                    className="text-red-500 cursor-pointer w-full"
+                                    onClick={() => setOpen(true)}
+                                >
+                                    Hapus
+                                </p>
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                    <MenuItemDeleteAction
+                        open={open}
+                        onOpenChange={setOpen}
+                        onDeletehandle={handleDelete}
+                    />
+                </>
+            );
+        },
+    },
+];
+
+export default function DataTable({ data, kamarId, listJenisHafalan }) {
     const filterSheetState = useState(false);
     const [globalFilter, setGlobalFilter] = useState();
     const [columnFilters, setColumnFilters] = useState([]);
@@ -88,39 +206,12 @@ export function DataTable({ data, selectData }) {
                     <div className="flex w-full justify-end gap-1">
                         <Button
                             className="grow max-w-[150px] w-full  bg-kazeem-secondary "
-                            id="tambah-kelas"
+                            id="tambah-santri"
                             data-e2e="btn-tambah"
                             onClick={() => setIsModalCreateOpen(true)}
                         >
                             Tambah
                         </Button>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button
-                                    variant="ghost"
-                                    className="h-10 w-10 p-0"
-                                    data-e2e="btn-dropdown"
-                                >
-                                    <span className="sr-only">Open menu</span>
-                                    <MoreVertical className="h-5 w-5" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                                <DropdownMenuLabel>Exports</DropdownMenuLabel>
-                                <DropdownMenuItem
-                                    className="cursor-pointer"
-                                    // onClick={handleGeneratePF}
-                                >
-                                    PDF
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    className="cursor-pointer"
-                                    // onClick={handleGenerateExcel}
-                                >
-                                    Excel
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
                     </div>
                 </div>
                 <div className="rounded-md border">
@@ -205,16 +296,22 @@ export function DataTable({ data, selectData }) {
                     </Button>
                 </div>
             </div>
-            {/* <FilterSheetPelanggaran
-                state={filterSheetState}
-                namaKelas={selectData.kelas}
-                kodeTA={selectData.kode_ta}
-                getColumnFilter={setColumnFilters}
-            /> */}
             <CreateModal
                 open={isModalCreateOpen}
                 onOpenChange={setIsModalCreateOpen}
+                jenis_hafalan_list={listJenisHafalan}
             />
+            {/* <ModalDaftarSantri
+                open={isModalSantriOpen}
+                onOpenChange={setIsModalSantriOpen}
+                kamarId={kamarId}
+            />
+            <ModalPindahKamar
+                open={isModalPindahKamarOpen}
+                onOpenChange={setisModalPindahKamarOpen}
+                currentKamarId={kamarId}
+                handleOnSimpan={handlePindahKamarOneSantri}
+            /> */}
         </>
     );
 }

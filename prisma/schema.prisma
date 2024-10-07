@@ -344,7 +344,7 @@ model Hafalan {
   id           Int          @id @default(autoincrement())
   JenisHafalan JenisHafalan @relation(fields: [jenisHafalanId], references: [id])
   Santri       Santri       @relation(fields: [santriId], references: [id])
-  hafalan_baru String
+  hafalan_baru String       @db.Text
   tgl_hafalan  DateTime     @default(now())
   keterangan   String?      @db.Text
 

@@ -76,3 +76,42 @@ export const getAllJenisHafalan = async () => {
         return serverResponse(null, true, "Gagal mendapatkan data!");
     }
 };
+
+export const addHafalanSantri = async (data) => {
+    try {
+        let {
+            hafalan_baru,
+            tgl_hafalan,
+            keterangan,
+            id_santri,
+            id_jenis_hafalan,
+        } = data;
+
+        await prisma.JenisHafalan.create({
+            data: {
+                hafalan_baru,
+                tgl_hafalan,
+                keterangan,
+                Santri: {
+                    connect: {
+                        id: id_santri,
+                    },
+                },
+                JenisHafalan: {
+                    connect: {
+                        id: id_jenis_hafalan,
+                    },
+                },
+            },
+        });
+
+        revalidatePath(HREF_URL.HAFALAN_SANTRI_HOME);
+        return serverResponse("OK", false, null);
+    } catch (err) {
+        return serverResponse(
+            null,
+            true,
+            "Gagal menambahkan data, pastikan seluuh data sudah lengkap!"
+        );
+    }
+};
