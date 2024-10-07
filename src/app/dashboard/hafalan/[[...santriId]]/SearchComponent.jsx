@@ -20,7 +20,6 @@ import { useState } from "react";
 
 export default function SearchComponent({ dataSantri }) {
     const field = {};
-    const namaSantri = [];
     const [openSantri, setOpenSantri] = useState(false);
     const [selectedSantri, setSelectedSantri] = useState(null);
     return (
