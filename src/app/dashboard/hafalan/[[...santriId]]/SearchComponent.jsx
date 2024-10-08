@@ -15,13 +15,19 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { HREF_URL } from "@/navigation-data";
 import { ArrowUpDown, CheckIcon } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function SearchComponent({ dataSantri }) {
     const field = {};
+    const router = useRouter();
+    const params = useParams();
     const [openSantri, setOpenSantri] = useState(false);
-    const [selectedSantri, setSelectedSantri] = useState(null);
+    const [selectedSantri, setSelectedSantri] = useState(
+        params.santriId ? parseInt(params.santriId[0]) : null
+    );
     return (
         <Popover open={openSantri} onOpenChange={setOpenSantri}>
             <PopoverTrigger asChild>
@@ -61,6 +67,11 @@ export default function SearchComponent({ dataSantri }) {
                                     onSelect={() => {
                                         setOpenSantri(false);
                                         setSelectedSantri(santri.id);
+                                        router.push(
+                                            HREF_URL.HAFALAN_SANTRI_DETAIL(
+                                                santri.id
+                                            )
+                                        );
                                     }}
                                 >
                                     {santri.nis + " - " + santri.nama_lengkap}

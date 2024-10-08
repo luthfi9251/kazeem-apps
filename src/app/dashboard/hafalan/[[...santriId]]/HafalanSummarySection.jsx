@@ -23,7 +23,7 @@ export default async function HafalanSummarySection({ santriId }) {
             <CardContent>
                 {santriId && (
                     <>
-                        <DetailSantriComponent />
+                        <DetailSantriComponent santriId={santriId} />
                         <Separator className="my-5" />
                         <DataTable
                             data={[]}
