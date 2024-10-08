@@ -54,7 +54,7 @@ export const HREF_URL = {
     KAMAR_SANTRI_DETAIL: (id) => `/dashboard/kamar/detail/${id}`,
     KAMAR_SANTRI_EDIT: (id) => `/dashboard/kamar/edit/${id}`,
     HAFALAN_SANTRI_HOME: "/dashboard/hafalan",
-    HAFALAN_SANTRI_EDIT: (id) => `/dashboard/hafalan/edit/${id}`,
+    HAFALAN_SANTRI_DETAIL: (id) => `/dashboard/hafalan/${id}`,
     HAFALAN_JENIS_HAFALAN: "/dashboard/hafalan/jenis",
 };
 

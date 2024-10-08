@@ -115,3 +115,20 @@ export const addHafalanSantri = async (data) => {
         );
     }
 };
+
+export const getSantriInformationHafalan = async (idSantri) => {
+    try {
+        let data = await prisma.Santri.findUnique({
+            where: {
+                id: parseInt(idSantri),
+            },
+            select: {
+                nis: true,
+                nama_lengkap: true,
+            },
+        });
+        return serverResponse(data, false, null);
+    } catch (err) {
+        return serverResponse(null, true, "Gagal mendapatkan data!");
+    }
+};
