@@ -9,10 +9,11 @@ import {
 import DetailSantriComponent from "./DetailSantriComponent";
 import DataTable from "./data-table";
 import { Separator } from "@/components/ui/separator";
-import { getAllJenisHafalan } from "@/actions/hafalan";
+import { getAllHafalanSantri, getAllJenisHafalan } from "@/actions/hafalan";
 
 export default async function HafalanSummarySection({ santriId }) {
     const responseListJenisHafalan = await getAllJenisHafalan();
+    const responseAllHafalanSantri = await getAllHafalanSantri(santriId);
     return (
         <Card>
             <CardHeader>
@@ -26,7 +27,8 @@ export default async function HafalanSummarySection({ santriId }) {
                         <DetailSantriComponent santriId={santriId} />
                         <Separator className="my-5" />
                         <DataTable
-                            data={[]}
+                            data={responseAllHafalanSantri.data ?? []}
+                            santriId={santriId}
                             listJenisHafalan={
                                 responseListJenisHafalan.data ?? []
                             }

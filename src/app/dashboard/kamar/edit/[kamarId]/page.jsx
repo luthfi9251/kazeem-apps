@@ -8,8 +8,10 @@ import {
 } from "@/components/ui/card";
 import FormEditKamar from "./FormEditKamar";
 import { getKamarById } from "@/actions/kamar";
+import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
+import { PAGE_NAME } from "@/variables/page-name";
 
-export default async function Page(props) {
+async function Page(props) {
     const kamarId = props.params.kamarId;
     const dataKamar = await getKamarById(kamarId);
 
@@ -28,3 +30,5 @@ export default async function Page(props) {
         </div>
     );
 }
+
+export default withAuthAndGroupCheck(Page, PAGE_NAME.KESANTRIAN_KAMAR_SANTRI);

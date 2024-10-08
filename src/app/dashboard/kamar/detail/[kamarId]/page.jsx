@@ -23,8 +23,10 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { HREF_URL } from "@/navigation-data";
+import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
+import { PAGE_NAME } from "@/variables/page-name";
 
-export default async function Page(props) {
+async function Page(props) {
     const kamarId = props.params.kamarId;
     const dataKamar = await getSantriInKamar(props.params.kamarId);
     if (dataKamar.isError) throw dataKamar.error;
@@ -78,3 +80,5 @@ export default async function Page(props) {
         </div>
     );
 }
+
+export default withAuthAndGroupCheck(Page, PAGE_NAME.KESANTRIAN_KAMAR_SANTRI);

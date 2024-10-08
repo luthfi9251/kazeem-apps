@@ -1,6 +1,6 @@
 "use client";
 
-import { addHafalanSantri } from "@/actions/hafalan";
+import { addHafalanSantri, editJenisHafalanSantri } from "@/actions/hafalan";
 import { createKamarSantri } from "@/actions/kamar";
 import { Button } from "@/components/ui/button";
 import {
@@ -33,6 +33,7 @@ import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import * as yup from "yup";
+import dayjs from "dayjs";
 
 const hafalanSchema = yup.object({
     // id_jenis_hafalan: yup.number().required("Jenis hafalan wajib diisi!"),
@@ -41,29 +42,28 @@ const hafalanSchema = yup.object({
     keterangan: yup.string().optional(),
 });
 
-export default function CreateModal({
+export default function DetailEditModal({
+    data,
     open,
     onOpenChange,
     santriId,
     jenis_hafalan_list,
+    edit = false,
 }) {
     const formHafalan = useForm({
         resolver: yupResolver(hafalanSchema),
-        defaultValues: {
-            id_santri: "",
-            id_jenis_hafalan: "2",
-            hafalan_baru: "",
-            tgl_hafalan: new Date().toISOString(),
-            keterangan: "",
-        },
         values: {
             id_santri: santriId[0],
+            id_jenis_hafalan: data?.JenisHafalan.id + "",
+            hafalan_baru: data?.hafalan_baru,
+            tgl_hafalan: dayjs(data?.tgl_hafalan).format("YYYY-MM-DD"),
+            keterangan: data?.keterangan,
         },
     });
 
     const onSubmitHandler = (formData) => {
         toast.promise(
-            () => addHafalanSantri(formData),
+            () => editJenisHafalanSantri(data.id, formData),
             {
                 pending: "Menyimpan data",
                 success: {
@@ -108,6 +108,7 @@ export default function CreateModal({
                                     <Select
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
+                                        disabled={!edit}
                                     >
                                         <FormControl>
                                             <SelectTrigger>
@@ -138,7 +139,11 @@ export default function CreateModal({
                                 <FormItem className="flex flex-col">
                                     <FormLabel required>Hafalan Baru</FormLabel>
                                     <FormControl>
-                                        <Textarea {...field} rows={3} />
+                                        <Textarea
+                                            disabled={!edit}
+                                            {...field}
+                                            rows={3}
+                                        />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -158,6 +163,7 @@ export default function CreateModal({
                                             type="date"
                                             name="tgl_hafalan"
                                             id="tgl_hafalan"
+                                            disabled={!edit}
                                             {...field}
                                         />
                                     </FormControl>
@@ -172,15 +178,21 @@ export default function CreateModal({
                                 <FormItem className="flex flex-col">
                                     <FormLabel>Keterangan</FormLabel>
                                     <FormControl>
-                                        <Textarea {...field} rows={3} />
+                                        <Textarea
+                                            disabled={!edit}
+                                            {...field}
+                                            rows={3}
+                                        />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
-                        <Button className="bg-kazeem-primary hover:bg-kazeem-darker">
-                            Tambah
-                        </Button>
+                        {edit && (
+                            <Button className="bg-kazeem-primary hover:bg-kazeem-darker">
+                                Simpan
+                            </Button>
+                        )}
                     </form>
                 </Form>
             </DialogContent>

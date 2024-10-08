@@ -8,8 +8,10 @@ import {
 } from "@/components/ui/card";
 import { DataTable } from "./data-table";
 import { getAllKamarSantri } from "@/actions/kamar";
+import { PAGE_NAME } from "@/variables/page-name";
+import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
 
-export default async function Page() {
+async function Page() {
     const dataKamar = await getAllKamarSantri();
     if (dataKamar.isError) throw dataKamar.error;
     return (
@@ -26,3 +28,5 @@ export default async function Page() {
         </div>
     );
 }
+
+export default withAuthAndGroupCheck(Page, PAGE_NAME.KESANTRIAN_KAMAR_SANTRI);

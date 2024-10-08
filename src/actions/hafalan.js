@@ -45,6 +45,7 @@ export const editJenisHafalan = async (id, data) => {
         );
     }
 };
+
 export const deleteJenisHafalan = async (id) => {
     try {
         await prisma.JenisHafalan.delete({
@@ -77,6 +78,25 @@ export const getAllJenisHafalan = async () => {
     }
 };
 
+export const getAllHafalanSantri = async (idSantri) => {
+    try {
+        let data = await prisma.Hafalan.findMany({
+            where: {
+                Santri: {
+                    id: parseInt(idSantri),
+                },
+            },
+            include: {
+                JenisHafalan: true,
+                Santri: true,
+            },
+        });
+        return serverResponse(data, false, null);
+    } catch (err) {
+        return serverResponse(null, true, "Gagal mendapatkan data!");
+    }
+};
+
 export const addHafalanSantri = async (data) => {
     try {
         let {
@@ -87,27 +107,28 @@ export const addHafalanSantri = async (data) => {
             id_jenis_hafalan,
         } = data;
 
-        await prisma.JenisHafalan.create({
+        await prisma.Hafalan.create({
             data: {
                 hafalan_baru,
                 tgl_hafalan,
                 keterangan,
                 Santri: {
                     connect: {
-                        id: id_santri,
+                        id: parseInt(id_santri),
                     },
                 },
                 JenisHafalan: {
                     connect: {
-                        id: id_jenis_hafalan,
+                        id: parseInt(id_jenis_hafalan),
                     },
                 },
             },
         });
 
-        revalidatePath(HREF_URL.HAFALAN_SANTRI_HOME);
+        revalidatePath(HREF_URL.HAFALAN_SANTRI_DETAIL(id_santri));
         return serverResponse("OK", false, null);
     } catch (err) {
+        console.log(err);
         return serverResponse(
             null,
             true,
@@ -130,5 +151,60 @@ export const getSantriInformationHafalan = async (idSantri) => {
         return serverResponse(data, false, null);
     } catch (err) {
         return serverResponse(null, true, "Gagal mendapatkan data!");
+    }
+};
+
+export const editJenisHafalanSantri = async (idHafalan, data) => {
+    try {
+        let {
+            hafalan_baru,
+            tgl_hafalan,
+            keterangan,
+            id_jenis_hafalan,
+            id_santri,
+        } = data;
+
+        await prisma.Hafalan.update({
+            where: {
+                id: parseInt(idHafalan),
+            },
+            data: {
+                hafalan_baru,
+                tgl_hafalan,
+                keterangan,
+                JenisHafalan: {
+                    connect: {
+                        id: parseInt(id_jenis_hafalan),
+                    },
+                },
+            },
+        });
+        revalidatePath(HREF_URL.HAFALAN_SANTRI_DETAIL(id_santri));
+        return serverResponse("OK", false, null);
+    } catch (err) {
+        return serverResponse(
+            null,
+            true,
+            "Gagal mengubah data, pastikan jenis hafalan unik!"
+        );
+    }
+};
+
+export const deleteHafalanSantri = async (idHafalan, id_santri) => {
+    try {
+        await prisma.Hafalan.delete({
+            where: {
+                id: idHafalan,
+            },
+        });
+        revalidatePath(HREF_URL.HAFALAN_SANTRI_DETAIL(id_santri));
+        return serverResponse("OK", false, null);
+    } catch (err) {
+        console.log(err);
+        return serverResponse(
+            null,
+            true,
+            "Gagal mengubah data, pastikan jenis hafalan unik!"
+        );
     }
 };

@@ -10,8 +10,10 @@ import SearchComponent from "./SearchComponent";
 import { getAllSantriNameAndNIS } from "@/actions/santri";
 import HeadSection from "./HeadSection";
 import HafalanSummarySection from "./HafalanSummarySection";
+import { PAGE_NAME } from "@/variables/page-name";
+import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
 
-export default async function Page(props) {
+async function Page(props) {
     const santriId = props.params.santriId;
     let response = await getAllSantriNameAndNIS();
 
@@ -24,3 +26,5 @@ export default async function Page(props) {
         </div>
     );
 }
+
+export default withAuthAndGroupCheck(Page, PAGE_NAME.KESANTRIAN_HAFALAN_SANTRI);
