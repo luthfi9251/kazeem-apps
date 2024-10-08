@@ -1,12 +1,7 @@
 "use client";
 import DebouncedInput from "@/components/DebouncedInput";
 import { useState } from "react";
-import {
-    LoaderCircle,
-    MoreVertical,
-    Filter,
-    MoreHorizontal,
-} from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 import {
     ColumnDef,
     flexRender,
@@ -16,9 +11,7 @@ import {
     getFilteredRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-
 import { Button } from "@/components/ui/button";
-
 import {
     Table,
     TableBody,
@@ -35,16 +28,14 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useQuery } from "@tanstack/react-query";
-import Link from "next/link";
-import { HREF_URL } from "@/navigation-data";
-import { generatePDFPelanggaran } from "@/lib/generate-pdf";
-import { generateExcel } from "@/lib/generate-excel";
 import { DataTableColumnHeader } from "@/components/DataTableHeader";
 import MenuItemDeleteAction from "@/components/MenuItemDeleteAction";
 import { toast } from "react-toastify";
-import { deleteSantriFromKamar, pindahKamar } from "@/actions/kamar";
 import CreateModal from "./CreateModal";
+import dayjs from "dayjs";
+import "dayjs/locale/id";
+import DetailEditModal from "./DetailEditModal";
+import { deleteHafalanSantri } from "@/actions/hafalan";
 
 const columns = [
     {
@@ -59,9 +50,14 @@ const columns = [
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Tgl Hafalan" />
         ),
+        cell: ({ row }) => {
+            return dayjs(row.original.tgl_hafalan)
+                .locale("id")
+                .format("DD MMMM YYYY");
+        },
     },
     {
-        accessorKey: "jenis_hafalan",
+        accessorKey: "JenisHafalan.jenis_hafalan",
         filterFn: "equalsString",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Jenis Hafalan" />
@@ -79,13 +75,18 @@ const columns = [
         header: "Actions",
         cell: ({ row, table }) => {
             const [open, setOpen] = useState(false);
-            const user = row.original;
+            const dataOriginal = row.original;
             const tableState = table.getState();
-            const showPindahKamarDialog = tableState.setisModalPindahKamarOpen;
-            const setSelectedSantri = tableState.setSelectedSantriPindaKamar;
+            const showEditDetailModal = tableState.setIsModalEditOpen;
+            const setSelected = tableState.setSelectedData;
+            const setIsEditMode = tableState.setIsEditMode;
             const handleDelete = () => {
                 toast.promise(
-                    () => deleteSantriFromKamar(user.id),
+                    () =>
+                        deleteHafalanSantri(
+                            dataOriginal.id,
+                            dataOriginal.Santri.id
+                        ),
                     {
                         pending: "Menghapus data",
                         success: {
@@ -123,24 +124,28 @@ const columns = [
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem>
-                                <Link
-                                    href={HREF_URL.SANTRI_DETAIL(user.id)}
+                            <DropdownMenuItem className="cursor-pointer">
+                                <p
                                     className="w-full"
-                                    data-e2e="btn-detail"
+                                    onClick={() => {
+                                        showEditDetailModal(true);
+                                        setSelected(dataOriginal);
+                                        setIsEditMode(false);
+                                    }}
                                 >
                                     Detail
-                                </Link>
+                                </p>
                             </DropdownMenuItem>
                             <DropdownMenuItem className="cursor-pointer">
                                 <p
                                     className="w-full"
                                     onClick={() => {
-                                        showPindahKamarDialog(true);
-                                        setSelectedSantri(user.id);
+                                        showEditDetailModal(true);
+                                        setSelected(dataOriginal);
+                                        setIsEditMode(true);
                                     }}
                                 >
-                                    Pindah Kamar
+                                    Edit
                                 </p>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
@@ -165,11 +170,14 @@ const columns = [
     },
 ];
 
-export default function DataTable({ data, kamarId, listJenisHafalan }) {
+export default function DataTable({ data, santriId, listJenisHafalan }) {
     const filterSheetState = useState(false);
     const [globalFilter, setGlobalFilter] = useState();
     const [columnFilters, setColumnFilters] = useState([]);
     const [isModalCreateOpen, setIsModalCreateOpen] = useState(false);
+    const [isModalEditOpen, setIsModalEditOpen] = useState(false);
+    const [selectedData, setSelectedData] = useState(null);
+    const [isEditMode, setIsEditMode] = useState(false);
 
     const table = useReactTable({
         data,
@@ -181,6 +189,9 @@ export default function DataTable({ data, kamarId, listJenisHafalan }) {
         state: {
             globalFilter,
             columnFilters,
+            setIsModalEditOpen,
+            setSelectedData,
+            setIsEditMode,
         },
         onColumnFiltersChange: setColumnFilters,
         initialState: {
@@ -297,21 +308,19 @@ export default function DataTable({ data, kamarId, listJenisHafalan }) {
                 </div>
             </div>
             <CreateModal
+                santriId={santriId}
                 open={isModalCreateOpen}
                 onOpenChange={setIsModalCreateOpen}
                 jenis_hafalan_list={listJenisHafalan}
             />
-            {/* <ModalDaftarSantri
-                open={isModalSantriOpen}
-                onOpenChange={setIsModalSantriOpen}
-                kamarId={kamarId}
+            <DetailEditModal
+                edit={isEditMode}
+                data={selectedData}
+                santriId={santriId}
+                open={isModalEditOpen}
+                onOpenChange={setIsModalEditOpen}
+                jenis_hafalan_list={listJenisHafalan}
             />
-            <ModalPindahKamar
-                open={isModalPindahKamarOpen}
-                onOpenChange={setisModalPindahKamarOpen}
-                currentKamarId={kamarId}
-                handleOnSimpan={handlePindahKamarOneSantri}
-            /> */}
         </>
     );
 }

@@ -6,7 +6,7 @@ export default async function DashboardLayout(props) {
     let session = await auth();
     const { children } = props;
 
-    if (session?.user) {
+    if (session?.user && session.user.accessPage.length > 0) {
         return (
             <div className="flex flex-col md:flex-row w-screen min-h-screen">
                 <Sidebar session={session} />

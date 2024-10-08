@@ -40,7 +40,8 @@ import {
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import "react-toastify/dist/ReactToastify.css";
-import { URL_PATH } from "@/navigation-data";
+
+const URL_PATH = [];
 
 function AlertDialogLogout() {
     return (

@@ -8,8 +8,10 @@ import {
 } from "@/components/ui/card";
 import DataTable from "./data-table";
 import { getAllJenisHafalan } from "@/actions/hafalan";
+import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
+import { PAGE_NAME } from "@/variables/page-name";
 
-export default async function Page() {
+async function Page() {
     let response = await getAllJenisHafalan();
 
     if (response.isError) throw response.error;
@@ -28,3 +30,5 @@ export default async function Page() {
         </div>
     );
 }
+
+export default withAuthAndGroupCheck(Page, PAGE_NAME.KESANTRIAN_HAFALAN_SANTRI);
