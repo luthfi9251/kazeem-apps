@@ -80,6 +80,29 @@ const NAV_DATA = [
                     },
                 ],
             },
+            {
+                group_name: "Manajemen Pegawai",
+                child: [
+                    {
+                        name: "Pegawai",
+                        page_name: PAGE_NAME.KESANTRIAN_KELOLA_SANTRI,
+                        href: HREF_URL.PEGAWAI_HOME,
+                        suffix: ["/edit", "/create", "/detail"],
+                    },
+                    {
+                        name: "Jabatan Pegawai",
+                        page_name: PAGE_NAME.KESANTRIAN_KELOLA_SANTRI,
+                        href: HREF_URL.PEGAWAI_JABATAN_HOME,
+                        suffix: ["/edit", "/create", "/detail"],
+                    },
+                    {
+                        name: "Pegawai Presensi",
+                        page_name: PAGE_NAME.KESANTRIAN_KELOLA_SANTRI,
+                        href: HREF_URL.PRESENSI_HOME,
+                        suffix: ["/edit", "/create", "/detail"],
+                    },
+                ],
+            },
         ],
     },
     {

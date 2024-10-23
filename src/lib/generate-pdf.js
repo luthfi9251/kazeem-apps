@@ -120,6 +120,62 @@ export async function generatePDFKesehatan(data, namaKelas, ta) {
     });
 }
 
+export async function generatePDFPresensi(data) {
+    const doc = new jsPDF();
+    doc.setProperties({
+        title: "Data Presensi Pegawai",
+    });
+
+    doc.autoTable({
+        body: [
+            ["Jumlah data pegawai", data.length],
+        ],
+    });
+    doc.autoTable({
+        startY: doc.lastAutoTable.finalY + 10,
+        columns: [
+            { dataKey: "id", header: "No." },
+            { dataKey: "id_pegawai", header: "ID Pegawai" },
+            { dataKey: "nama_pegawai", header: "Nama Lengkap" },
+            { dataKey: "jabatan", header: "Jabatan" },
+            { dataKey: "tgl_presensi", header: "Tgl Presensi" },
+            { dataKey: "status", header: "Status" },
+            { dataKey: "keterangan", header: "Keterangan" },
+        ],
+        body: data,
+        theme: "plain",
+        headStyles: {
+            fillColor: [69, 96, 131],
+            fontSize: 10,
+            textColor: "#ffffff",
+        },
+        willDrawCell: (data) => {
+            if (data.column.dataKey === "id" && data.section === "body") {
+                data.cell.text = [data.row.index + 1 + ""];
+            }
+        },
+        didDrawPage: function (data) {
+            // Footer
+            doc.setFontSize(7);
+
+            // jsPDF 1.4+ uses getHeight, <1.4 uses .height
+            var pageSize = doc.internal.pageSize;
+            var pageHeight = pageSize.height
+                ? pageSize.height
+                : pageSize.getHeight();
+            doc.text(
+                `Generated at ${new Date().toLocaleString("id")} by Kazeem`,
+                data.settings.margin.left,
+                pageHeight - 10
+            );
+        },
+    });
+
+    doc.output("dataurlnewwindow", {
+        filename: `Data Presensi Pegawai ${new Date()}.pdf`,
+    });
+}
+
 export async function generatePDFPelanggaran(data, namaKelas, ta) {
     const doc = new jsPDF();
     doc.setProperties({

@@ -17,6 +17,11 @@ export const HREF_URL = {
     SANTRI_EDIT: (id) => `/dashboard/santri/edit/${id}`,
     SANTRI_DETAIL: (id, back = null) =>
         `/dashboard/santri/detail/${id}${back ? `?back=${back}` : ""}`,
+    PEGAWAI_JABATAN_HOME: "/dashboard/pegawai/jabatan",
+    PEGAWAI_HOME: `/dashboard/pegawai`,
+    PEGAWAI_EDIT: (id) => `/dashboard/pegawai/edit/${id}`,
+    PEGAWAI_DETAIL: (id, back = null) =>
+        `/dashboard/pegawai/detail/${id}${back ? `?back=${back}` : ""}`,
     KEMADRASAHAN_KELAS_DETAIL: (id) =>
         `/dashboard/kemadrasahan/kelas/detail/${id}`,
     KEMADRASAHAN_KELAS_EDIT: (id) => `/dashboard/kemadrasahan/kelas/edit/${id}`,
@@ -35,6 +40,10 @@ export const HREF_URL = {
     KESEHATAN_CREATE: "/dashboard/santri/kesehatan/create",
     KESEHATAN_DETAIL: (id) => `/dashboard/santri/kesehatan/detail/${id}`,
     KESEHATAN_EDIT: (id) => `/dashboard/santri/kesehatan/edit/${id}`,
+    PRESENSI_HOME: "/dashboard/pegawai/presensi",
+    PRESENSI_CREATE: "/dashboard/pegawai/presensi/create",
+    PRESENSI_DETAIL: (id) => `/dashboard/pegawai/presensi/detail/${id}`,
+    PRESENSI_EDIT: (id) => `/dashboard/pegawai/presensi/edit/${id}`,
     WALISANTRI_VIEW: "/walisantri",
     WALISANTRI_VIEW_LOGIN: "/walisantri/login",
     SETTINGS_AKUN: "/settings",
@@ -133,6 +142,22 @@ export const URL_PATH = [
             },
         ],
     },
+    {
+        name: "Pegawai",
+        icon: <UsersRound className="h-5 w-5" />,
+        page_name: "",
+        href: "",
+        hasChild: true,
+        children: [
+            {
+                name: "Kelola Pegawai",
+                page_name: PAGE_NAME.KEPEGAWAIAN_KELOLA_PEGAWAI,
+                href: HREF_URL.PEGAWAI_HOME,
+                suffix: ["/edit", "/create", "/detail"],
+                icon: "",
+            },
+        ],
+    }
     // {
     //     name: "Pelanggaran",
     //     icon: <CircleAlert className="h-5 w-5" />,

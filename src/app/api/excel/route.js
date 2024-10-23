@@ -2,10 +2,12 @@ import { NextResponse } from "next/server";
 import * as xlsx from "xlsx";
 import { auth } from "@/auth";
 import { getDataKesehatanForExcelExport } from "@/actions/kesehatan";
+import { getDataPresensiForExcelExport } from "@/actions/presensi";
 import { getDataPelanggaranForExcelExport } from "@/actions/pelanggaran";
 import { getAllKelasDataForExcelExport } from "@/actions/kelas";
 import { getOneKelasDataForExcelExport } from "@/actions/kelas";
 import { getDataSantriForExcelExport } from "@/actions/santri";
+import { getDataPegawaiForExcelExport } from "@/actions/pegawai";
 
 export async function POST(req, props) {
     try {
@@ -24,6 +26,9 @@ export async function POST(req, props) {
             case "KESEHATAN":
                 data = await getDataKesehatanForExcelExport();
                 break;
+            case "PRESENSI":
+                data = await getDataPresensiForExcelExport();
+                break;
             case "PELANGGARAN":
                 data = await getDataPelanggaranForExcelExport();
                 break;
@@ -37,6 +42,9 @@ export async function POST(req, props) {
                 break;
             case "SANTRI_ALL":
                 data = await getDataSantriForExcelExport();
+                break;
+            case "PEGAWAI_ALL":
+                data = await getDataPegawaiForExcelExport();
                 break;
             case "EXPORT_TO_EXCEL_ONLY":
                 data = JSON.parse(formData.get("dataRow"));
