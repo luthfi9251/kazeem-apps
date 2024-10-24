@@ -12,7 +12,6 @@ import prisma from "@/lib/prisma";
 import dayjs from "dayjs";
 import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
 import { PAGE_NAME } from "@/variables/page-name";
-import { getDataKesehatanByKelasAndTA } from "../_actions/kesehatan";
 
 async function getData() {
     let data = await prisma.presensiPegawai.findMany({
