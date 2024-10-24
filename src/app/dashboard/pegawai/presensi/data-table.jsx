@@ -32,7 +32,6 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { useQuery } from "@tanstack/react-query";
-import { getDataKesehatanByKelasAndTA } from "../_actions/kesehatan";
 import Link from "next/link";
 import { HREF_URL } from "@/navigation-data";
 import {
