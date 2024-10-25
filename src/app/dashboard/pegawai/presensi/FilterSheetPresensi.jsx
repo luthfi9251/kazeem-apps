@@ -245,7 +245,7 @@ export default function FilterSheetKesehatan({
                                             <SelectItem value="ALPHA">
                                                 Alpha
                                             </SelectItem>
-                                            <SelectItem value="LANNYA">
+                                            <SelectItem value="LAINNYA">
                                                 Lainnya
                                             </SelectItem>
                                             <SelectItem key="ALL" value="ALL">
