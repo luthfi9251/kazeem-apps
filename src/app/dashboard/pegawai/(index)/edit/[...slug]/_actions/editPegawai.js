@@ -42,7 +42,6 @@ export async function editPegawai(pegawaiFormData, jabatanPegawaiFormData) {
             },
             data: updateQueryData,
         });
-        // console.log("Data berhasil disimpan:", updatePegawai);
 
         revalidatePath("/dashboard/pegawai/edit/" + pegawai.get("id"));
         revalidatePath("/dashboard/pegawai/detail/" + pegawai.get("id"));

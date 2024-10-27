@@ -34,7 +34,6 @@ export async function addPegawai(pegawaiFormData, jabatanPegawaiFormData) {
             tgl_lhr: new Date(pegawai.get("tgl_lhr")).toISOString(),
             JabatanPegawai: {
                 create: jabatanPegawai.map((item) => {
-                    console.log(item.nama_jabatan)
                     return {
                         Jabatan: {
                             connectOrCreate: {
@@ -54,9 +53,7 @@ export async function addPegawai(pegawaiFormData, jabatanPegawaiFormData) {
     };
 
     try {
-        console.log("Query untuk disimpan:", JSON.stringify(query, null, 2)); // Log query
         let pegawaiSave = await prisma.Pegawai.create(query);
-        // console.log("Data berhasil disimpan:", pegawaiSave);
         revalidatePath("/dashboard/pegawai");
         return serverResponse("Success add pegawai");
     } catch (err) {
