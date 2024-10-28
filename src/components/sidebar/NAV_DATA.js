@@ -5,6 +5,7 @@ const {
     UsersRound,
     School,
     ChartColumnDecreasing,
+    Radio,
 } = require("lucide-react");
 
 const NAV_DATA = [
@@ -122,6 +123,29 @@ const NAV_DATA = [
                         name: "Tahun Ajar",
                         page_name: PAGE_NAME.KEMADRASAHAN_TAHUN_AJAR,
                         href: HREF_URL.KEMADRASAHAN_TA_HOME,
+                        suffix: ["/edit", "/create"],
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        icon: Radio,
+        label: "Broadcasting",
+        child: [
+            {
+                group_name: "Pengumuman",
+                child: [
+                    {
+                        name: "Santri",
+                        page_name: PAGE_NAME.KEMADRASAHAN_KELOLA_KELAS,
+                        href: HREF_URL.PENGUMUMAN_SANTRI,
+                        suffix: ["/edit", "/create", "/detail"],
+                    },
+                    {
+                        name: "Pegawai",
+                        page_name: PAGE_NAME.KEMADRASAHAN_TAHUN_AJAR,
+                        href: HREF_URL.PENGUMUMAN_PEGAWAI,
                         suffix: ["/edit", "/create"],
                     },
                 ],

@@ -43,10 +43,21 @@ export const columns = [
         ),
     },
     {
+        accessorKey: "lokasi",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Lokasi" />
+        ),
+    },
+    {
         accessorKey: "kapasitas",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Kapasitas" />
         ),
+        cell: ({ row }) => {
+            return (
+                <span className="capitalize ">{`${row.original._count.Santri} / ${row.original.kapasitas}`}</span>
+            );
+        },
     },
 
     {

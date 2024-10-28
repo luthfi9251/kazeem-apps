@@ -92,7 +92,9 @@ export default function DetailEditModal({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Tambah Kamar Santri</DialogTitle>
+                    <DialogTitle>
+                        {edit ? "Edit" : "Detail"} Hafalan Santri
+                    </DialogTitle>
                 </DialogHeader>
                 <Form {...formHafalan}>
                     <form

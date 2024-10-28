@@ -246,6 +246,7 @@ export default function Sidebar({ session }) {
                         <div className="px-4">
                             <Image
                                 src="/kazeem-logo.png"
+                                alt="logo kazeem"
                                 width={40}
                                 height={40}
                                 className="object-contain"
