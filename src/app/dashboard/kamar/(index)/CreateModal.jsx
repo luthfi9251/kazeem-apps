@@ -31,6 +31,10 @@ const kamarSchema = yup.object({
         .string()
         .max(100, "Panjang maksimal 100 karakter!")
         .required("Nama kamar wajib diisi!"),
+    lokasi: yup
+        .string()
+        .max(100, "Panjang maksimal 100 karakter!")
+        .required("Lokasi wajib diisi!"),
     kapasitas: yup.number().default(10),
     deskripsi: yup
         .string()
@@ -45,6 +49,7 @@ export default function CreateModal({ open, onOpenChange }) {
             nama_kamar: "",
             kapasitas: 100,
             deskripsi: "",
+            lokasi: "",
         },
     });
 
@@ -92,6 +97,19 @@ export default function CreateModal({ open, onOpenChange }) {
                             render={({ field }) => (
                                 <FormItem className="flex flex-col">
                                     <FormLabel required>Nama Kamar</FormLabel>
+                                    <FormControl>
+                                        <Input {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={formKamar.control}
+                            name="lokasi"
+                            render={({ field }) => (
+                                <FormItem className="flex flex-col">
+                                    <FormLabel required>Lokasi</FormLabel>
                                     <FormControl>
                                         <Input {...field} />
                                     </FormControl>

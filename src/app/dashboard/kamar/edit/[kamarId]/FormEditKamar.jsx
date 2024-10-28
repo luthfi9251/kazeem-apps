@@ -23,6 +23,10 @@ const kamarSchema = yup.object({
         .string()
         .max(100, "Panjang maksimal 100 karakter!")
         .required("Nama kamar wajib diisi!"),
+    lokasi: yup
+        .string()
+        .max(100, "Panjang maksimal 100 karakter!")
+        .required("Lokasi wajib diisi!"),
     kapasitas: yup.number().default(10),
     deskripsi: yup
         .string()
@@ -38,6 +42,7 @@ export default function FormEditKamar({ data }) {
             nama_kamar: data.nama_kamar,
             kapasitas: data.kapasitas,
             deskripsi: data.deskripsi,
+            lokasi: data.lokasi,
         },
     });
     const onSubmitHandler = (formData) => {
@@ -78,6 +83,19 @@ export default function FormEditKamar({ data }) {
                     render={({ field }) => (
                         <FormItem className="flex flex-col">
                             <FormLabel required>Nama Kamar</FormLabel>
+                            <FormControl>
+                                <Input {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={formKamar.control}
+                    name="lokasi"
+                    render={({ field }) => (
+                        <FormItem className="flex flex-col">
+                            <FormLabel required>Lokasi</FormLabel>
                             <FormControl>
                                 <Input {...field} />
                             </FormControl>

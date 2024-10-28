@@ -7,11 +7,12 @@ import { revalidatePath } from "next/cache";
 
 export const createKamarSantri = async (formData) => {
     try {
-        let { nama_kamar, deskripsi, kapasitas } = formData;
+        let { nama_kamar, deskripsi, kapasitas, lokasi } = formData;
         await prisma.Kamar.create({
             data: {
                 nama_kamar,
                 deskripsi,
+                lokasi,
                 kapasitas,
             },
         });
@@ -32,12 +33,17 @@ export const getAllKamarSantri = async () => {
             where: {},
             select: {
                 nama_kamar: true,
+                lokasi: true,
                 id: true,
                 kapasitas: true,
                 deskripsi: true,
+                _count: {
+                    select: {
+                        Santri: true,
+                    },
+                },
             },
         });
-
         return serverResponse(data, false, null);
     } catch (err) {
         return serverResponse(null, true, "Gagal mendapatkan data");
@@ -52,9 +58,15 @@ export const getKamarById = async (idKamar) => {
             },
             select: {
                 nama_kamar: true,
+                lokasi: true,
                 id: true,
                 kapasitas: true,
                 deskripsi: true,
+                _count: {
+                    select: {
+                        Santri: true,
+                    },
+                },
             },
         });
 
@@ -89,6 +101,11 @@ export const getSantriInKamar = async (idKamar) => {
                 id: parseInt(idKamar),
             },
             include: {
+                _count: {
+                    select: {
+                        Santri: true,
+                    },
+                },
                 Santri: {
                     select: {
                         id: true,
@@ -176,6 +193,7 @@ export const updateKamarSantri = async (idKamar, data) => {
                 nama_kamar: data.nama_kamar,
                 kapasitas: data.kapasitas,
                 deskripsi: data.deskripsi,
+                lokasi: data.lokasi,
             },
         });
         revalidatePath(HREF_URL.KAMAR_SANTRI_DETAIL(idKamar));

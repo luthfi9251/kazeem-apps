@@ -52,7 +52,15 @@ async function Page(props) {
                                     Kapasitas
                                 </TableCell>
                                 <TableCell>
-                                    {dataKamar.data?.kapasitas}
+                                    {`${dataKamar.data?._count.Santri} / ${dataKamar.data?.kapasitas}`}
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell className=" font-medium">
+                                    Lokasi
+                                </TableCell>
+                                <TableCell>
+                                    {dataKamar.data?.lokasi ?? "-"}
                                 </TableCell>
                             </TableRow>
                             <TableRow>

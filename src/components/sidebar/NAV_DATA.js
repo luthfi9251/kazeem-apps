@@ -6,6 +6,7 @@ const {
     School,
     ChartColumnDecreasing,
     FileUser,
+    Radio,
 } = require("lucide-react");
 
 const NAV_DATA = [
@@ -153,6 +154,29 @@ const NAV_DATA = [
                         page_name: PAGE_NAME.KEPEGAWAIAN_PRESENSI,
                         href: HREF_URL.PRESENSI_HOME,
                         suffix: ["/edit", "/create", "/detail"],
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        icon: Radio,
+        label: "Broadcasting",
+        child: [
+            {
+                group_name: "Pengumuman",
+                child: [
+                    {
+                        name: "Santri",
+                        page_name: PAGE_NAME.KEMADRASAHAN_KELOLA_KELAS,
+                        href: HREF_URL.PENGUMUMAN_SANTRI,
+                        suffix: ["/edit", "/create", "/detail"],
+                    },
+                    {
+                        name: "Pegawai",
+                        page_name: PAGE_NAME.KEMADRASAHAN_TAHUN_AJAR,
+                        href: HREF_URL.PENGUMUMAN_PEGAWAI,
+                        suffix: ["/edit", "/create"],
                     },
                 ],
             },

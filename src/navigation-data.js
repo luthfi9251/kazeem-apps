@@ -54,4 +54,8 @@ export const HREF_URL = {
     HAFALAN_SANTRI_HOME: "/dashboard/hafalan",
     HAFALAN_SANTRI_DETAIL: (id) => `/dashboard/hafalan/${id}`,
     HAFALAN_JENIS_HAFALAN: "/dashboard/hafalan/jenis",
+
+    PENGUMUMAN_SANTRI: "/dashboard/pengumuman-santri",
+    PENGUMUMAN_SANTRI_CREATE: "/dashboard/pengumuman-santri/create",
+    PENGUMUMAN_PEGAWAI: "/dashboard/pengumuman-pegawai",
 };

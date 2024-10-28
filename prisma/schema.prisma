@@ -56,6 +56,8 @@ model User {
   PageVariableUpdated PageVariable[]        @relation("pagevariable_updated_by")
   KamarCreated        Kamar[]               @relation("kamar_created_by")
   KamarUpdated        Kamar[]               @relation("kamar_updated_by")
+  PengumumanCreated   Pengumuman[]          @relation("pengumuman_created_by")
+  PengumumanUpdated   Pengumuman[]          @relation("pengumuman_updated_by")
 }
 
 model Page {
@@ -319,6 +321,7 @@ enum StatusKesehatan {
 model Kamar {
   id         Int      @id @default(autoincrement())
   nama_kamar String   @unique
+  lokasi     String
   kapasitas  Int      @default(0)
   deskripsi  String   @db.Text
   Santri     Santri[]
@@ -407,4 +410,37 @@ model Hafalan {
   updated_at     DateTime @updatedAt
   jenisHafalanId Int
   santriId       Int
+}
+
+model Pengumuman {
+  id    Int    @id @default(autoincrement())
+  judul String
+  teks  String @db.Text
+
+  created_at          DateTime              @default(now())
+  updated_at          DateTime              @updatedAt
+  created_by          User?                 @relation("pengumuman_created_by", fields: [created_by_id], references: [id])
+  created_by_id       String?
+  last_update_by      User?                 @relation("pengumuman_updated_by", fields: [last_update_by_id], references: [id])
+  last_update_by_id   String?
+  PengumumanRecipient PengumumanRecipient[]
+}
+
+model PengumumanRecipient {
+  id               Int        @id @default(autoincrement())
+  Pengumuman       Pengumuman @relation(fields: [pengumumanId], references: [id])
+  pengumumanId     Int
+  recipient_name   String
+  recipient_type   String
+  recipient_number String
+  status           Status     @default(PENDING)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+enum Status {
+  PENDING
+  SUCCESS
+  FAILED
 }
