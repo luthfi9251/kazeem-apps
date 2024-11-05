@@ -42,7 +42,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { generatePDFKesehatan, generatePDFPresensi } from "@/lib/generate-pdf";
+import { generatePDFPresensi } from "@/lib/generate-pdf";
 import { generateExcel } from "@/lib/generate-excel";
 import FilterSheetPresensi from "./FilterSheetPresensi";
 

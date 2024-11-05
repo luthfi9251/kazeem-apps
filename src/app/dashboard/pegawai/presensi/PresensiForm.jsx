@@ -104,7 +104,6 @@ export default function PresensiForm({
                             control={form.control}
                             name="id_pegawai"
                             render={({ field }) => (
-                                // console.log("Nilai field.value id:", field.value),
                                 <FormItem className="flex flex-col">
                                     <FormLabel required>Nama Pegawai</FormLabel>
                                     <Popover open={openPegawai} onOpenChange={setopenPegawai}>
@@ -136,10 +135,8 @@ export default function PresensiForm({
                                                                 key={pegawai.id_pegawai}
                                                                 data-e2e="select-item"
                                                                 onSelect={() => {
-                                                                    // console.log("Item dipilih:", pegawai); 
                                                                     form.setValue("id_pegawai", pegawai.id_pegawai); 
                                                                     setopenPegawai(false);
-                                                                    // console.log("Nilai id_pegawai setelah dipilih:", form.getValues("id_pegawai")); 
                                                                 }}                                                                
                                                             >
                                                                 {pegawai.nama_pegawai}
@@ -155,7 +152,6 @@ export default function PresensiForm({
                                 </FormItem>
                             )}
                         />
-        
 
                             <FormField
                                 control={form.control}

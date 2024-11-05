@@ -23,11 +23,6 @@ let pegawaiSchema = yup.object({
         .max(100, "Panjang maksimal 100 karakter")
         .required(),
     tgl_lhr: yup.date().required(),
-    // alamat: yup
-    //     .string()
-    //     .min(1, "Panjang minimal 1 Karakter")
-    //     .max(255, "Panjang maksimal 255 karakter")
-    //     .required(),
 });
 
 export default pegawaiSchema;

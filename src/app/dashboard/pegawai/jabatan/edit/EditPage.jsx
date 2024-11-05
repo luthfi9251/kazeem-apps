@@ -64,7 +64,7 @@ export default function EditPage(props) {
     };
 
     const onSubmit = async () => {
-        // console.log(dataPerwalian);
+
         await form.trigger();
         if (form.formState.isValid) {
             let dataJabatan = form.getValues();

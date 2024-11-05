@@ -32,30 +32,9 @@ async function getData(id) {
     };
 }
 
-// async function getPegawaiById(id) {
-//     let dataPegawai = await prisma.Pegawai.findMany({
-//         where: {
-//             id: parseInt(id),
-//         },
-//         select: {
-//             id: true,
-//             nama_pegawai: true,
-//         },
-//     });
-
-//     return {
-//         id_pegawai: dataPegawai.id,
-//         nama_pegawai: dataPegawai.nama_pegawai,
-//     };
-// }
-
 async function Page(props) {
     let id = props.params.id;
     let data = await getData(id);
-    // let namaPegawai = data.pegawai ? [{ id_pegawai: data.pegawai.id, nama_pegawai: data.pegawai.nama_pegawai }] : [];
-    // let pegawaiData = await getPegawaiById(data.pegawai.id);
-    // console.log("data result:", data);
-    // console.log("namaPegawai result:", namaPegawai);
 
     return <EditPage 
             namaPegawai={[{ id_pegawai: data.pegawai.id, nama_pegawai: data.pegawai.nama_pegawai }]}

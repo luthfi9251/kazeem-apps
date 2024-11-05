@@ -19,7 +19,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import JabatanPegawaiSchema from "../../yup-jabatan-pegawai-schema";
 import { PegawaiContext } from "../PegawaiDataProvider";
 import { useContext } from "react";
-import { saveEditWaliSantri } from "../_actions/jabatanpegawai";
 import { toast } from "react-toastify";
 import { useRouter, useSearchParams } from "next/navigation";
 import { HREF_URL } from "@/navigation-data";
@@ -40,7 +39,6 @@ export default function DetailPage(props) {
     });
 
     const onSubmit = async () => {
-        // console.log(dataPegawai);
     };
 
     return (

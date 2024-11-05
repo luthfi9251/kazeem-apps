@@ -40,17 +40,17 @@ export default function PegawaiListView(props) {
             <TableCaption></TableCaption>
             <TableHeader>
                 <TableRow>
-                    <TableHead>Id</TableHead>
+                    <TableHead>ID Pegawai</TableHead>
                     <TableHead>Nama Pegawai</TableHead>
                     <TableHead className="text-center">Action</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {dataPegawai.map((item, i) => {           
-                    return (
+            {dataPegawai.length > 0 ? (
+                dataPegawai.map((item, i) => (           
                         <TableRow key={i}>
                             <TableCell className="font-medium">
-                                {item.pegawai_id}
+                                {item.id_pegawai}
                             </TableCell>
                             <TableCell className="font-medium">
                                 {item.nama_pegawai}
@@ -97,9 +97,15 @@ export default function PegawaiListView(props) {
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </TableCell>
-                        </TableRow>
-                    );
-                })}
+                        </TableRow>                  
+                )) 
+            ) : (
+                <TableRow>
+                    <TableCell colSpan={3} className="text-center">
+                        Tidak ada data pegawai
+                    </TableCell>
+                </TableRow>
+            )}
             </TableBody>
         </Table>
     );

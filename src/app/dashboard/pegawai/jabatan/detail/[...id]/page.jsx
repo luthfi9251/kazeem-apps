@@ -16,6 +16,7 @@ async function getData(id) {
                     Pegawai: {
                         select: {
                             id: true,
+                            id_pegawai: true,
                             nama_pegawai: true,
                         },
                     },
@@ -28,6 +29,7 @@ async function getData(id) {
     data.JabatanPegawai = data.JabatanPegawai.map((item) => {
         return {
             id: item.id,
+            id_pegawai: item.Pegawai.id_pegawai,
             pegawai_id: item.Pegawai.id,
             nama_pegawai: item.Pegawai.nama_pegawai,
         };
