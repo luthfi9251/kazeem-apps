@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import { Checkbox } from "@/components/ui/checkbox";
 import AlertAddAnotherData from "@/components/AlertAddAnotherData";
 
-function PageCreatePegawai() {
+function PageCreatePegawai({ listJabatan }) {
     const user = null;
     const [dataJabatan, setJabatanGroup] = useContext(JabatanContext);
     const [openDialog, setOpenDialog] = useState(false);
@@ -122,7 +122,7 @@ function PageCreatePegawai() {
                     </Button>
                 </div>
                 <PegawaiForm form={formPegawai} />
-                <JabatanPegawaiForm allowDetail={false} />
+                <JabatanPegawaiForm allowDetail={false} listJabatan={listJabatan} />
             </div>
         </>
     );

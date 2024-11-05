@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import JabatanDataProvider from "../../JabatanDataProvider";
+import getAllJabatan from "../../../_actions/getAllJabatan";
 import EditPegawaiPage from "./EditPegawai";
 import withAuthAndGroupCheck from "@/hoc/withAuthAndGroupCheck";
 import { PAGE_NAME } from "@/variables/page-name";
@@ -19,7 +20,13 @@ async function getData(id) {
     return data;
 }
 
+async function getAllData() {
+    let jabatanData = await getAllJabatan();
+    return jabatanData;
+}
+
 async function PageEdit(props) {
+    let listJabatan = await getAllData();
     let { params } = props;
     let data = await getData(params.slug[0]);
     if (!data) {
@@ -34,7 +41,7 @@ async function PageEdit(props) {
 
     return (
         <JabatanDataProvider data={JabatanPegawai}>
-            <EditPegawaiPage data={data} />
+            <EditPegawaiPage data={data} listJabatan={listJabatan}/>
         </JabatanDataProvider>
     );
 }

@@ -46,7 +46,9 @@ async function getData() {
             no_telp: item.no_telp,
             email: item.email,
             tgl_lhr: item.tgl_lhr,
-            nama_jabatan: item.JabatanPegawai[0].Jabatan.nama_jabatan,
+            nama_jabatan: item.JabatanPegawai
+                .map((item) => item.Jabatan.nama_jabatan)
+                .join(", "),
         };
     });
 

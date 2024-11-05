@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Separator } from "@/components/ui/separator";
 import { CalendarIcon } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
@@ -36,7 +37,14 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import JabatanPegawaiView from "./JabatanPegawaiView";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -50,10 +58,10 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Label } from "@/components/ui/label";
 import { JabatanContext } from "./JabatanDataProvider";
-// import CardKelas from "./detail/[[...slug]]/CardKelas";
+// import { valuesIn } from "cypress/types/lodash";
 
 function DialogFormJabatan({ open, openChange, context }) {
     let [dataJabatan, setJabatanGroup] = context;
@@ -65,26 +73,16 @@ function DialogFormJabatan({ open, openChange, context }) {
         },
     });
 
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, "0"); // Month is 0-indexed, pad with leading zero
-        const day = String(date.getDate()).padStart(2, "0");
-
-        // Return the formatted date string
-        return `${year}-${month}-${day}`;
-    }
-
     let onSubmit = (data) => {
         let isAlreadyAdd = dataJabatan.find(
             (element) => element.nama_jabatan == data.nama_jabatan
         );
-        // let date = formatDate(data.tgl_lhr);
-        // data.tgl_lhr = date;
+
         if (!isAlreadyAdd) {
-            let jabatan = [...dataJabatan, data];
-            setJabatanGroup([...jabatan]);
+            const newId = Date.now();
+            const newJabatan = { ...data, id: newId };
+            
+            setJabatanGroup([...dataJabatan, newJabatan]);
         }
         form.reset();
         openChange(false);
@@ -95,8 +93,7 @@ function DialogFormJabatan({ open, openChange, context }) {
                 <DialogHeader>
                     <DialogTitle>Tambah Jabatan</DialogTitle>
                     <DialogDescription>
-                        Make changes to your profile here. Click save when
-                        you're done.
+                        Jika data jabatan belum ada, silahkan tambah data jabatan.
                     </DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
@@ -130,42 +127,110 @@ function DialogFormJabatan({ open, openChange, context }) {
 
 export default function JabatanPegawaiForm({
     disabled = false,
-    allowDetail = true,
-    // showKelas = false,
-    // dataKelas = [],
+    listJabatan = []
 }) {
+
     let [isOpen, setIsOpen] = useState(false);
     const jabatanContextVal = useContext(JabatanContext);
+    const [dataJabatan, setJabatanGroup] = jabatanContextVal;
+    const [selectedId, setSelectedId] = useState(null);
+
+    const handleDeleteJabatan = (id) => {
+        setJabatanGroup(dataJabatan.filter((item) => item.id !== id));
+    };
+
+    const handleSelectJabatan = () => {
+        const jabatan = listJabatan.find((item) => item.id === selectedId);
+        if (jabatan && !dataJabatan.some((item) => item.nama_jabatan === jabatan.nama_jabatan)) {
+            setJabatanGroup([...dataJabatan, jabatan]);
+        }
+    };
 
     return (
         <div>
-            <Card className="">
+            <Card>
                 <CardHeader>
                     <CardTitle>Data Jabatan</CardTitle>
                     <CardDescription> </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-5">
-                    <JabatanPegawaiView
-                        disabled={disabled}
-                        allowDetail={allowDetail}
-                    />
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Nama Jabatan</TableHead>
+                                <TableHead className="text-center">
+                                    Action
+                                </TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {dataJabatan.map((item) => (
+                                <TableRow key={item.id}>
+                                    <TableCell className="font-medium">
+                                        {item.nama_jabatan}
+                                    </TableCell>
+                                    <TableCell className="text-center">
+                                        <Button
+                                        className="h-8 w-8 p-0"
+                                        onClick={() => 
+                                            handleDeleteJabatan(
+                                                item.id
+                                            )
+                                        }
+                                        disabled={disabled}
+                                        >
+                                            <Trash2 className="h-4 w-4" />
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
                     <Separator />
+                    <div className="flex w-full space-x-2 items-end mt-5">
+                            <div className="w-full flex flex-col gap-2 px-4">
+                            <Label htmlFor="tambahJabatan">Pilih Jabatan</Label>
+                            <Select disabled={disabled} onValueChange={(value) => setSelectedId(parseInt(value))} >
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Pilih Jabatan"/>
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {listJabatan.length > 0 ? (
+                                        listJabatan.map((item) => (
+                                            <SelectItem key={item.id} value={item.id.toString()}>
+                                                {item.nama_jabatan}
+                                            </SelectItem>
+                                        ))
+                                    ) : (
+                                        <p className="text-sm text-gray-500 text-center py-2">
+                                        Tidak ada jabatan tersedia
+                                        </p>
+                                    )}
+                                </SelectContent>
+                            </Select>
+                            </div>
+                            <Button 
+                            onClick={handleSelectJabatan}
+                            disabled={disabled}
+                            >Pilih
+                            </Button>                   
                     <Button
                         variant="outline"
                         onClick={() => setIsOpen(true)}
                         disabled={disabled}
                     >
-                        Tambah Jabatan
+                        Tambah
                     </Button>
+                    </div>
                     <DialogFormJabatan
                         open={isOpen}
                         openChange={setIsOpen}
                         context={jabatanContextVal}
+                        setJabatanGroup={setJabatanGroup}
                         disabled={disabled}
                     />
                 </CardContent>
             </Card>
-            {/* {showKelas && <CardKelas dataKelas={dataKelas} />} */}
         </div>
     );
 }

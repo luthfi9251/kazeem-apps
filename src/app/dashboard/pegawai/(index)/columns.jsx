@@ -18,20 +18,6 @@ import { deletePegawai } from "./edit/[...slug]/_actions/editPegawai";
 import "dayjs/locale/id";
 import dayjs from "dayjs";
 
-/*
-model Santri {
-  id           Int          @id @default(autoincrement())
-  nama_lengkap String       @db.VarChar(100)
-  alamat       String       @db.VarChar(255)
-  email        String       @db.VarChar(100)
-  hp           String?      @db.VarChar(25)
-  tempat_lahir String       @db.VarChar(100)
-  tgl_lhr      DateTime
-  foto         String       @db.VarChar(100)
-  WaliSantri   WaliSantri[]
-}
-*/
-
 export const columns = [
     {
         accessorKey: "no",

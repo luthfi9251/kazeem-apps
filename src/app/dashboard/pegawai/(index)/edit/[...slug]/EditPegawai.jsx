@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 export default function EditPegawaiPage(props) {
-    let { data } = props;
+    let { data, listJabatan } = props;
     const [dataJabatan, setJabatanGroup] = useContext(JabatanContext);
     const router = useRouter();
     const formPegawai = useForm({
@@ -174,7 +174,7 @@ export default function EditPegawaiPage(props) {
                 </AlertDialog>
             </div>
             <PegawaiForm form={formPegawai} disabled={false}/>
-            <JabatanPegawaiForm disabled={false} />
+            <JabatanPegawaiForm disabled={false} listJabatan={listJabatan}/>
         </div>
     );
 }
