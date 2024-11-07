@@ -160,3 +160,30 @@ export const kirimPengumumanSantri = async (infoPengumuman, recipientList) => {
         return serverResponse(null, true, "Gagal mendapatkan data");
     }
 };
+
+export const getAllPengumuman = async () => {
+    try {
+        let getPengumuman = await prisma.Pengumuman.findMany({});
+        return serverResponse(getPengumuman, false, null);
+    } catch (err) {
+        console.log(err);
+        return serverResponse(null, true, "Gagal mendapatkan data");
+    }
+};
+export const getDetailPengumuman = async (idPengumuman) => {
+    try {
+        let getPengumuman = await prisma.Pengumuman.findUnique({
+            where: {
+                id: parseInt(idPengumuman),
+            },
+            include: {
+                PengumumanRecipient: true,
+            },
+        });
+        console.log(getPengumuman);
+        return serverResponse(getPengumuman, false, null);
+    } catch (err) {
+        console.log(err);
+        return serverResponse(null, true, "Gagal mendapatkan data");
+    }
+};

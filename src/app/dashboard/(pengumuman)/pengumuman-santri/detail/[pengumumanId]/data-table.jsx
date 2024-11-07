@@ -1,12 +1,7 @@
 "use client";
 import DebouncedInput from "@/components/DebouncedInput";
 import { useState } from "react";
-import {
-    LoaderCircle,
-    MoreVertical,
-    Filter,
-    MoreHorizontal,
-} from "lucide-react";
+import { Trash } from "lucide-react";
 import {
     ColumnDef,
     flexRender,
@@ -17,16 +12,6 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
 import {
     Table,
     TableBody,
@@ -35,25 +20,8 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useQuery } from "@tanstack/react-query";
-import Link from "next/link";
-import { HREF_URL } from "@/navigation-data";
-import { generatePDFPelanggaran } from "@/lib/generate-pdf";
-import { generateExcel } from "@/lib/generate-excel";
 import { DataTableColumnHeader } from "@/components/DataTableHeader";
-import { MenuItemDeleteActionWithConfirmation } from "@/components/MenuItemDeleteAction";
 import { useRouter } from "next/navigation";
-import dayjs from "dayjs";
-import "dayjs/locale/id";
-
 const columns = [
     {
         id: "no",
@@ -63,78 +31,39 @@ const columns = [
         },
     },
     {
-        accessorKey: "judul",
+        accessorKey: "recipient_name",
         filterFn: "equalsString",
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Judul" />
+            <DataTableColumnHeader column={column} title="Nama Santri" />
         ),
     },
     {
-        accessorKey: "created_at",
+        accessorKey: "recipient_type",
+        filterFn: "equalsString",
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Dibuat Pada" />
+            <DataTableColumnHeader column={column} title="Tipe Penerima" />
         ),
-        cell: ({ row }) => {
-            return dayjs(row.original.created_at)
-                .locale("id")
-                .format("DD MMMM YYYY");
-        },
     },
     {
-        id: "actions",
-        header: "Actions",
-        maxSize: 50,
-        cell: ({ row, table }) => {
-            const [open, setOpen] = useState(false);
-            const data = row.original;
-            const handleDelete = () => {};
-            return (
-                <>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button
-                                variant="ghost"
-                                className="h-8 w-8 p-0"
-                                data-e2e="btn-dropdown"
-                            >
-                                <span className="sr-only">Open menu</span>
-                                <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem>
-                                <Link
-                                    href={HREF_URL.PENGUMUMAN_SANTRI_DETAIL(
-                                        data.id
-                                    )}
-                                    className="w-full"
-                                    data-e2e="btn-detail"
-                                >
-                                    Detail
-                                </Link>
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                    <MenuItemDeleteActionWithConfirmation
-                        open={open}
-                        onOpenChange={setOpen}
-                        onDeletehandle={handleDelete}
-                        challengeText={data.nama_kamar}
-                    />
-                </>
-            );
-        },
+        accessorKey: "recipient_number",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Nomor HP" />
+        ),
+    },
+    {
+        accessorKey: "status",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Status" />
+        ),
     },
 ];
 
-export function DataTable({ data }) {
+export default function DataTable({ data }) {
     const [globalFilter, setGlobalFilter] = useState();
     const [columnFilters, setColumnFilters] = useState([]);
-    const router = useRouter();
 
     const table = useReactTable({
-        data,
+        data: data ?? [],
         columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
@@ -165,45 +94,6 @@ export function DataTable({ data }) {
                         className=" max-w-sm"
                         placeholder="Search all columns..."
                     />
-                    <div className="flex w-full justify-end gap-1">
-                        <Button
-                            className="grow max-w-[150px] w-full  bg-kazeem-secondary "
-                            id="tambah-kelas"
-                            data-e2e="btn-tambah"
-                            onClick={() =>
-                                router.push(HREF_URL.PENGUMUMAN_SANTRI_CREATE)
-                            }
-                        >
-                            Tambah
-                        </Button>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button
-                                    variant="ghost"
-                                    className="h-10 w-10 p-0"
-                                    data-e2e="btn-dropdown"
-                                >
-                                    <span className="sr-only">Open menu</span>
-                                    <MoreVertical className="h-5 w-5" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                                <DropdownMenuLabel>Exports</DropdownMenuLabel>
-                                <DropdownMenuItem
-                                    className="cursor-pointer"
-                                    // onClick={handleGeneratePF}
-                                >
-                                    PDF
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    className="cursor-pointer"
-                                    // onClick={handleGenerateExcel}
-                                >
-                                    Excel
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </div>
                 </div>
                 <div className="rounded-md border">
                     <Table>

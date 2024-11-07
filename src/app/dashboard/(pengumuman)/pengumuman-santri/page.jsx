@@ -7,8 +7,13 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { DataTable } from "./data-table";
+import { getAllPengumuman } from "@/actions/pengumuman";
 
-export default function Page() {
+export default async function Page() {
+    let serverResponse = await getAllPengumuman();
+
+    if (serverResponse.isError) throw serverResponse.error;
+
     return (
         <div className="md:p-5 p-2">
             <Card>
@@ -17,14 +22,7 @@ export default function Page() {
                     <CardDescription>Card Description</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <DataTable
-                        data={[
-                            {
-                                judul: "TEST",
-                                text: "afija afifioaf awfijaf afaiwpf",
-                            },
-                        ]}
-                    />
+                    <DataTable data={serverResponse.data ?? []} />
                 </CardContent>
             </Card>
         </div>

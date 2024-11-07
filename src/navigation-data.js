@@ -57,5 +57,7 @@ export const HREF_URL = {
 
     PENGUMUMAN_SANTRI: "/dashboard/pengumuman-santri",
     PENGUMUMAN_SANTRI_CREATE: "/dashboard/pengumuman-santri/create",
+    PENGUMUMAN_SANTRI_DETAIL: (id) =>
+        `/dashboard/pengumuman-santri/detail/${id}`,
     PENGUMUMAN_PEGAWAI: "/dashboard/pengumuman-pegawai",
 };
