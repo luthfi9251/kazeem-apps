@@ -5,6 +5,7 @@ const {
     UsersRound,
     School,
     ChartColumnDecreasing,
+    FileUser,
 } = require("lucide-react");
 
 const NAV_DATA = [
@@ -80,29 +81,6 @@ const NAV_DATA = [
                     },
                 ],
             },
-            {
-                group_name: "Manajemen Pegawai",
-                child: [
-                    {
-                        name: "Pegawai",
-                        page_name: PAGE_NAME.KESANTRIAN_KELOLA_SANTRI,
-                        href: HREF_URL.PEGAWAI_HOME,
-                        suffix: ["/edit", "/create", "/detail"],
-                    },
-                    {
-                        name: "Jabatan Pegawai",
-                        page_name: PAGE_NAME.KESANTRIAN_KELOLA_SANTRI,
-                        href: HREF_URL.PEGAWAI_JABATAN_HOME,
-                        suffix: ["/edit", "/create", "/detail"],
-                    },
-                    {
-                        name: "Pegawai Presensi",
-                        page_name: PAGE_NAME.KESANTRIAN_KELOLA_SANTRI,
-                        href: HREF_URL.PRESENSI_HOME,
-                        suffix: ["/edit", "/create", "/detail"],
-                    },
-                ],
-            },
         ],
     },
     {
@@ -123,6 +101,35 @@ const NAV_DATA = [
                         page_name: PAGE_NAME.KEMADRASAHAN_TAHUN_AJAR,
                         href: HREF_URL.KEMADRASAHAN_TA_HOME,
                         suffix: ["/edit", "/create"],
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        icon: FileUser,
+        label: "Kepegawaian",
+        child: [
+            {
+                group_name: "Manajemen Pegawai",
+                child: [
+                    {
+                        name: "Pegawai",
+                        page_name: PAGE_NAME.KEPEGAWAIAN_KELOLA_PEGAWAI,
+                        href: HREF_URL.PEGAWAI_HOME,
+                        suffix: ["/edit", "/create", "/detail"],
+                    },
+                    {
+                        name: "Jabatan Pegawai",
+                        page_name: PAGE_NAME.KEPEGAWAIAN_JABATAN_PEGAWAI,
+                        href: HREF_URL.PEGAWAI_JABATAN_HOME,
+                        suffix: ["/edit", "/create", "/detail"],
+                    },
+                    {
+                        name: "Pegawai Presensi",
+                        page_name: PAGE_NAME.KEPEGAWAIAN_PRESENSI,
+                        href: HREF_URL.PRESENSI_HOME,
+                        suffix: ["/edit", "/create", "/detail"],
                     },
                 ],
             },

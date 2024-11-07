@@ -61,7 +61,7 @@ function PageCreatePegawai({ listJabatan }) {
                             throw data.error;
                         }
                         setOpenDialog(true);
-                        router.push("/dashboard/pegawai");
+                        // router.push("/dashboard/pegawai");
                         return "Data berhasil disimpan";
                     },
                 },
@@ -122,7 +122,10 @@ function PageCreatePegawai({ listJabatan }) {
                     </Button>
                 </div>
                 <PegawaiForm form={formPegawai} />
-                <JabatanPegawaiForm allowDetail={false} listJabatan={listJabatan} />
+                <JabatanPegawaiForm
+                    allowDetail={false}
+                    listJabatan={listJabatan}
+                />
             </div>
         </>
     );
