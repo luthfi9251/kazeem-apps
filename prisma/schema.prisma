@@ -54,6 +54,10 @@ model User {
   PageAccessUpdated   PageAccess[]          @relation("pageaccess_created_by")
   PageVariableCreated PageVariable[]        @relation("pagevariable_created_by")
   PageVariableUpdated PageVariable[]        @relation("pagevariable_updated_by")
+  KamarCreated        Kamar[]               @relation("kamar_created_by")
+  KamarUpdated        Kamar[]               @relation("kamar_updated_by")
+  PengumumanCreated   Pengumuman[]          @relation("pengumuman_created_by")
+  PengumumanUpdated   Pengumuman[]          @relation("pengumuman_updated_by")
 }
 
 model Page {
@@ -114,6 +118,8 @@ model Santri {
   tgl_lhr      DateTime      @db.Date
   foto         String?       @db.VarChar(100)
   jenis_kel    JenisKel      @default(LAKI_LAKI)
+  kamarId      Int?
+  kamar_santri Kamar?        @relation(fields: [kamarId], references: [id])
   WaliSantri   WaliSantri[]
   KelasSantri  KelasSantri[]
 
@@ -122,8 +128,9 @@ model Santri {
   created_by_id     String?
   created_by        User?   @relation("santri_created_by", fields: [created_by_id], references: [id])
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  Hafalan    Hafalan[]
 }
 
 enum JenisKel {
@@ -311,16 +318,32 @@ enum StatusKesehatan {
   SEMBUH
 }
 
+model Kamar {
+  id         Int      @id @default(autoincrement())
+  nama_kamar String   @unique
+  lokasi     String
+  kapasitas  Int      @default(0)
+  deskripsi  String   @db.Text
+  Santri     Santri[]
+
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+  created_by        User?    @relation("kamar_created_by", fields: [created_by_id], references: [id])
+  created_by_id     String?
+  last_update_by    User?    @relation("kamar_updated_by", fields: [last_update_by_id], references: [id])
+  last_update_by_id String?
+}
+
 model Pegawai {
-  id           Int           @id @default(autoincrement())
-  id_pegawai   String        @unique @db.VarChar(100)
-  nama_pegawai String        @db.VarChar(100)
-  jenis_kel    JenisKel      @default(LAKI_LAKI)
-  no_telp      String        @db.VarChar(25)
-  email        String        @db.VarChar(100)
-  tempat_lahir String        @db.VarChar(100)
-  tgl_lhr      DateTime      @db.Date
-  JabatanPegawai JabatanPegawai[]
+  id              Int               @id @default(autoincrement())
+  id_pegawai      String            @unique @db.VarChar(100)
+  nama_pegawai    String            @db.VarChar(100)
+  jenis_kel       JenisKel          @default(LAKI_LAKI)
+  no_telp         String            @db.VarChar(25)
+  email           String            @db.VarChar(100)
+  tempat_lahir    String            @db.VarChar(100)
+  tgl_lhr         DateTime          @db.Date
+  JabatanPegawai  JabatanPegawai[]
   PresensiPegawai PresensiPegawai[]
 
   created_at DateTime @default(now())
@@ -328,32 +351,32 @@ model Pegawai {
 }
 
 model Jabatan {
-  id           Int           @id @default(autoincrement())
-  nama_jabatan String        @db.VarChar(100) @unique
+  id             Int              @id @default(autoincrement())
+  nama_jabatan   String           @unique @db.VarChar(100)
   JabatanPegawai JabatanPegawai[]
 
   created_at DateTime @default(now())
-  updated_at DateTime @updatedAt  
+  updated_at DateTime @updatedAt
 }
 
 model JabatanPegawai {
-  id           Int           @id @default(autoincrement())
-  id_pegawai   Int           
-  id_jabatan   Int
-  Pegawai      Pegawai       @relation(fields: [id_pegawai], references: [id])
-  Jabatan      Jabatan       @relation(fields: [id_jabatan], references: [id])
+  id         Int     @id @default(autoincrement())
+  id_pegawai Int
+  id_jabatan Int
+  Pegawai    Pegawai @relation(fields: [id_pegawai], references: [id])
+  Jabatan    Jabatan @relation(fields: [id_jabatan], references: [id])
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }
 
 model PresensiPegawai {
-  id           Int           @id @default(autoincrement())
-  pegawai      Pegawai       @relation(fields: [id_pegawai], references: [id])
-  id_pegawai   Int  
+  id           Int            @id @default(autoincrement())
+  pegawai      Pegawai        @relation(fields: [id_pegawai], references: [id])
+  id_pegawai   Int
   tgl_presensi DateTime
   status       StatusPresensi
-  keterangan   String?       @db.Text
+  keterangan   String?        @db.Text
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -364,4 +387,60 @@ enum StatusPresensi {
   IJIN
   ALPHA
   LAINNYA
+}
+
+model JenisHafalan {
+  id            Int    @id @default(autoincrement())
+  jenis_hafalan String @unique
+
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  Hafalan    Hafalan[]
+}
+
+model Hafalan {
+  id           Int          @id @default(autoincrement())
+  JenisHafalan JenisHafalan @relation(fields: [jenisHafalanId], references: [id])
+  Santri       Santri       @relation(fields: [santriId], references: [id])
+  hafalan_baru String       @db.Text
+  tgl_hafalan  DateTime     @default(now())
+  keterangan   String?      @db.Text
+
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+  jenisHafalanId Int
+  santriId       Int
+}
+
+model Pengumuman {
+  id    Int    @id @default(autoincrement())
+  judul String
+  teks  String @db.Text
+
+  created_at          DateTime              @default(now())
+  updated_at          DateTime              @updatedAt
+  created_by          User?                 @relation("pengumuman_created_by", fields: [created_by_id], references: [id])
+  created_by_id       String?
+  last_update_by      User?                 @relation("pengumuman_updated_by", fields: [last_update_by_id], references: [id])
+  last_update_by_id   String?
+  PengumumanRecipient PengumumanRecipient[]
+}
+
+model PengumumanRecipient {
+  id               Int        @id @default(autoincrement())
+  Pengumuman       Pengumuman @relation(fields: [pengumumanId], references: [id])
+  pengumumanId     Int
+  recipient_name   String
+  recipient_type   String
+  recipient_number String
+  status           Status     @default(PENDING)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+enum Status {
+  PENDING
+  SUCCESS
+  FAILED
 }

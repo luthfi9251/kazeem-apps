@@ -127,9 +127,7 @@ export async function generatePDFPresensi(data) {
     });
 
     doc.autoTable({
-        body: [
-            ["Jumlah data pegawai", data.length],
-        ],
+        body: [["Jumlah data pegawai", data.length]],
     });
     doc.autoTable({
         startY: doc.lastAutoTable.finalY + 10,
@@ -293,5 +291,117 @@ export async function generatePDFPelanggaranSummary(data, namaSantri) {
 
     doc.output("dataurlnewwindow", {
         filename: `Daftar Pelanggaran Santri ${namaSantri}.pdf`,
+    });
+}
+
+export async function generatePDFKamar(data) {
+    const doc = new jsPDF();
+    doc.setProperties({
+        title: "Daftar Kamar Santri",
+    });
+
+    doc.autoTable({
+        body: [["Jumlah Kamar", data.length]],
+    });
+
+    doc.autoTable({
+        startY: doc.lastAutoTable.finalY + 10,
+        columns: [
+            { dataKey: "id", header: "No." },
+            { dataKey: "nama_kamar", header: "Nama Kamar" },
+            { dataKey: "lokasi", header: "Lokasi" },
+            { dataKey: "kapasitas", header: "Kapasitas" },
+            { dataKey: "deskripsi", header: "Deskripsi" },
+        ],
+        body: data,
+        theme: "plain",
+        headStyles: {
+            fillColor: [69, 96, 131],
+            fontSize: 10,
+            textColor: "#ffffff",
+        },
+        willDrawCell: (data) => {
+            if (data.column.dataKey === "id" && data.section === "body") {
+                data.cell.text = [data.row.index + 1 + ""];
+            }
+        },
+        didDrawPage: function (data) {
+            // Footer
+            doc.setFontSize(7);
+
+            // jsPDF 1.4+ uses getHeight, <1.4 uses .height
+            var pageSize = doc.internal.pageSize;
+            var pageHeight = pageSize.height
+                ? pageSize.height
+                : pageSize.getHeight();
+            doc.text(
+                `Generated at ${new Date().toLocaleString("id")} by Kazeem`,
+                data.settings.margin.left,
+                pageHeight - 10
+            );
+        },
+    });
+
+    doc.output("dataurlnewwindow", {
+        filename: `Daftar Kamar Santri.pdf`,
+    });
+}
+
+export async function generatePDFKamarDetail(data, info) {
+    const doc = new jsPDF();
+    doc.setProperties({
+        title: "Daftar Kamar Santri " + info.nama_kamar,
+    });
+
+    doc.autoTable({
+        body: [
+            ["Nama Kamar", info.nama_kamar],
+            ["Lokasi", info.lokasi],
+            ["Kapasitas", info.kapasitas],
+            ["Deskripsi", info.deskripsi],
+            ["Jumlah Santri", data.length],
+        ],
+    });
+
+    doc.autoTable({
+        startY: doc.lastAutoTable.finalY + 10,
+        columns: [
+            { dataKey: "id", header: "No." },
+            { dataKey: "nama_kamar", header: "Nama Kamar" },
+            { dataKey: "lokasi", header: "Lokasi" },
+            { dataKey: "kapasitas", header: "Kapasitas" },
+            { dataKey: "deskripsi", header: "Deskripsi" },
+        ],
+        body: data,
+        theme: "plain",
+        headStyles: {
+            fillColor: [69, 96, 131],
+            fontSize: 10,
+            textColor: "#ffffff",
+        },
+        willDrawCell: (data) => {
+            if (data.column.dataKey === "id" && data.section === "body") {
+                data.cell.text = [data.row.index + 1 + ""];
+            }
+        },
+        didDrawPage: function (data) {
+            // Footer
+            doc.setFontSize(7);
+
+            // jsPDF 1.4+ uses getHeight, <1.4 uses .height
+            var pageSize = doc.internal.pageSize;
+            var pageHeight = pageSize.height
+                ? pageSize.height
+                : pageSize.getHeight();
+            doc.text(
+                `Generated at ${new Date().toLocaleString("id")} by Kazeem`,
+                data.settings.margin.left,
+                pageHeight - 10
+            );
+        },
+    });
+
+    doc.output("dataurlnewwindow", {
+        filename: `Daftar Kamar Santri - ${info.nama_kamar}.pdf`,
     });
 }

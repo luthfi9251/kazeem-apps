@@ -6,6 +6,7 @@ const {
     School,
     ChartColumnDecreasing,
     FileUser,
+    Radio,
 } = require("lucide-react");
 
 const NAV_DATA = [
@@ -50,6 +51,52 @@ const NAV_DATA = [
                         page_name: PAGE_NAME.KESANTRIAN_WALI_SANTRI,
                         href: "/dashboard/santri/wali",
                         suffix: ["/edit", "/create", "/detail"],
+                    },
+                    {
+                        name: "Kamar",
+                        page_name: PAGE_NAME.KESANTRIAN_KAMAR_SANTRI,
+                        href: HREF_URL.KAMAR_SANTRI_HOME,
+                        suffix: ["/edit", "/create", "/detail"],
+                    },
+                ],
+            },
+            {
+                group_name: "Hafalan",
+                child: [
+                    {
+                        name: "Data Hafalan",
+                        page_name: PAGE_NAME.KESANTRIAN_HAFALAN_SANTRI,
+                        href: HREF_URL.HAFALAN_SANTRI_HOME,
+                        suffix: ["/edit"],
+                    },
+                    {
+                        name: "Jenis Hafalan",
+                        href: HREF_URL.HAFALAN_JENIS_HAFALAN,
+                        page_name: PAGE_NAME.KESANTRIAN_HAFALAN_SANTRI,
+                        suffix: [],
+                    },
+                    {
+                        name: "Kamar",
+                        page_name: PAGE_NAME.KESANTRIAN_KAMAR_SANTRI,
+                        href: HREF_URL.KAMAR_SANTRI_HOME,
+                        suffix: ["/edit", "/create", "/detail"],
+                    },
+                ],
+            },
+            {
+                group_name: "Hafalan",
+                child: [
+                    {
+                        name: "Data Hafalan",
+                        page_name: PAGE_NAME.KESANTRIAN_HAFALAN_SANTRI,
+                        href: HREF_URL.HAFALAN_SANTRI_HOME,
+                        suffix: ["/edit"],
+                    },
+                    {
+                        name: "Jenis Hafalan",
+                        href: HREF_URL.HAFALAN_JENIS_HAFALAN,
+                        page_name: PAGE_NAME.KESANTRIAN_HAFALAN_SANTRI,
+                        suffix: [],
                     },
                 ],
             },
@@ -130,6 +177,29 @@ const NAV_DATA = [
                         page_name: PAGE_NAME.KEPEGAWAIAN_PRESENSI,
                         href: HREF_URL.PRESENSI_HOME,
                         suffix: ["/edit", "/create", "/detail"],
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        icon: Radio,
+        label: "Broadcasting",
+        child: [
+            {
+                group_name: "Pengumuman",
+                child: [
+                    {
+                        name: "Santri",
+                        page_name: PAGE_NAME.KEMADRASAHAN_KELOLA_KELAS,
+                        href: HREF_URL.PENGUMUMAN_SANTRI,
+                        suffix: ["/edit", "/create", "/detail"],
+                    },
+                    {
+                        name: "Pegawai",
+                        page_name: PAGE_NAME.KEMADRASAHAN_TAHUN_AJAR,
+                        href: HREF_URL.PENGUMUMAN_PEGAWAI,
+                        suffix: ["/edit", "/create"],
                     },
                 ],
             },

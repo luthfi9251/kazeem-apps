@@ -8,6 +8,10 @@ import { getAllKelasDataForExcelExport } from "@/actions/kelas";
 import { getOneKelasDataForExcelExport } from "@/actions/kelas";
 import { getDataSantriForExcelExport } from "@/actions/santri";
 import { getDataPegawaiForExcelExport } from "@/actions/pegawai";
+import {
+    getKamarALLForExcelExport,
+    getKamarSpecifiedForExcelExport,
+} from "@/actions/kamar";
 
 export async function POST(req, props) {
     try {
@@ -45,6 +49,13 @@ export async function POST(req, props) {
                 break;
             case "PEGAWAI_ALL":
                 data = await getDataPegawaiForExcelExport();
+                break;
+            case "KAMAR_ALL":
+                data = await getKamarALLForExcelExport();
+                break;
+            case "KAMAR_SPECIFIED":
+                let idKamar = formData.get("idKelas");
+                data = await getKamarSpecifiedForExcelExport(idKamar);
                 break;
             case "EXPORT_TO_EXCEL_ONLY":
                 data = JSON.parse(formData.get("dataRow"));

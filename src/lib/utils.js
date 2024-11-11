@@ -141,3 +141,13 @@ export const calculateActiveNavLink = (navItem, pathname) => {
     }
     return false;
 };
+
+export const severResponseFormatAdapterForUseQuery = async (asyncFunc) => {
+    try {
+        let data = await asyncFunc();
+        if (data.isError) throw data.error;
+        return data;
+    } catch (err) {
+        throw err;
+    }
+};
