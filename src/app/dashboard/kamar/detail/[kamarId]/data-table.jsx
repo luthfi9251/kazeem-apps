@@ -47,7 +47,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { HREF_URL } from "@/navigation-data";
-import { generatePDFPelanggaran } from "@/lib/generate-pdf";
+import { generatePDFKamar, generatePDFPelanggaran } from "@/lib/generate-pdf";
 import { generateExcel } from "@/lib/generate-excel";
 import { DataTableColumnHeader } from "@/components/DataTableHeader";
 import ModalDaftarSantri from "./ModalDaftarSantri";
@@ -169,7 +169,7 @@ const columns = [
     },
 ];
 
-export function DataTable({ data, kamarId }) {
+export function DataTable({ data, info, kamarId }) {
     const filterSheetState = useState(false);
     const [globalFilter, setGlobalFilter] = useState();
     const [columnFilters, setColumnFilters] = useState([]);
@@ -229,14 +229,20 @@ export function DataTable({ data, kamarId }) {
             .then(() => setisModalPindahKamarOpen(false));
     };
 
-    // const handleGenerateExcel = () => {
-    //     generateExcel({
-    //         filename: `Data kelas ${dataKelas.nama_kelas} - ${taSelected}`,
-    //         type: "KELAS_SPECIFIED",
-    //         idKelas: idKelas,
-    //         kodeTa: taSelected,
-    //     });
-    // };
+    const handleGenerateExcel = () => {
+        generateExcel({
+            filename: `Data Kamar - Detail ${info?.nama_kamar}`,
+            type: "KAMAR_SPECIFIED",
+            idKelas: kamarId,
+        });
+    };
+
+    const handleGeneratePDF = () => {
+        let dataRow = table
+            .getFilteredRowModel()
+            .rows.map((item) => item.original);
+        generatePDFKamar(dataRow);
+    };
 
     return (
         <>
@@ -278,7 +284,7 @@ export function DataTable({ data, kamarId }) {
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
                                     className="cursor-pointer"
-                                    // onClick={handleGenerateExcel}
+                                    onClick={handleGenerateExcel}
                                 >
                                     Excel
                                 </DropdownMenuItem>

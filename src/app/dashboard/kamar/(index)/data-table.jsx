@@ -42,7 +42,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { HREF_URL } from "@/navigation-data";
-import { generatePDFPelanggaran } from "@/lib/generate-pdf";
+import { generatePDFKamar, generatePDFPelanggaran } from "@/lib/generate-pdf";
 import { generateExcel } from "@/lib/generate-excel";
 import { columns } from "./column";
 import CreateModal from "./CreateModal";
@@ -74,6 +74,20 @@ export function DataTable({ data, selectData }) {
             ],
         },
     });
+
+    const handleGenerateExcel = () => {
+        generateExcel({
+            filename: "Data Kamar",
+            type: "KAMAR_ALL",
+        });
+    };
+
+    const handleGeneratePDF = () => {
+        let dataRow = table
+            .getFilteredRowModel()
+            .rows.map((item) => item.original);
+        generatePDFKamar(dataRow);
+    };
 
     return (
         <>
@@ -109,13 +123,13 @@ export function DataTable({ data, selectData }) {
                                 <DropdownMenuLabel>Exports</DropdownMenuLabel>
                                 <DropdownMenuItem
                                     className="cursor-pointer"
-                                    // onClick={handleGeneratePF}
+                                    onClick={handleGeneratePDF}
                                 >
                                     PDF
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
                                     className="cursor-pointer"
-                                    // onClick={handleGenerateExcel}
+                                    onClick={handleGenerateExcel}
                                 >
                                     Excel
                                 </DropdownMenuItem>

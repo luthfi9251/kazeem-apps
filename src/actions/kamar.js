@@ -219,3 +219,56 @@ export const deleteKamarSantri = async (idKamar) => {
         return serverResponse(null, true, "Gagal mengupdate data");
     }
 };
+
+export const getKamarALLForExcelExport = async () => {
+    let data = await prisma.Kamar.findMany({
+        where: {},
+        select: {
+            nama_kamar: true,
+            lokasi: true,
+            id: true,
+            kapasitas: true,
+            deskripsi: true,
+            _count: {
+                select: {
+                    Santri: true,
+                },
+            },
+        },
+    });
+
+    return data.map((item) => ({
+        nama_kamar: item.nama_kamar,
+        lokasi: item.lokasi,
+        kapasitas: item.kapasitas,
+        deskripsi: item.deskripsi,
+        jumlah_santri: item._count.Santri,
+    }));
+};
+
+export const getKamarSpecifiedForExcelExport = async (idKamar) => {
+    let data = await prisma.Kamar.findUnique({
+        where: {
+            id: parseInt(idKamar),
+        },
+        include: {
+            _count: {
+                select: {
+                    Santri: true,
+                },
+            },
+            Santri: {
+                select: {
+                    id: true,
+                    nis: true,
+                    nama_lengkap: true,
+                },
+            },
+        },
+    });
+
+    return data.Santri.map((item) => ({
+        ...item,
+        nama_kamar: data.nama_kamar,
+    }));
+};

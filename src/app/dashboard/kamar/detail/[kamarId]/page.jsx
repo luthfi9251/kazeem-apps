@@ -82,6 +82,7 @@ async function Page(props) {
                 </CardContent>
             </Card>
             <DaftarSantriSection
+                info={dataKamar.data}
                 data={dataKamar.isError ? [] : dataKamar.data.Santri}
                 kamarId={kamarId}
             />
