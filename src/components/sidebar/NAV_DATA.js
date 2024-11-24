@@ -75,29 +75,6 @@ const NAV_DATA = [
                         page_name: PAGE_NAME.KESANTRIAN_HAFALAN_SANTRI,
                         suffix: [],
                     },
-                    {
-                        name: "Kamar",
-                        page_name: PAGE_NAME.KESANTRIAN_KAMAR_SANTRI,
-                        href: HREF_URL.KAMAR_SANTRI_HOME,
-                        suffix: ["/edit", "/create", "/detail"],
-                    },
-                ],
-            },
-            {
-                group_name: "Hafalan",
-                child: [
-                    {
-                        name: "Data Hafalan",
-                        page_name: PAGE_NAME.KESANTRIAN_HAFALAN_SANTRI,
-                        href: HREF_URL.HAFALAN_SANTRI_HOME,
-                        suffix: ["/edit"],
-                    },
-                    {
-                        name: "Jenis Hafalan",
-                        href: HREF_URL.HAFALAN_JENIS_HAFALAN,
-                        page_name: PAGE_NAME.KESANTRIAN_HAFALAN_SANTRI,
-                        suffix: [],
-                    },
                 ],
             },
             {
@@ -147,6 +124,17 @@ const NAV_DATA = [
                         name: "Tahun Ajar",
                         page_name: PAGE_NAME.KEMADRASAHAN_TAHUN_AJAR,
                         href: HREF_URL.KEMADRASAHAN_TA_HOME,
+                        suffix: ["/edit", "/create"],
+                    },
+                ],
+            },
+            {
+                group_name: "Manajemen Akademik",
+                child: [
+                    {
+                        name: "Mata Pelajaran",
+                        page_name: PAGE_NAME.KEMADRASAHAN_KELOLA_KELAS,
+                        href: HREF_URL.KEMADRASAHAN_MAPEL_HOME,
                         suffix: ["/edit", "/create"],
                     },
                 ],

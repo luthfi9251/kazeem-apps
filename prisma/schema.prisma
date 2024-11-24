@@ -251,18 +251,19 @@ model TahunAjar {
 }
 
 model Kelas {
-  id                Int           @id @default(autoincrement())
-  nama_kelas        String        @db.VarChar(200)
-  tingkat_id        Int
-  Tingkat           Tingkat       @relation(fields: [tingkat_id], references: [id])
-  keterangan        String        @db.Text()
-  KelasSantri       KelasSantri[]
-  created_at        DateTime      @default(now())
-  updated_at        DateTime      @updatedAt
-  created_by        User?         @relation("kelas_created_by", fields: [created_by_id], references: [id])
-  created_by_id     String?
-  last_update_by    User?         @relation("kelas_updated_by", fields: [last_update_by_id], references: [id])
-  last_update_by_id String?
+  id                 Int                  @id @default(autoincrement())
+  nama_kelas         String               @db.VarChar(200)
+  tingkat_id         Int
+  Tingkat            Tingkat              @relation(fields: [tingkat_id], references: [id])
+  keterangan         String               @db.Text()
+  KelasSantri        KelasSantri[]
+  created_at         DateTime             @default(now())
+  updated_at         DateTime             @updatedAt
+  created_by         User?                @relation("kelas_created_by", fields: [created_by_id], references: [id])
+  created_by_id      String?
+  last_update_by     User?                @relation("kelas_updated_by", fields: [last_update_by_id], references: [id])
+  last_update_by_id  String?
+  KelasMataPelajaran KelasMataPelajaran[]
 
   @@unique([nama_kelas, tingkat_id], name: "kelasIdentifier")
 }
@@ -346,8 +347,9 @@ model Pegawai {
   JabatanPegawai  JabatanPegawai[]
   PresensiPegawai PresensiPegawai[]
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  created_at         DateTime             @default(now())
+  updated_at         DateTime             @updatedAt
+  KelasMataPelajaran KelasMataPelajaran[]
 }
 
 model Jabatan {
@@ -443,4 +445,24 @@ enum Status {
   PENDING
   SUCCESS
   FAILED
+}
+
+model MataPelajaran {
+  id                 Int                  @id @default(autoincrement())
+  nama_pelajaran     String
+  deskripsi          String?              @db.Text
+  KelasMataPelajaran KelasMataPelajaran[]
+}
+
+model KelasMataPelajaran {
+  id              Int           @id @default(autoincrement())
+  Kelas           Kelas         @relation(fields: [kelasId], references: [id])
+  kelasId         Int
+  MataPelajaran   MataPelajaran @relation(fields: [mataPelajaranId], references: [id])
+  mataPelajaranId Int
+  Pengampu        Pegawai       @relation(fields: [pegawaiId], references: [id])
+  pegawaiId       Int
+  hari            String
+  jam_mulai       String
+  jam_berakhir    String
 }

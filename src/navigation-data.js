@@ -23,6 +23,11 @@ export const HREF_URL = {
     KEMADRASAHAN_TA_EDIT: (id) =>
         `/dashboard/kemadrasahan/tahunajar/edit/${id}`,
 
+    KEMADRASAHAN_MAPEL_HOME: "/dashboard/kemadrasahan/pelajaran",
+    KEMADRASAHAN_MAPEL_CREATE: "/dashboard/kemadrasahan/pelajaran/create",
+    KEMADRASAHAN_MAPEL_EDIT: (id) =>
+        `/dashboard/kemadrasahan/jam-pelajaran/edit/${id}`,
+
     PELANGGARAN_HOME: "/dashboard/pelanggaran",
     PELANGGARAN_CREATE: "/dashboard/pelanggaran/create",
     PELANGGARAN_EDIT: (id, back = null) =>
