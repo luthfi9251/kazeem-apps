@@ -6,8 +6,13 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { DataTable } from "./data-table";
+import { getMataPelajaran } from "@/actions/pelajaran";
 
-function page() {
+async function page() {
+    let data = await getMataPelajaran();
+
+    if (data.isError) throw data.error;
+
     return (
         <div className="md:p-5 p-2">
             <Card>
@@ -16,7 +21,7 @@ function page() {
                     <CardDescription>Card Description</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <DataTable data={[]} />
+                    <DataTable data={data.data} />
                 </CardContent>
             </Card>
         </div>

@@ -1,6 +1,6 @@
 "use client";
 import ActionBarCreate from "@/components/ActionBarCreate";
-import PelajaranForm from "../PelajaranForm";
+import PelajaranForm from "../../PelajaranForm";
 import { HREF_URL } from "@/navigation-data";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
@@ -13,17 +13,23 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { useRef } from "react";
-import { addMataPelajaran } from "@/actions/pelajaran";
+import { useMemo, useRef } from "react";
+import {
+    addMataPelajaran,
+    editMataPelajaran,
+    getMataPelajaranById,
+} from "@/actions/pelajaran";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 
-function page() {
+function EditPage({ id, data }) {
     const submitButton = useRef(null);
     const router = useRouter();
+
     const handleSubmit = (value) => {
         toast.promise(
-            async () => await addMataPelajaran(value),
+            async () => await editMataPelajaran(id, value),
             {
                 pending: "Menyimpan data",
                 success: {
@@ -59,13 +65,18 @@ function page() {
             </div>
             <Card className="col-span-2">
                 <CardHeader>
-                    <CardTitle>Tambah Mata Pelajaran</CardTitle>
+                    <CardTitle>Edit Mata Pelajaran</CardTitle>
                     <CardDescription>Card Description</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <PelajaranForm
                         ref={submitButton}
                         handleSubmit={handleSubmit}
+                        defaultValue={{
+                            kode_mapel: data?.kode_mapel,
+                            nama_pelajaran: data?.nama_pelajaran,
+                            deskripsi: data?.deskripsi,
+                        }}
                     />
                 </CardContent>
             </Card>
@@ -73,4 +84,4 @@ function page() {
     );
 }
 
-export default page;
+export default EditPage;

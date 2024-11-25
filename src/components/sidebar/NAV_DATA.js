@@ -129,12 +129,18 @@ const NAV_DATA = [
                 ],
             },
             {
-                group_name: "Manajemen Akademik",
+                group_name: "Akademik",
                 child: [
                     {
                         name: "Mata Pelajaran",
                         page_name: PAGE_NAME.KEMADRASAHAN_KELOLA_KELAS,
                         href: HREF_URL.KEMADRASAHAN_MAPEL_HOME,
+                        suffix: ["/edit", "/create"],
+                    },
+                    {
+                        name: "Jadwal Pelajaran",
+                        page_name: PAGE_NAME.KEMADRASAHAN_KELOLA_KELAS,
+                        href: HREF_URL.KEMADRASAHAN_JAPEL_HOME,
                         suffix: ["/edit", "/create"],
                     },
                 ],

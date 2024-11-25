@@ -32,10 +32,10 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 import { generateExcel } from "@/lib/generate-excel";
-import { DataTableColumnHeader } from "@/components/DataTableHeader";
 import { HREF_URL } from "@/navigation-data";
+import { DataTableColumnHeader } from "@/components/DataTableHeader";
 
-export const COLUMNS = [
+const columns = [
     {
         id: "no",
         header: "No.",
@@ -44,12 +44,9 @@ export const COLUMNS = [
         },
     },
     {
-        accessorKey: "kode_mapel",
+        accessorKey: "nama_hari",
         header: ({ column }) => (
-            <DataTableColumnHeader
-                column={column}
-                title="Kode Mata Pelajaran"
-            />
+            <DataTableColumnHeader column={column} title="Hari" />
         ),
     },
     {
@@ -59,9 +56,21 @@ export const COLUMNS = [
         ),
     },
     {
-        accessorKey: "deskripsi",
+        accessorKey: "kode_pelajaran",
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Deskripsi" />
+            <DataTableColumnHeader column={column} title="Kode Pelajaran" />
+        ),
+    },
+    {
+        accessorKey: "pengampu",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Pengampu" />
+        ),
+    },
+    {
+        accessorKey: "jam Pelajaran",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Jam Pelajaran" />
         ),
     },
     {
@@ -83,26 +92,7 @@ export const COLUMNS = [
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        {/* <DropdownMenuItem>
-                            <Link
-                                href={HREF_URL.KEMADRASAHAN_KELAS_DETAIL(
-                                    user.id
-                                )}
-                                className="w-full"
-                                data-e2e="btn-detail"
-                            >
-                                Detail
-                            </Link>
-                        </DropdownMenuItem> */}
-                        <DropdownMenuItem>
-                            <Link
-                                href={HREF_URL.KEMADRASAHAN_MAPEL_EDIT(user.id)}
-                                className="w-full"
-                                data-e2e="btn-edit"
-                            >
-                                Edit
-                            </Link>
-                        </DropdownMenuItem>
+                        <DropdownMenuItem>Hapus</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             );
@@ -110,7 +100,7 @@ export const COLUMNS = [
     },
 ];
 
-export function DataTable({ data }) {
+export default function DataTableJadwal({ data }) {
     const [columnFilters, setColumnFilters] = useState();
     const [pagination, setPagination] = useState({
         pageIndex: 0, //initial page index
@@ -118,7 +108,7 @@ export function DataTable({ data }) {
     });
     const table = useReactTable({
         data,
-        columns: COLUMNS,
+        columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         onColumnFiltersChange: setColumnFilters,
@@ -137,11 +127,18 @@ export function DataTable({ data }) {
         },
     });
 
+    const handleGenerateExcel = () => {
+        // generateExcel({
+        //     filename: "Data Semua Kelas Santri",
+        //     type: "KELAS_ALL",
+        // });
+    };
+
     return (
         <div>
             <div className="grid grid-cols-2 py-4">
                 <Input
-                    placeholder="Cari Pelajaran"
+                    placeholder="Cari Mapel"
                     value={
                         table.getColumn("nama_kelas")?.getFilterValue() ?? ""
                     }
@@ -153,15 +150,36 @@ export function DataTable({ data }) {
                     className="max-w-sm"
                 />
                 <div className="flex w-full gap-2 justify-end">
-                    <Link href={HREF_URL.KEMADRASAHAN_MAPEL_CREATE}>
+                    <Link href="/dashboard/kemadrasahan/kelas/create">
                         <Button
                             className="self-end bg-kazeem-secondary "
                             id="tambah-kelas"
                             data-e2e="btn-tambah"
                         >
-                            Tambah
+                            Tambah Kelas
                         </Button>
                     </Link>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button
+                                variant="ghost"
+                                className="h-10 w-10 p-0"
+                                data-e2e="btn-dropdown"
+                            >
+                                <span className="sr-only">Open menu</span>
+                                <MoreVertical className="h-5 w-5" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Exports</DropdownMenuLabel>
+                            <DropdownMenuItem
+                                className="cursor-pointer"
+                                onClick={handleGenerateExcel}
+                            >
+                                Excel
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
             </div>
             <div className="rounded-md border">
@@ -213,7 +231,7 @@ export function DataTable({ data }) {
                         ) : (
                             <TableRow>
                                 <TableCell
-                                    colSpan={COLUMNS.length}
+                                    colSpan={columns.length}
                                     className="h-24 text-center"
                                 >
                                     No results.

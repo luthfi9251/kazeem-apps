@@ -449,6 +449,7 @@ enum Status {
 
 model MataPelajaran {
   id                 Int                  @id @default(autoincrement())
+  kode_mapel         String               @unique
   nama_pelajaran     String
   deskripsi          String?              @db.Text
   KelasMataPelajaran KelasMataPelajaran[]

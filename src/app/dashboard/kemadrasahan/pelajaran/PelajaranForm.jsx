@@ -18,28 +18,60 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { forwardRef } from "react";
 
 const formSchema = yup.object({
+    kode_mapel: yup.string().required(),
     nama_pelajaran: yup.string().required(),
     deskripsi: yup.string().optional(),
 });
 
 const PelajaranForm = forwardRef((props, ref) => {
+    const defaultValueForm = {
+        kode_mapel: "",
+        nama_pelajaran: "",
+        deskripsi: "",
+    };
+
     const form = useForm({
         resolver: yupResolver(formSchema),
-    });
 
-    function onSubmit(values) {}
+        values: props.defaultValue ?? defaultValueForm,
+    });
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
+            <form
+                onSubmit={form.handleSubmit(props.handleSubmit)}
+                className="space-y-8 "
+            >
+                <FormField
+                    control={form.control}
+                    name="kode_mapel"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel required>Kode Mata Pelajaran</FormLabel>
+                            <FormControl>
+                                <Input
+                                    placeholder="A-001"
+                                    type="text"
+                                    {...field}
+                                />
+                            </FormControl>
+
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
                 <FormField
                     control={form.control}
                     name="nama_pelajaran"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Nama Pelajaran</FormLabel>
+                            <FormLabel required>Nama Pelajaran</FormLabel>
                             <FormControl>
-                                <Input placeholder="Kimia" type="" {...field} />
+                                <Input
+                                    placeholder="Kimia"
+                                    type="text"
+                                    {...field}
+                                />
                             </FormControl>
 
                             <FormMessage />

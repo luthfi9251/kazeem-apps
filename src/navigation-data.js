@@ -26,7 +26,13 @@ export const HREF_URL = {
     KEMADRASAHAN_MAPEL_HOME: "/dashboard/kemadrasahan/pelajaran",
     KEMADRASAHAN_MAPEL_CREATE: "/dashboard/kemadrasahan/pelajaran/create",
     KEMADRASAHAN_MAPEL_EDIT: (id) =>
-        `/dashboard/kemadrasahan/jam-pelajaran/edit/${id}`,
+        `/dashboard/kemadrasahan/pelajaran/edit/${id}`,
+
+    KEMADRASAHAN_JAPEL_HOME: "/dashboard/kemadrasahan/jadwal-pelajaran",
+    KEMADRASAHAN_JAPEL_CREATE:
+        "/dashboard/kemadrasahan/jadwal-pelajaran/create",
+    KEMADRASAHAN_JAPEL_EDIT: (id) =>
+        `/dashboard/kemadrasahan/jadwal-pelajaran/edit/${id}`,
 
     PELANGGARAN_HOME: "/dashboard/pelanggaran",
     PELANGGARAN_CREATE: "/dashboard/pelanggaran/create",
