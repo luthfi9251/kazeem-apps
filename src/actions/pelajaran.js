@@ -28,6 +28,11 @@ export const getMataPelajaran = async () => {
     return serverResponse(data, false, null);
 };
 
+export const getListPegawai = async () => {
+    let data = await prisma.Pegawai.findMany({});
+    return serverResponse(data, false, null);
+};
+
 export const getMataPelajaranById = async (idPlain) => {
     try {
         const id = parseInt(idPlain);

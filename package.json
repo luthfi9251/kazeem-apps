@@ -13,7 +13,8 @@
         "lint": "next lint",
         "cypress:open": "cypress open",
         "prisma:seed": "npx prisma generate",
-        "prisma:reset": "npx prisma migrate reset --force"
+        "prisma:reset": "npx prisma migrate reset --force",
+        "prisma:reset:push:seed": "npx prisma migrate reset --skip-seed --force && npx prisma db push && npx prisma db seed"
     },
     "dependencies": {
         "@hookform/resolvers": "^3.3.4",

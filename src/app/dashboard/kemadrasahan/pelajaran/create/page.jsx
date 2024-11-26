@@ -33,7 +33,11 @@ function page() {
                         return "Data berhasil disimpan";
                     },
                 },
-                error: (err) => err.message,
+                error: {
+                    render(err) {
+                        return err.message;
+                    },
+                },
             },
             {
                 position: "bottom-right",

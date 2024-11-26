@@ -362,6 +362,51 @@ const seedKesehatanSantri = async (kelasSantriList, jumlah = 10) => {
     return await Promise.all(kesProm);
 };
 
+const seedKaryawanAndBagian = async (jumlah = 10) => {
+    let arrProm = [];
+    const jabatanPegawaiArr = [
+        "TU",
+        "Guru",
+        "Kepala Bagian",
+        "Staff",
+        "Karyawan",
+    ];
+    for (let i = 0; i < jumlah; i++) {
+        let namaJabatanRandom = faker.helpers.arrayElement(jabatanPegawaiArr);
+        // console.log(`Pegawai ke: ${i} jabatan ${namaJabatanRandom}`);
+        let createPegawai = await prisma.Pegawai.create({
+            data: {
+                id_pegawai: faker.number.int({ min: 10000 }) + "",
+                nama_pegawai: faker.person.fullName(),
+                jenis_kel: faker.helpers.arrayElement([
+                    "LAKI_LAKI",
+                    "PEREMPUAN",
+                ]),
+                no_telp: faker.phone.number(),
+                email: faker.internet.email(),
+                tempat_lahir: faker.location.city(),
+                tgl_lhr: faker.date.birthdate(),
+                JabatanPegawai: {
+                    create: {
+                        Jabatan: {
+                            connectOrCreate: {
+                                where: {
+                                    nama_jabatan: namaJabatanRandom,
+                                },
+                                create: {
+                                    nama_jabatan: namaJabatanRandom,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        });
+        // arrProm.push(createPegawai);
+    }
+    return "";
+};
+
 const templateSeedDevelopment = async (seedAdmin) => {
     let santriDataList = [];
     for (let i = 0; i < 20; i++) {
@@ -392,6 +437,7 @@ const templateSeedDevelopment = async (seedAdmin) => {
     let kategoriPelanggaranList = await seedTenKategoriPelanggaran();
     await seedPelanggaranSantri(kelasSantriAktifList, kategoriPelanggaranList);
     await seedKesehatanSantri(kelasSantriAktifList, 15);
+    await seedKaryawanAndBagian();
 };
 
 async function main() {
