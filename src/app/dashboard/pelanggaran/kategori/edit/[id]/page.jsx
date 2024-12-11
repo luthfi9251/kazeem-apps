@@ -8,16 +8,36 @@ async function getData(id) {
         where: {
             id,
         },
+        include: {
+            Penanganan: {
+                select: {
+                    id: true,
+                },
+            },
+        },
     });
     return data;
 }
+async function getAllPegawai() {
+    let pegawai = await prisma.Pegawai.findMany({
+        select: {
+            id: true,
+            id_pegawai: true,
+            nama_pegawai: true,
+        },
+    });
+
+    return pegawai;
+}
+
 async function Page(props) {
     let id = parseInt(props.params.id);
     let data = await getData(id);
+    let dataPegawai = await getAllPegawai();
 
     return (
         <>
-            <EditPage data={data} />
+            <EditPage data={data} listPegawai={dataPegawai} />
         </>
     );
 }

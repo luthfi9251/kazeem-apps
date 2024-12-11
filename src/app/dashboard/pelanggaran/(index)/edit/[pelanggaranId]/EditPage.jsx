@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useSearchParams } from "next/navigation";
 
-export default function EditPage({ data }) {
+export default function EditPage({ data, listPegawai }) {
     let router = useRouter();
     let params = useSearchParams();
     let backUrl = params.get("back");
@@ -42,7 +42,9 @@ export default function EditPage({ data }) {
             keterangan: activePelanggaran.keterangan,
             konsekuensi: activePelanggaran.konsekuensi,
             poin: activePelanggaran.Kategori.poin,
-            allow_edit: false,
+            allow_add: false,
+            kelKecakapan: activePelanggaran.Kategori.kelKecakapan,
+            penangan: activePelanggaran.Kategori.pegawaiId,
         },
     });
 
@@ -54,12 +56,14 @@ export default function EditPage({ data }) {
             poin: data.poin,
             keterangan: data.keterangan,
             konsekuensi: data.konsekuensi,
+            kelKecakapan: data.kelKecakapan,
+            penangan: data.penangan,
         };
         toast.promise(
             () =>
                 updatePelanggaran(activePelanggaran.id, {
                     dataPelanggaran,
-                    isCreateNewKategori: data.allow_edit,
+                    isCreateNewKategori: data.allow_add,
                     kategoriPelanggaranId: data.nama_pelanggaran_option,
                 }),
             {
@@ -159,7 +163,12 @@ export default function EditPage({ data }) {
                     </AlertDialogContent>
                 </AlertDialog>
             </div>
-            <PelanggaranForm form={formPelanggaran} data={data} edit />
+            <PelanggaranForm
+                listPegawai={listPegawai}
+                form={formPelanggaran}
+                data={data}
+                edit
+            />
         </div>
     );
 }

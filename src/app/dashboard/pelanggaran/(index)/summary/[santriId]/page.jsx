@@ -70,7 +70,20 @@ async function getData(idSantri) {
             },
         },
         include: {
-            Kategori: true,
+            Kategori: {
+                select: {
+                    nama_pelanggaran: true,
+                    kategori: true,
+                    jenis: true,
+                    poin: true,
+                    kelKecakapan: true,
+                    Penanganan: {
+                        select: {
+                            nama_pegawai: true,
+                        },
+                    },
+                },
+            },
             KelasSantri: {
                 select: {
                     TahunAjar: {
@@ -129,6 +142,8 @@ async function getData(idSantri) {
             kategori: item.Kategori.kategori,
             jenis: item.Kategori.jenis,
             poin: item.Kategori.poin,
+            kelKecakapan: item.Kategori.kelKecakapan,
+            nama_pegawai: item.Kategori.Penanganan.nama_pegawai,
             keterangan: item.keterangan,
             konsekuensi: item.konsekuensi,
             berkas_penunjang: item.berkas_penunjang,
@@ -142,11 +157,42 @@ async function getData(idSantri) {
     return { dataSantri, dataSummary, dataPelanggaran };
 }
 
+async function getPoinPerKecakapan(idSantri) {
+    let poinKecakapan = await prisma.Pelanggaran.findMany({
+        where: {
+            KelasSantri: {
+                Santri: {
+                    id: parseInt(idSantri),
+                },
+            },
+        },
+        select: {
+            Kategori: {
+                select: {
+                    kelKecakapan: true,
+                    poin: true,
+                },
+            },
+        },
+    });
+    // pengetahuan, keterampilan, emosianal;
+    let summary = poinKecakapan.reduce(
+        (prev, item) => {
+            let key = item.Kategori.kelKecakapan.toUpperCase();
+            prev[key] += item.Kategori.poin;
+            return prev;
+        },
+        { SPIRITUAL: 0, PENGETAHUAN: 0, KETERAMPILAN: 0, EMOSIONAL: 0 }
+    );
+    return summary;
+}
+
 async function Page(props) {
     let idSantri = props.params.santriId;
     let { dataSantri, dataSummary, dataPelanggaran } = await getData(
         parseInt(idSantri)
     );
+    let poinKecakapan = await getPoinPerKecakapan(idSantri);
     return (
         <>
             <DetailPage
@@ -154,6 +200,7 @@ async function Page(props) {
                 dataSummary={dataSummary}
                 dataPelanggaran={dataPelanggaran}
                 idSantri={idSantri}
+                dataKecakapan={poinKecakapan}
             />
         </>
     );

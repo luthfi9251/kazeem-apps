@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import AlertAddAnotherData from "@/components/AlertAddAnotherData";
 
-export default function CreatePage() {
+export default function CreatePage({ listPegawai }) {
     let router = useRouter();
     const [openDialog, setOpenDialog] = useState(false);
     const formKategori = useForm({
@@ -22,6 +22,8 @@ export default function CreatePage() {
             kategori: "RINGAN",
             jenis: "",
             poin: 0,
+            kelKecakapan: "",
+            penangan: "",
         },
     });
 
@@ -30,6 +32,7 @@ export default function CreatePage() {
     };
 
     let onSubmit = (data) => {
+        console.log({ data });
         toast.promise(
             () => addKategoriPelanggaran(data),
             {
@@ -97,7 +100,12 @@ export default function CreatePage() {
                         </Button>
                     </Link>
                 </div>
-                <KategoriForm form={formKategori} />
+                <div className="col-span-1 md:col-span-2">
+                    <KategoriForm
+                        form={formKategori}
+                        listPegawai={listPegawai}
+                    />
+                </div>
             </div>
         </>
     );

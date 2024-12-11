@@ -24,7 +24,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-export default function EditPage({ data }) {
+export default function EditPage({ data, listPegawai }) {
     let id = data.id;
     let router = useRouter();
     const formKategori = useForm({
@@ -34,6 +34,8 @@ export default function EditPage({ data }) {
             kategori: data.kategori,
             jenis: data.jenis,
             poin: data.poin,
+            kelKecakapan: data.kelKecakapan,
+            penangan: data.Penanganan.id,
         },
     });
 
@@ -145,7 +147,7 @@ export default function EditPage({ data }) {
                     </AlertDialogContent>
                 </AlertDialog>
             </div>
-            <KategoriForm form={formKategori} />
+            <KategoriForm form={formKategori} listPegawai={listPegawai} />
         </div>
     );
 }

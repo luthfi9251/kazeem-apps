@@ -204,10 +204,12 @@ model Pelanggaran {
 
 model KategoriPelanggaran {
   id               Int      @id @default(autoincrement())
-  nama_pelanggaran String   @unique
+  nama_pelanggaran String
   kategori         Kategori
   jenis            String
   poin             Int      @default(0)
+  kelKecakapan     String
+  Penanganan       Pegawai  @relation(fields: [pegawaiId], references: [id])
 
   created_by        User?         @relation("kategoriPel_created_by", fields: [created_by_id], references: [id])
   created_by_id     String?
@@ -216,6 +218,9 @@ model KategoriPelanggaran {
   created_at        DateTime      @default(now())
   updated_at        DateTime      @updatedAt
   Pelangaran        Pelanggaran[]
+  pegawaiId         Int
+
+  @@unique([nama_pelanggaran, pegawaiId], name: "kategoriIdentifier")
 }
 
 enum Kategori {
@@ -346,8 +351,9 @@ model Pegawai {
   JabatanPegawai  JabatanPegawai[]
   PresensiPegawai PresensiPegawai[]
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  created_at          DateTime              @default(now())
+  updated_at          DateTime              @updatedAt
+  KategoriPelanggaran KategoriPelanggaran[]
 }
 
 model Jabatan {

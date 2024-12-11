@@ -171,7 +171,7 @@ const SidebarContent = ({
                         </Avatar>
                     </div>
                 </div>
-                <div className="grow p-4">
+                <div className="grow p-4 overflow-y-auto">
                     <h2 className="text-white font-semibold text-lg p-2">
                         {activeGroup.label}
                     </h2>

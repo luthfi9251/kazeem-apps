@@ -37,6 +37,14 @@ export const columns = [
         header: "Jenis",
     },
     {
+        accessorKey: "kelKecakapan",
+        header: "Kecakapan",
+    },
+    {
+        accessorKey: "Penanganan.nama_pegawai",
+        header: "Penangan",
+    },
+    {
         accessorKey: "poin",
         header: "Poin",
     },

@@ -27,9 +27,27 @@ async function getKategoriPelanggaran() {
             jenis: true,
             kategori: true,
             poin: true,
+            kelKecakapan: true,
+            Penanganan: {
+                select: {
+                    id: true,
+                },
+            },
         },
     });
     return kategori;
+}
+
+async function getAllPegawai() {
+    let pegawai = await prisma.Pegawai.findMany({
+        select: {
+            id: true,
+            id_pegawai: true,
+            nama_pegawai: true,
+        },
+    });
+
+    return pegawai;
 }
 
 async function Page(props) {
@@ -38,6 +56,9 @@ async function Page(props) {
         getPelanggaranDetail(idPelanggaran),
         getKategoriPelanggaran(),
     ]);
+    let dataPegawai = await getAllPegawai();
+
+    // console.log({ kategoriPelanggaran, pelanggaranDetail });
 
     return (
         <>
@@ -55,6 +76,7 @@ async function Page(props) {
                     pelanggaranDetail,
                     idPelanggaran,
                 }}
+                listPegawai={dataPegawai}
             />
         </>
     );

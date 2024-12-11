@@ -10,6 +10,8 @@ export async function addKategoriPelanggaran({
     kategori,
     jenis,
     poin,
+    kelKecakapan,
+    penangan,
 }) {
     try {
         let session = await auth();
@@ -24,6 +26,12 @@ export async function addKategoriPelanggaran({
                 kategori,
                 jenis,
                 poin,
+                kelKecakapan,
+                Penanganan: {
+                    connect: {
+                        id: penangan,
+                    },
+                },
                 last_update_by: userActionId,
                 created_by: userActionId,
             },
@@ -54,7 +62,14 @@ export async function editKategoriPelanggaran(id, data) {
     return new Promise(async (resolve, reject) => {
         try {
             let session = await auth();
-            let { nama_pelanggaran, kategori, jenis, poin } = data;
+            let {
+                nama_pelanggaran,
+                kategori,
+                jenis,
+                poin,
+                kelKecakapan,
+                penangan,
+            } = data;
             let userActionId = {
                 connect: {
                     id: session.user.id,
@@ -69,6 +84,12 @@ export async function editKategoriPelanggaran(id, data) {
                     kategori,
                     jenis,
                     poin,
+                    kelKecakapan,
+                    Penanganan: {
+                        connect: {
+                            id: penangan,
+                        },
+                    },
                     last_update_by: userActionId,
                 },
             });

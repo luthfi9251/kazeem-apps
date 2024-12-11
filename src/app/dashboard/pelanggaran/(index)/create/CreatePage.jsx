@@ -14,7 +14,7 @@ import AlertAddAnotherData from "@/components/AlertAddAnotherData";
 import { useState } from "react";
 import { checkFormatAllowedByFileName } from "@/lib/utils";
 
-export default function CreatePage({ data }) {
+export default function CreatePage({ data, listPegawai }) {
     let router = useRouter();
     const [openDialog, setOpenDialog] = useState(false);
     const formPelanggaran = useForm({
@@ -29,6 +29,8 @@ export default function CreatePage({ data }) {
             poin: 0,
             allow_add: false,
             send_notification: false,
+            kelKecakapan: "",
+            penangan: "",
         },
     });
 
@@ -51,6 +53,8 @@ export default function CreatePage({ data }) {
             poin: data.poin,
             keterangan: data.keterangan,
             konsekuensi: data.konsekuensi,
+            kelKecakapan: data.kelKecakapan,
+            penangan: data.penangan,
         };
 
         if (data.file_penunjang) {
@@ -144,7 +148,11 @@ export default function CreatePage({ data }) {
                         Simpan
                     </Button>
                 </div>
-                <PelanggaranForm form={formPelanggaran} data={data} />
+                <PelanggaranForm
+                    listPegawai={listPegawai}
+                    form={formPelanggaran}
+                    data={data}
+                />
             </div>
         </>
     );

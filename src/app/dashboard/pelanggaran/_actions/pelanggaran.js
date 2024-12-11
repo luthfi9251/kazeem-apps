@@ -69,6 +69,8 @@ export async function addPelanggaran(
                 poin,
                 keterangan,
                 konsekuensi,
+                kelKecakapan,
+                penangan,
             } = dataPelanggaran;
             let createAll = await prisma.Pelanggaran.create({
                 data: {
@@ -83,6 +85,12 @@ export async function addPelanggaran(
                             kategori,
                             jenis,
                             poin,
+                            kelKecakapan,
+                            Penanganan: {
+                                connect: {
+                                    id: penangan,
+                                },
+                            },
                             created_by: connectUserID,
                             last_update_by: connectUserID,
                         },
@@ -238,6 +246,8 @@ export async function updatePelanggaran(idPelanggaran, data) {
                 dataPelanggaran,
             } = data;
 
+            console.log({ data });
+
             let {
                 nama_pelanggaran,
                 kategori,
@@ -245,6 +255,8 @@ export async function updatePelanggaran(idPelanggaran, data) {
                 poin,
                 keterangan,
                 konsekuensi,
+                kelKecakapan,
+                penangan,
             } = dataPelanggaran;
             let connectUserID = {
                 connect: {
@@ -268,6 +280,12 @@ export async function updatePelanggaran(idPelanggaran, data) {
                                 kategori,
                                 jenis,
                                 poin,
+                                kelKecakapan,
+                                Penanganan: {
+                                    connect: {
+                                        id: penangan,
+                                    },
+                                },
                                 created_by: connectUserID,
                                 last_update_by: connectUserID,
                             },

@@ -19,11 +19,13 @@ import CardPelanggaran from "./CardPelanggaran";
 import { HREF_URL } from "@/navigation-data";
 import { generateExcel } from "@/lib/generate-excel";
 import { generatePDFPelanggaranSummary } from "@/lib/generate-pdf";
+import CardKecakapan from "./CardKecakapan";
 
 export default function DetailPage({
     dataSantri,
     dataSummary,
     dataPelanggaran,
+    dataKecakapan,
     idSantri,
 }) {
     const handleGenerateExcel = (dataRow) => {
@@ -67,6 +69,7 @@ export default function DetailPage({
                 <CardContent className="grid md:grid-cols-2 grid-cols-1 gap-3">
                     <CardDataSantri dataSantri={dataSantri} />
                     <CardJumlahPelanggaran dataSummary={dataSummary} />
+                    <CardKecakapan dataKecakapan={dataKecakapan} />
                     <CardPelanggaran
                         dataPelanggaran={dataPelanggaran}
                         idSantri={idSantri}

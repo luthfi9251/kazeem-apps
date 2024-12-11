@@ -67,6 +67,14 @@ export const columns = [
         header: "Konsekuensi",
     },
     {
+        accessorKey: "kelKecakapan",
+        header: "Kecakapan",
+    },
+    {
+        accessorKey: "nama_pegawai",
+        header: "Penangan",
+    },
+    {
         accessorKey: "created_at",
         header: "Dibuat tgl",
         filterFn: (row, columnId, filterValue) => {

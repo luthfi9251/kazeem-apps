@@ -301,6 +301,12 @@ const seedTenKategoriPelanggaran = async () => {
         "mengintip",
         "merusak",
     ];
+    let kelKecakapan = [
+        "spiritual",
+        "pengetahuan",
+        "keterampilan",
+        "emosional",
+    ];
     let createKategoriPelanggaran = KATEGORI.map((item) => {
         return prisma.kategoriPelanggaran.create({
             data: {
@@ -308,6 +314,14 @@ const seedTenKategoriPelanggaran = async () => {
                 kategori: "SEDANG",
                 jenis: "PRILAKU",
                 poin: 10,
+                kelKecakapan: faker.helpers
+                    .arrayElement(kelKecakapan)
+                    .toUpperCase(),
+                Penanganan: {
+                    connect: {
+                        id: 1,
+                    },
+                },
             },
         });
     });
@@ -362,6 +376,42 @@ const seedKesehatanSantri = async (kelasSantriList, jumlah = 10) => {
     return await Promise.all(kesProm);
 };
 
+const seedPegawai = async (jumlah = 10) => {
+    const JABATAN_PEGAWAI = ["Manager", "Staff", "Guru"];
+
+    for (let i = 0; i < jumlah; i++) {
+        let managerRandom = faker.helpers.arrayElement(JABATAN_PEGAWAI);
+        await prisma.pegawai.create({
+            data: {
+                id_pegawai: i + "",
+                nama_pegawai: faker.person.fullName(),
+                jenis_kel: faker.helpers.arrayElement([
+                    "LAKI_LAKI",
+                    "PEREMPUAN",
+                ]),
+                no_telp: faker.phone.number(),
+                email: faker.internet.email(),
+                tempat_lahir: faker.location.country(),
+                tgl_lhr: faker.date.birthdate(),
+                JabatanPegawai: {
+                    create: {
+                        Jabatan: {
+                            connectOrCreate: {
+                                where: {
+                                    nama_jabatan: managerRandom,
+                                },
+                                create: {
+                                    nama_jabatan: managerRandom,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        });
+    }
+};
+
 const templateSeedDevelopment = async (seedAdmin) => {
     let santriDataList = [];
     for (let i = 0; i < 20; i++) {
@@ -389,6 +439,7 @@ const templateSeedDevelopment = async (seedAdmin) => {
         santriDataList,
         tahunAjar2024.id
     );
+    await seedPegawai();
     let kategoriPelanggaranList = await seedTenKategoriPelanggaran();
     await seedPelanggaranSantri(kelasSantriAktifList, kategoriPelanggaranList);
     await seedKesehatanSantri(kelasSantriAktifList, 15);

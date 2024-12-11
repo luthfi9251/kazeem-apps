@@ -25,6 +25,12 @@ async function getData() {
             jenis: true,
             kategori: true,
             poin: true,
+            kelKecakapan: true,
+            Penanganan: {
+                select: {
+                    nama_pegawai: true,
+                },
+            },
         },
     });
 

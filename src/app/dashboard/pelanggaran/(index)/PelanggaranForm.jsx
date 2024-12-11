@@ -48,11 +48,19 @@ import { CheckIcon, ArrowUpDown } from "lucide-react";
 export default function PelanggaranForm({
     data,
     form,
+    listPegawai = [],
     edit = false,
     disabled = false,
 }) {
+    const KELOMPOK_KECAKAPAN = [
+        "spiritual",
+        "pengetahuan",
+        "keterampilan",
+        "emosianal",
+    ].map((item) => item.toUpperCase());
     let { namaSantri, kategoriPelanggaran } = data;
     const [openSantri, setOpenSantri] = useState(false);
+    const [openPegawai, setOpenPegawai] = useState(false);
     const [openKategori, setOpenKategori] = useState(false);
     const [valKategori, setValKategori] = useState(null);
     const [isEditedKategori, setIsEditedKategori] = useState(false);
@@ -253,6 +261,16 @@ export default function PelanggaranForm({
                                                                                 "poin",
                                                                                 pelanggaran.poin
                                                                             );
+                                                                            form.setValue(
+                                                                                "kelKecakapan",
+                                                                                pelanggaran.kelKecakapan
+                                                                            );
+                                                                            form.setValue(
+                                                                                "penangan",
+                                                                                pelanggaran
+                                                                                    .Penanganan
+                                                                                    ?.id
+                                                                            );
                                                                             setOpenKategori(
                                                                                 false
                                                                             );
@@ -315,6 +333,14 @@ export default function PelanggaranForm({
                                                         );
                                                         form.setValue(
                                                             "poin",
+                                                            ""
+                                                        );
+                                                        form.setValue(
+                                                            "kelKecakapan",
+                                                            ""
+                                                        );
+                                                        form.setValue(
+                                                            "penangan",
                                                             ""
                                                         );
                                                     }}
@@ -420,7 +446,7 @@ export default function PelanggaranForm({
                                 )}
                             /> */}
                         </div>
-                        <fieldset className="grid gap-6 rounded-lg border p-4">
+                        <fieldset className="grid gap-2 rounded-lg border p-4">
                             <legend className="-ml-1 px-1 text-sm font-medium">
                                 Kategori Pelanggaran
                             </legend>
@@ -479,6 +505,41 @@ export default function PelanggaranForm({
                             />
                             <FormField
                                 control={form.control}
+                                name="kelKecakapan"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-col">
+                                        <FormLabel required>
+                                            Kelompok Kecakapan
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Select
+                                                onValueChange={field.onChange}
+                                                defaultValue={field.value}
+                                                disabled={!isEditedKategori}
+                                            >
+                                                <SelectTrigger className="w-full">
+                                                    <SelectValue placeholder="Pilih Kategori" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {KELOMPOK_KECAKAPAN.map(
+                                                        (item) => (
+                                                            <SelectItem
+                                                                key={item}
+                                                                value={item}
+                                                            >
+                                                                {item.toUpperCase()}
+                                                            </SelectItem>
+                                                        )
+                                                    )}
+                                                </SelectContent>
+                                            </Select>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
                                 name="jenis"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
@@ -508,6 +569,104 @@ export default function PelanggaranForm({
                                                 disabled={!isEditedKategori}
                                             />
                                         </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="penangan"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-col">
+                                        <FormLabel required>
+                                            Ditangani Oleh
+                                        </FormLabel>
+                                        <Popover
+                                            open={openPegawai}
+                                            onOpenChange={setOpenPegawai}
+                                        >
+                                            <PopoverTrigger asChild>
+                                                <FormControl>
+                                                    <Button
+                                                        variant="outline"
+                                                        role="combobox"
+                                                        data-e2e="btn-tambah-santri"
+                                                        disabled={
+                                                            !isEditedKategori
+                                                        }
+                                                        className={cn(
+                                                            "w-full justify-between",
+                                                            !field.value &&
+                                                                "text-muted-foreground"
+                                                        )}
+                                                    >
+                                                        {field.value
+                                                            ? listPegawai.find(
+                                                                  (santri) =>
+                                                                      santri.id ===
+                                                                      field.value
+                                                              )?.nama_pegawai
+                                                            : "Pilih Pegawai"}
+                                                        <ArrowUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                    </Button>
+                                                </FormControl>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-[300px] p-0">
+                                                <Command>
+                                                    <CommandInput
+                                                        placeholder="Cari Pegawai..."
+                                                        className="h-9"
+                                                    />
+                                                    <CommandList>
+                                                        <CommandEmpty>
+                                                            Pegawai Tidak
+                                                            Ditemukan
+                                                        </CommandEmpty>
+                                                        <CommandGroup>
+                                                            {listPegawai.map(
+                                                                (pegawai) => (
+                                                                    <CommandItem
+                                                                        value={
+                                                                            pegawai.nama_pegawai
+                                                                        }
+                                                                        key={
+                                                                            pegawai.id
+                                                                        }
+                                                                        data-e2e="select-item"
+                                                                        onSelect={() => {
+                                                                            form.setValue(
+                                                                                "penangan",
+                                                                                pegawai.id
+                                                                            );
+                                                                            setOpenPegawai(
+                                                                                false
+                                                                            );
+                                                                        }}
+                                                                    >
+                                                                        {
+                                                                            pegawai.nama_pegawai
+                                                                        }
+                                                                        <CheckIcon
+                                                                            className={cn(
+                                                                                "ml-auto h-4 w-4",
+                                                                                pegawai.id ===
+                                                                                    field.value
+                                                                                    ? "opacity-100"
+                                                                                    : "opacity-0"
+                                                                            )}
+                                                                        />
+                                                                    </CommandItem>
+                                                                )
+                                                            )}
+                                                        </CommandGroup>
+                                                    </CommandList>
+                                                </Command>
+                                            </PopoverContent>
+                                        </Popover>
+                                        <FormDescription>
+                                            Silahkan pilih orang yang menangnai
+                                            pelanggaran
+                                        </FormDescription>
                                         <FormMessage />
                                     </FormItem>
                                 )}

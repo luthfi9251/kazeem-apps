@@ -37,9 +37,27 @@ async function getKategoriPelanggaran() {
             jenis: true,
             kategori: true,
             poin: true,
+            kelKecakapan: true,
+            Penanganan: {
+                select: {
+                    id: true,
+                },
+            },
         },
     });
     return kategori;
+}
+
+async function getAllPegawai() {
+    let pegawai = await prisma.Pegawai.findMany({
+        select: {
+            id: true,
+            id_pegawai: true,
+            nama_pegawai: true,
+        },
+    });
+
+    return pegawai;
 }
 
 async function Page() {
@@ -48,12 +66,14 @@ async function Page() {
         getKategoriPelanggaran(),
         getEnableWhatsappNotification(),
     ]);
+    let dataPegawai = await getAllPegawai();
 
     return (
         <>
             <CreatePage
                 enableWhatsapp={enableWhatsapp}
                 data={{ namaSantri, kategoriPelanggaran }}
+                listPegawai={dataPegawai}
             />
         </>
     );
