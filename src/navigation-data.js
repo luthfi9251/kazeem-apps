@@ -55,6 +55,14 @@ export const HREF_URL = {
     HAFALAN_SANTRI_DETAIL: (id) => `/dashboard/hafalan/${id}`,
     HAFALAN_JENIS_HAFALAN: "/dashboard/hafalan/jenis",
 
+    PERIZINAN_KELUAR_SANTRI_HOME: "/dashboard/perizinan/keluar",
+    PERIZINAN_KELUAR_SANTRI_DETAIL: (id) => `/dashboard/perizinan/keluar/${id}`,
+    HAFALAN_JENIS_HAFALAN: "/dashboard/hafalan/jenis",
+
+    PERIZINAN_PULANG_SANTRI_HOME: "/dashboard/perizinan/pulang",
+    PERIZINAN_PULANG_SANTRI_DETAIL: (id) => `/dashboard/perizinan/pulang/${id}`,
+    HAFALAN_JENIS_HAFALAN: "/dashboard/hafalan/jenis",
+
     PENGUMUMAN_SANTRI: "/dashboard/pengumuman-santri",
     PENGUMUMAN_SANTRI_CREATE: "/dashboard/pengumuman-santri/create",
     PENGUMUMAN_SANTRI_DETAIL: (id) =>
