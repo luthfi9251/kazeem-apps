@@ -84,23 +84,6 @@ const NAV_DATA = [
                     // },
                 ],
             },
-            // {
-            //     group_name: "Perizinan",
-            //     child: [
-            //         {
-            //             name: "Izin Keluar",
-            //             page_name: PAGE_NAME.KESANTRIAN_PERIZINAN_SANTRI,
-            //             href: HREF_URL.PERIZINAN_KELUAR_SANTRI_HOME,
-            //             suffix: ["/edit"],
-            //         },
-            //         {
-            //             name: "Izin Pulang",
-            //             page_name: PAGE_NAME.KESANTRIAN_PERIZINAN_SANTRI,
-            //             href: HREF_URL.PERIZINAN_PULANG_SANTRI_HOME,
-            //             suffix: ["/edit"],
-            //         },
-            //     ],
-            // },
             {
                 group_name: "Pelanggaran",
                 child: [
