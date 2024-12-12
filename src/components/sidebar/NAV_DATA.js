@@ -4,6 +4,7 @@ const {
     User,
     UsersRound,
     School,
+    MoonStar,
     ChartColumnDecreasing,
     FileUser,
     Radio,
@@ -75,31 +76,31 @@ const NAV_DATA = [
                         page_name: PAGE_NAME.KESANTRIAN_HAFALAN_SANTRI,
                         suffix: [],
                     },
-                    {
-                        name: "Kamar",
-                        page_name: PAGE_NAME.KESANTRIAN_KAMAR_SANTRI,
-                        href: HREF_URL.KAMAR_SANTRI_HOME,
-                        suffix: ["/edit", "/create", "/detail"],
-                    },
+                    // {
+                    //     name: "Kamar",
+                    //     page_name: PAGE_NAME.KESANTRIAN_KAMAR_SANTRI,
+                    //     href: HREF_URL.KAMAR_SANTRI_HOME,
+                    //     suffix: ["/edit", "/create", "/detail"],
+                    // },
                 ],
             },
-            {
-                group_name: "Hafalan",
-                child: [
-                    {
-                        name: "Data Hafalan",
-                        page_name: PAGE_NAME.KESANTRIAN_HAFALAN_SANTRI,
-                        href: HREF_URL.HAFALAN_SANTRI_HOME,
-                        suffix: ["/edit"],
-                    },
-                    {
-                        name: "Jenis Hafalan",
-                        href: HREF_URL.HAFALAN_JENIS_HAFALAN,
-                        page_name: PAGE_NAME.KESANTRIAN_HAFALAN_SANTRI,
-                        suffix: [],
-                    },
-                ],
-            },
+            // {
+            //     group_name: "Perizinan",
+            //     child: [
+            //         {
+            //             name: "Izin Keluar",
+            //             page_name: PAGE_NAME.KESANTRIAN_PERIZINAN_SANTRI,
+            //             href: HREF_URL.PERIZINAN_KELUAR_SANTRI_HOME,
+            //             suffix: ["/edit"],
+            //         },
+            //         {
+            //             name: "Izin Pulang",
+            //             page_name: PAGE_NAME.KESANTRIAN_PERIZINAN_SANTRI,
+            //             href: HREF_URL.PERIZINAN_PULANG_SANTRI_HOME,
+            //             suffix: ["/edit"],
+            //         },
+            //     ],
+            // },
             {
                 group_name: "Pelanggaran",
                 child: [
@@ -148,6 +149,29 @@ const NAV_DATA = [
                         page_name: PAGE_NAME.KEMADRASAHAN_TAHUN_AJAR,
                         href: HREF_URL.KEMADRASAHAN_TA_HOME,
                         suffix: ["/edit", "/create"],
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        icon: MoonStar,
+        label: "Kepondokan",
+        child: [
+            {
+                group_name: "Perizinan",
+                child: [
+                    {
+                        name: "Izin Non-Pulang",
+                        page_name: PAGE_NAME.KESANTRIAN_PERIZINAN_SANTRI,
+                        href: HREF_URL.PERIZINAN_KELUAR_SANTRI_HOME,
+                        suffix: ["/edit"],
+                    },
+                    {
+                        name: "Izin Pulang",
+                        page_name: PAGE_NAME.KESANTRIAN_PERIZINAN_SANTRI,
+                        href: HREF_URL.PERIZINAN_PULANG_SANTRI_HOME,
+                        suffix: ["/edit"],
                     },
                 ],
             },
