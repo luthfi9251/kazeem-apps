@@ -128,9 +128,11 @@ model Santri {
   created_by_id     String?
   created_by        User?   @relation("santri_created_by", fields: [created_by_id], references: [id])
 
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
+  created_at DateTime     @default(now())
+  updated_at DateTime     @updatedAt
   Hafalan    Hafalan[]
+  IzinKeluar IzinKeluar[]
+  IzinPulang IzinPulang[]
 }
 
 enum JenisKel {
@@ -443,4 +445,41 @@ enum Status {
   PENDING
   SUCCESS
   FAILED
+}
+
+model IzinKeluar {
+  id          Int        @id @default(autoincrement())
+  Santri      Santri     @relation(fields: [santriId], references: [id])
+  tgl_izin    DateTime   @default(now())
+  jam_keluar  DateTime   @default(now())
+  jam_kembali DateTime
+  keperluan   String     @db.Text
+  tujuan      String     @db.Text
+  keterangan  String?    @db.Text
+  statusIzin  StatusIzin @default(SEDANG_BERLANGSUNG)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  santriId   Int
+}
+
+model IzinPulang {
+  id          Int        @id @default(autoincrement())
+  Santri      Santri     @relation(fields: [santriId], references: [id])
+  tgl_izin    DateTime   @default(now())
+  tgl_kembali DateTime?
+  keperluan   String     @db.Text
+  keterangan  String?    @db.Text
+  statusIzin  StatusIzin @default(SEDANG_BERLANGSUNG)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  santriId   Int
+}
+
+enum StatusIzin {
+  SEDANG_BERLANGSUNG
+  DISPENSASI_TERLAMBAT
+  MELEBIHI_BATAS_WAKTU
+  TELAH_SELESAI
 }
