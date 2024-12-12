@@ -11,16 +11,28 @@ async function getData(id) {
     });
     return data;
 }
+async function getAllPegawai() {
+    let pegawai = await prisma.Pegawai.findMany({
+        select: {
+            id: true,
+            id_pegawai: true,
+            nama_pegawai: true,
+        },
+    });
+
+    return pegawai;
+}
 
 async function Page(props) {
     let id = parseInt(props.params.id);
     let data = await getData(id);
+    const listPegawai = await getAllPegawai();
     if (!data) {
         throw new Error("Data tidak ditemukan!");
     }
     return (
         <>
-            <DetailPage data={data} />
+            <DetailPage data={data} listPegawai={listPegawai} />
         </>
     );
 }

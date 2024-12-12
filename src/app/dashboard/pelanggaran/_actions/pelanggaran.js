@@ -72,6 +72,7 @@ export async function addPelanggaran(
                 kelKecakapan,
                 penangan,
             } = dataPelanggaran;
+            console.log({ dataPelanggaran });
             let createAll = await prisma.Pelanggaran.create({
                 data: {
                     KelasSantri: {
@@ -85,18 +86,19 @@ export async function addPelanggaran(
                             kategori,
                             jenis,
                             poin,
-                            kelKecakapan,
+                            kelKecakapan: kelKecakapan.toUpperCase(),
                             Penanganan: {
                                 connect: {
                                     id: penangan,
                                 },
                             },
+                            konsekuensi,
                             created_by: connectUserID,
                             last_update_by: connectUserID,
                         },
                     },
                     keterangan,
-                    konsekuensi,
+
                     berkas_penunjang: pathToFile,
                     created_by: connectUserID,
                     last_update_by: connectUserID,
@@ -118,7 +120,6 @@ export async function addPelanggaran(
                             id: parseInt(pelanggaranId),
                         },
                     },
-                    konsekuensi: dataPelanggaran.konsekuensi,
                     keterangan: dataPelanggaran.keterangan,
                     berkas_penunjang: pathToFile,
                     created_by: connectUserID,
@@ -271,13 +272,13 @@ export async function updatePelanggaran(idPelanggaran, data) {
                         id: idPelanggaran,
                     },
                     data: {
-                        konsekuensi,
                         keterangan,
                         last_update_by: connectUserID,
                         Kategori: {
                             create: {
                                 nama_pelanggaran,
                                 kategori,
+                                konsekuensi,
                                 jenis,
                                 poin,
                                 kelKecakapan,
@@ -298,7 +299,6 @@ export async function updatePelanggaran(idPelanggaran, data) {
                         id: idPelanggaran,
                     },
                     data: {
-                        konsekuensi,
                         keterangan,
                         last_update_by: connectUserID,
                         Kategori: {

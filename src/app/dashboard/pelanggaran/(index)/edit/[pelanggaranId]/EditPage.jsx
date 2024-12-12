@@ -40,7 +40,7 @@ export default function EditPage({ data, listPegawai }) {
             kategori: activePelanggaran.Kategori.kategori,
             jenis: activePelanggaran.Kategori.jenis,
             keterangan: activePelanggaran.keterangan,
-            konsekuensi: activePelanggaran.konsekuensi,
+            konsekuensi: activePelanggaran.Kategori.konsekuensi,
             poin: activePelanggaran.Kategori.poin,
             allow_add: false,
             kelKecakapan: activePelanggaran.Kategori.kelKecakapan,

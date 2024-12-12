@@ -7,6 +7,8 @@ let kategoriPelanggaranSchema = yup.object({
     kategori: yup.string().required(),
     jenis: yup.string().required(),
     poin: yup.number().required(),
+    kelKecakapan: yup.string().required(),
+    konsekuensi: yup.string().required(),
 });
 
 export default kategoriPelanggaranSchema;

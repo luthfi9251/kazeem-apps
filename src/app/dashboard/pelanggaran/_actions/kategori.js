@@ -12,6 +12,7 @@ export async function addKategoriPelanggaran({
     poin,
     kelKecakapan,
     penangan,
+    konsekuensi,
 }) {
     try {
         let session = await auth();
@@ -32,6 +33,7 @@ export async function addKategoriPelanggaran({
                         id: penangan,
                     },
                 },
+                konsekuensi,
                 last_update_by: userActionId,
                 created_by: userActionId,
             },
@@ -69,6 +71,7 @@ export async function editKategoriPelanggaran(id, data) {
                 poin,
                 kelKecakapan,
                 penangan,
+                konsekuensi,
             } = data;
             let userActionId = {
                 connect: {
@@ -85,6 +88,7 @@ export async function editKategoriPelanggaran(id, data) {
                     jenis,
                     poin,
                     kelKecakapan,
+                    konsekuensi,
                     Penanganan: {
                         connect: {
                             id: penangan,

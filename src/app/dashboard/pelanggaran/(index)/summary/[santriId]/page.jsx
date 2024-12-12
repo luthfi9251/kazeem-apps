@@ -77,6 +77,7 @@ async function getData(idSantri) {
                     jenis: true,
                     poin: true,
                     kelKecakapan: true,
+                    konsekuensi: true,
                     Penanganan: {
                         select: {
                             nama_pegawai: true,
@@ -145,7 +146,7 @@ async function getData(idSantri) {
             kelKecakapan: item.Kategori.kelKecakapan,
             nama_pegawai: item.Kategori.Penanganan.nama_pegawai,
             keterangan: item.keterangan,
-            konsekuensi: item.konsekuensi,
+            konsekuensi: item.Kategori.konsekuensi,
             berkas_penunjang: item.berkas_penunjang,
             created_at: new Date(item.created_at).toLocaleDateString(),
             nama_kelas: item.KelasSantri.Kelas.nama_kelas,

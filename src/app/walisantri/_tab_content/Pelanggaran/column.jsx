@@ -107,13 +107,30 @@ export const columns = [
                                     <h4 className="font-semibold text-black">
                                         Keterangan
                                     </h4>
-                                    <p>{row.original.konsekuensi}</p>
+                                    <p>{row.original.keterangan}</p>
+                                </div>
+                                <div className="space-y-2">
+                                    <h4 className="font-semibold text-black">
+                                        Kecakapan
+                                    </h4>
+                                    <p>{row.original.Kategori.kelKecakapan}</p>
                                 </div>
                                 <div className="space-y-2">
                                     <h4 className="font-semibold text-black">
                                         Konsekuensi
                                     </h4>
-                                    <p>{row.original.konsekuensi}</p>
+                                    <p>{row.original.Kategori.konsekuensi}</p>
+                                </div>
+                                <div className="space-y-2">
+                                    <h4 className="font-semibold text-black">
+                                        Ditangani Oleh
+                                    </h4>
+                                    <p>
+                                        {
+                                            row.original.Kategori.Penanganan
+                                                .nama_pegawai
+                                        }
+                                    </p>
                                 </div>
                                 <div className="space-y-2">
                                     <h4 className="font-semibold text-black">

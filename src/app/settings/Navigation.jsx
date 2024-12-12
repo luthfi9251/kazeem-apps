@@ -22,6 +22,11 @@ const NAV_LIST = [
         href: HREF_URL.SETTINGS_WHATSAPP,
         page_name: PAGE_NAME.SETTING_WHATSAPP_API,
     },
+    {
+        text: "Pelanggaran",
+        href: HREF_URL.SETTINGS_PELANGGARAN,
+        page_name: PAGE_NAME.SETTING_WHATSAPP_API,
+    },
 ];
 
 export default function SettingNavigation({ session, enabledWAAPI }) {

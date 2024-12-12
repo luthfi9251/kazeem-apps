@@ -55,7 +55,7 @@ export default function KategoriForm({
         "pengetahuan",
         "keterampilan",
         "emosianal",
-    ];
+    ].map((item) => item.toUpperCase());
 
     const [openPegawai, setOpenPegawai] = useState(false);
 
@@ -271,6 +271,19 @@ export default function KategoriForm({
                                         Silahkan pilih orang yang menangnai
                                         pelanggaran
                                     </FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="konsekuensi"
+                            render={({ field }) => (
+                                <FormItem className="flex flex-col">
+                                    <FormLabel required>Konsekuensi</FormLabel>
+                                    <FormControl>
+                                        <Input disabled={disabled} {...field} />
+                                    </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}

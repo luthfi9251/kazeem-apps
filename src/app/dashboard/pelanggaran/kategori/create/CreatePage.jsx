@@ -24,6 +24,7 @@ export default function CreatePage({ listPegawai }) {
             poin: 0,
             kelKecakapan: "",
             penangan: "",
+            konsekuensi: "",
         },
     });
 
@@ -32,7 +33,6 @@ export default function CreatePage({ listPegawai }) {
     };
 
     let onSubmit = (data) => {
-        console.log({ data });
         toast.promise(
             () => addKategoriPelanggaran(data),
             {

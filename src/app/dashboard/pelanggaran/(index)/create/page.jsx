@@ -34,6 +34,7 @@ async function getKategoriPelanggaran() {
         select: {
             id: true,
             nama_pelanggaran: true,
+            konsekuensi: true,
             jenis: true,
             kategori: true,
             poin: true,

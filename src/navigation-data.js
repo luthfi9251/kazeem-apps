@@ -45,6 +45,7 @@ export const HREF_URL = {
     SETTINGS_AKUN: "/settings",
     SETTINGS_KEPONDOKAN: "/settings/kepondokan",
     SETTINGS_WHATSAPP: "/settings/whatsapp",
+    SETTINGS_PELANGGARAN: "/settings/pelanggaran",
 
     KAMAR_SANTRI_HOME: "/dashboard/kamar",
     KAMAR_SANTRI_CREATE: "/dashboard/kamar/create",

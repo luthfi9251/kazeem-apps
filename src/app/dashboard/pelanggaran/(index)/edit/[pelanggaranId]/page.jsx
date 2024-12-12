@@ -27,6 +27,7 @@ async function getKategoriPelanggaran() {
             jenis: true,
             kategori: true,
             poin: true,
+            konsekuensi: true,
             kelKecakapan: true,
             Penanganan: {
                 select: {

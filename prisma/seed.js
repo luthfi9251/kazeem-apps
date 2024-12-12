@@ -278,7 +278,6 @@ const seedPelanggaranSantri = async (
                     },
                 },
                 keterangan: faker.lorem.paragraph(),
-                konsekuensi: faker.lorem.paragraph(),
                 created_at: tglCreate,
             },
         });
@@ -314,6 +313,7 @@ const seedTenKategoriPelanggaran = async () => {
                 kategori: "SEDANG",
                 jenis: "PRILAKU",
                 poin: 10,
+                konsekuensi: faker.lorem.paragraph(),
                 kelKecakapan: faker.helpers
                     .arrayElement(kelKecakapan)
                     .toUpperCase(),

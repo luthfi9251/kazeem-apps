@@ -36,6 +36,7 @@ export default function EditPage({ data, listPegawai }) {
             poin: data.poin,
             kelKecakapan: data.kelKecakapan,
             penangan: data.Penanganan.id,
+            konsekuensi: data.konsekuensi,
         },
     });
 

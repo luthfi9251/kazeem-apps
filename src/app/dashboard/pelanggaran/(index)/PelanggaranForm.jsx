@@ -56,7 +56,7 @@ export default function PelanggaranForm({
         "spiritual",
         "pengetahuan",
         "keterampilan",
-        "emosianal",
+        "emosional",
     ].map((item) => item.toUpperCase());
     let { namaSantri, kategoriPelanggaran } = data;
     const [openSantri, setOpenSantri] = useState(false);
@@ -266,6 +266,10 @@ export default function PelanggaranForm({
                                                                                 pelanggaran.kelKecakapan
                                                                             );
                                                                             form.setValue(
+                                                                                "konsekuensi",
+                                                                                pelanggaran.konsekuensi
+                                                                            );
+                                                                            form.setValue(
                                                                                 "penangan",
                                                                                 pelanggaran
                                                                                     .Penanganan
@@ -332,6 +336,10 @@ export default function PelanggaranForm({
                                                             ""
                                                         );
                                                         form.setValue(
+                                                            "konsekuensi",
+                                                            ""
+                                                        );
+                                                        form.setValue(
                                                             "poin",
                                                             ""
                                                         );
@@ -368,22 +376,6 @@ export default function PelanggaranForm({
                                                 className="resize-none"
                                                 {...field}
                                             />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            <FormField
-                                control={form.control}
-                                name="konsekuensi"
-                                render={({ field }) => (
-                                    <FormItem className="flex flex-col">
-                                        <FormLabel required>
-                                            Konsekuensi
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Input {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -514,7 +506,7 @@ export default function PelanggaranForm({
                                         <FormControl>
                                             <Select
                                                 onValueChange={field.onChange}
-                                                defaultValue={field.value}
+                                                value={field.value}
                                                 disabled={!isEditedKategori}
                                             >
                                                 <SelectTrigger className="w-full">
@@ -667,6 +659,24 @@ export default function PelanggaranForm({
                                             Silahkan pilih orang yang menangnai
                                             pelanggaran
                                         </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="konsekuensi"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-col">
+                                        <FormLabel required>
+                                            Konsekuensi
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Textarea
+                                                {...field}
+                                                disabled={!isEditedKategori}
+                                            />
+                                        </FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}

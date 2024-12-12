@@ -109,7 +109,11 @@ export const getDashboardData = async (nis) => {
                                 created_at: "desc",
                             },
                             include: {
-                                Kategori: true,
+                                Kategori: {
+                                    include: {
+                                        Penanganan: true,
+                                    },
+                                },
                             },
                         },
                         Kesehatan: {

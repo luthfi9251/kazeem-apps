@@ -33,7 +33,6 @@ async function getNotificationWhatsapp() {
                 ? true
                 : false,
     };
-    console.log(returned);
     return returned;
 }
 

@@ -8,7 +8,8 @@ import { toast } from "react-toastify";
 import kategoriPelanggaranSchema from "../../yup-kategori-pelanggaran-schema";
 import KategoriForm from "../../KategoriForm";
 
-export default function DetailPage({ data }) {
+export default function DetailPage({ data, listPegawai }) {
+    // console.log({ data });
     const formKategori = useForm({
         resolver: yupResolver(kategoriPelanggaranSchema),
         defaultValues: {
@@ -16,6 +17,9 @@ export default function DetailPage({ data }) {
             kategori: data.kategori,
             jenis: data.jenis,
             poin: data.poin,
+            kelKecakapan: data.kelKecakapan,
+            penangan: data.pegawaiId,
+            konsekuensi: data.konsekuensi,
         },
     });
     return (
@@ -36,7 +40,11 @@ export default function DetailPage({ data }) {
                     </Button>
                 </Link>
             </div>
-            <KategoriForm form={formKategori} disabled={true} />
+            <KategoriForm
+                listPegawai={listPegawai}
+                form={formKategori}
+                disabled={true}
+            />
         </div>
     );
 }
