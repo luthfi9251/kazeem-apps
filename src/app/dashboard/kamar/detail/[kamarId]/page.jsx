@@ -30,6 +30,13 @@ async function Page(props) {
     const kamarId = props.params.kamarId;
     const dataKamar = await getSantriInKamar(props.params.kamarId);
     if (dataKamar.isError) throw dataKamar.error;
+
+    const infoKamar = {
+        nama_kamar: dataKamar.data?.nama_kamar,
+        kapasitas: dataKamar.data?.kapasitas,
+        lokasi: dataKamar.data?.lokasi ?? "-",
+        deskripsi: dataKamar.data?.deskripsi ?? "-",
+    };
     return (
         <div className="md:p-5 p-2 grid grid-cols-1 gap-3">
             <Card className="lg:col-span-1">
@@ -85,6 +92,7 @@ async function Page(props) {
                 info={dataKamar.data}
                 data={dataKamar.isError ? [] : dataKamar.data.Santri}
                 kamarId={kamarId}
+                infoKamar={infoKamar}
             />
         </div>
     );

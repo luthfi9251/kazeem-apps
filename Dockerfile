@@ -1,4 +1,4 @@
-FROM node:18-alpine AS base
+FROM node:20.18.2-slim AS base
 
 FROM base AS deps
 WORKDIR /app
@@ -12,6 +12,7 @@ RUN npm i sharp
 
 # Rebuild the source code only when needed
 FROM base AS builder
+RUN apk add --no-cache openssl
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .

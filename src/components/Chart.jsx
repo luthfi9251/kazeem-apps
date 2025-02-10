@@ -35,6 +35,7 @@ export function PieChartComponent({
     chartConfig,
     chartData,
 }) {
+    console.log({ name: title, chartData });
     return (
         <Card className="flex flex-col">
             <CardHeader className="items-center pb-0">

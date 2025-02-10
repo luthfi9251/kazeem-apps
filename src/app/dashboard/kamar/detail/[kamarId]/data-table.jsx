@@ -169,7 +169,7 @@ const columns = [
     },
 ];
 
-export function DataTable({ data, info, kamarId }) {
+export function DataTable({ data, info, kamarId, infoKamar }) {
     const filterSheetState = useState(false);
     const [globalFilter, setGlobalFilter] = useState();
     const [columnFilters, setColumnFilters] = useState([]);
@@ -241,7 +241,8 @@ export function DataTable({ data, info, kamarId }) {
         let dataRow = table
             .getFilteredRowModel()
             .rows.map((item) => item.original);
-        generatePDFKamar(dataRow);
+
+        generatePDFKamar(dataRow, infoKamar);
     };
 
     return (
@@ -278,7 +279,7 @@ export function DataTable({ data, info, kamarId }) {
                                 <DropdownMenuLabel>Exports</DropdownMenuLabel>
                                 <DropdownMenuItem
                                     className="cursor-pointer"
-                                    // onClick={handleGeneratePF}
+                                    onClick={handleGeneratePDF}
                                 >
                                     PDF
                                 </DropdownMenuItem>

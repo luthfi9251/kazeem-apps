@@ -12,14 +12,18 @@ import { severResponseFormatAdapterForUseQuery } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { DataTable } from "./data-table";
 
-export default function DaftarSantriSection({ kamarId, data }) {
+export default function DaftarSantriSection({ kamarId, data, infoKamar }) {
     return (
         <Card className="lg:col-span-1">
             <CardHeader>
                 <CardTitle>Data Santri</CardTitle>
             </CardHeader>
             <CardContent>
-                <DataTable data={data} kamarId={kamarId} />
+                <DataTable
+                    data={data}
+                    kamarId={kamarId}
+                    infoKamar={infoKamar}
+                />
             </CardContent>
         </Card>
     );

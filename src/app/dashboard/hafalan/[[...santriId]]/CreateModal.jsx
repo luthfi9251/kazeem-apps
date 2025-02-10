@@ -92,7 +92,7 @@ export default function CreateModal({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Tambah Kamar Santri</DialogTitle>
+                    <DialogTitle>Tambah Hafalan Santri</DialogTitle>
                 </DialogHeader>
                 <Form {...formHafalan}>
                     <form

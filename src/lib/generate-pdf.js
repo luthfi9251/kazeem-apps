@@ -294,24 +294,28 @@ export async function generatePDFPelanggaranSummary(data, namaSantri) {
     });
 }
 
-export async function generatePDFKamar(data) {
+export async function generatePDFKamar(data, infoKamar) {
     const doc = new jsPDF();
     doc.setProperties({
         title: "Daftar Kamar Santri",
     });
 
     doc.autoTable({
-        body: [["Jumlah Kamar", data.length]],
+        body: [
+            ["Nama Kamar", infoKamar.nama_kamar],
+            ["Lokasi", infoKamar.lokasi],
+            ["Kapasitas", infoKamar.kapasitas],
+            ["Deskripsi", infoKamar.deskripsi],
+            ["Jumlah Santri", data.length],
+        ],
     });
 
     doc.autoTable({
         startY: doc.lastAutoTable.finalY + 10,
         columns: [
             { dataKey: "id", header: "No." },
-            { dataKey: "nama_kamar", header: "Nama Kamar" },
-            { dataKey: "lokasi", header: "Lokasi" },
-            { dataKey: "kapasitas", header: "Kapasitas" },
-            { dataKey: "deskripsi", header: "Deskripsi" },
+            { dataKey: "nis", header: "NIS" },
+            { dataKey: "nama_lengkap", header: "Nama Santri" },
         ],
         body: data,
         theme: "plain",

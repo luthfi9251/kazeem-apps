@@ -24,8 +24,76 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
+import { useForm } from "react-hook-form";
+
+function DialogFormJabatan({ open, openChange, context }) {
+    let [dataJabatan, setJabatanGroup] = context;
+    let user = false;
+    const form = useForm({
+        defaultValues: {
+            nama_jabatan: "",
+        },
+    });
+
+    let onSubmit = (data) => {};
+    return (
+        <Dialog open={open} onOpenChange={openChange}>
+            <DialogContent className=" w-full">
+                <DialogHeader>
+                    <DialogTitle>Tambah Jabatan</DialogTitle>
+                    <DialogDescription>
+                        Silahkan tambah data jabatan.
+                    </DialogDescription>
+                </DialogHeader>
+                <Form {...form}>
+                    <form
+                        id="form-jabatan"
+                        className="space-y-8"
+                        onSubmit={form.handleSubmit(onSubmit)}
+                    >
+                        <FormField
+                            control={form.control}
+                            name="nama_jabatan"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel required>Nama Jabatan</FormLabel>
+                                    <FormControl>
+                                        <Input {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <DialogFooter>
+                            <Button type="submit">Tambah Jabatan</Button>
+                        </DialogFooter>
+                    </form>
+                </Form>
+            </DialogContent>
+        </Dialog>
+    );
+}
 
 export function DataTable({ columns, data }) {
+    let [isOpen, setIsOpen] = useState(false);
     const [columnFilters, setColumnFilters] = useState();
     const [pagination, setPagination] = useState({
         pageIndex: 0, //initial page index
@@ -57,7 +125,9 @@ export function DataTable({ columns, data }) {
             <div className="grid grid-cols-2 py-4">
                 <Input
                     placeholder="Cari Nama Jabatan..."
-                    value={table.getColumn("nama_jabatan")?.getFilterValue() ?? ""}
+                    value={
+                        table.getColumn("nama_jabatan")?.getFilterValue() ?? ""
+                    }
                     onChange={(event) =>
                         table
                             .getColumn("nama_jabatan")
@@ -65,6 +135,15 @@ export function DataTable({ columns, data }) {
                     }
                     className="max-w-sm"
                 />
+                <div className="flex w-full justify-end">
+                    <Button
+                        className="self-end bg-kazeem-secondary "
+                        id="tambah-pegawi"
+                        onClick={() => setIsOpen(true)}
+                    >
+                        Tambah Jabatan
+                    </Button>
+                </div>
             </div>
             <div className="rounded-md border">
                 <Table>
@@ -147,6 +226,13 @@ export function DataTable({ columns, data }) {
                     Next
                 </Button>
             </div>
+            <DialogFormJabatan
+                open={isOpen}
+                openChange={setIsOpen}
+                context={[0, 1]}
+                setJabatanGroup={() => {}}
+                disabled={false}
+            />
         </div>
     );
 }
